@@ -1,0 +1,90 @@
+[
+  {
+    "segment_id": "ECS",
+    "segment": "etch_clean",
+    "segment_name": "Etch/Clean/Strip",
+    "likely_bottleneck": "High-aspect-ratio plasma profile control with low damage",
+    "bottleneck_type": "Scientific plus process-integration bottleneck",
+    "why_likely": "Public technical material repeatedly couples anisotropy, selectivity, profile, residue, particles, and damage; advanced memory pushes aspect ratio higher.",
+    "observable_signals": "HAR language in annual reports; ICP/CCP product emphasis; etch process and RF job postings.",
+    "caveats": "Public pages show target performance and applications more clearly than real yield-learning depth.",
+    "suggested_primary_sources": "AMEC annual reports and etch pages; CNIPA; CNKI; recruiting pages"
+  },
+  {
+    "segment_id": "ECS",
+    "segment": "etch_clean",
+    "segment_name": "Etch/Clean/Strip",
+    "likely_bottleneck": "Post-etch clean and strip that remove residues without pattern loss",
+    "bottleneck_type": "Materials-plus-chemistry bottleneck",
+    "why_likely": "Patterned cleaning and strip require simultaneous residue removal, particle control, and no-damage behavior, especially after aggressive etch.",
+    "observable_signals": "Megasonic/no-damage cleaning pages; strip-tool disclosures; clean-process job titles.",
+    "caveats": "Customer-specific chemistries and rework heuristics are often private.",
+    "suggested_primary_sources": "ACM Research Shanghai product pages; CNIPA; CNKI; application-engineer postings"
+  },
+  {
+    "segment_id": "DEP",
+    "segment": "deposition",
+    "segment_name": "Deposition",
+    "likely_bottleneck": "Conformal HAR film growth at production-worthy throughput",
+    "bottleneck_type": "Scientific plus production bottleneck",
+    "why_likely": "Official sources openly recognize the tradeoff between ALD-like conformality and throughput, and the need for batch/vertical solutions.",
+    "observable_signals": "ALD/LPCVD product mix; validation and repeat-order disclosures; film-process job ads.",
+    "caveats": "Repeat orders are a helpful signal but do not reveal full chamber-match difficulty.",
+    "suggested_primary_sources": "NAURA ALD/LPCVD pages and article; AMEC annual reports; CNINFO"
+  },
+  {
+    "segment_id": "DEP",
+    "segment": "deposition",
+    "segment_name": "Deposition",
+    "likely_bottleneck": "Coupling precursor chemistry to stable chamber behavior and low particles",
+    "bottleneck_type": "Scale-up bottleneck",
+    "why_likely": "Lab film quality is easier than stable HVM performance across PM cycles and chamber populations.",
+    "observable_signals": "In-situ clean messaging; chamber-match language; maintenance and application roles; patents on gas delivery and chamber materials.",
+    "caveats": "Public filings may under-describe maintenance sensitivity and excursion modes.",
+    "suggested_primary_sources": "NAURA and AMEC product pages and annual reports; CNIPA; company ATS"
+  },
+  {
+    "segment_id": "MI",
+    "segment": "metrology_inspection",
+    "segment_name": "Metrology/Inspection",
+    "likely_bottleneck": "Optics-plus-algorithms integration that reduces false alarms without losing sensitivity",
+    "bottleneck_type": "Cross-disciplinary bottleneck",
+    "why_likely": "Inspection and metrology tools publicly emphasize illumination, classification, AI/ML, and yield-ramp support, implying a hard hardware-software boundary problem.",
+    "observable_signals": "Optical-design and algorithm hiring; product language on ADC, AI, classification, and yield excursion control.",
+    "caveats": "Private datasets and customer libraries mean papers and patents undercount operational skill.",
+    "suggested_primary_sources": "KLA official pages; Skyverse and SMEE product pages; recruitment pages"
+  },
+  {
+    "segment_id": "MI",
+    "segment": "metrology_inspection",
+    "segment_name": "Metrology/Inspection",
+    "likely_bottleneck": "Field calibration and fab-specific tuning",
+    "bottleneck_type": "Service and application bottleneck",
+    "why_likely": "Measurement trust in production depends on calibration, matching, nuisance suppression, and tool-to-tool consistency at customer sites.",
+    "observable_signals": "Field support roles; annual reports on support teams; service-page language; training plans.",
+    "caveats": "The best know-how is often buried in service routines rather than formal R&D outputs.",
+    "suggested_primary_sources": "Skyverse annual reports and ATS; SMEE service pages; CNINFO"
+  },
+  {
+    "segment_id": "LIT",
+    "segment": "lithography_sidebar",
+    "segment_name": "Lithography Sidebar",
+    "likely_bottleneck": "Opto-mechatronic integration for overlay, focus, and stability",
+    "bottleneck_type": "System-engineering bottleneck",
+    "why_likely": "ASML’s public decomposition of lithography and SMEE’s published skill requirements both point to a rare combination of optics, mechanics, control, and calibration.",
+    "observable_signals": "Optical-design job requirements; lithography product pages stressing focus/overlay/backside alignment.",
+    "caveats": "This row is a sidebar inference for atlas design, not a claim about exact labor shortage magnitude.",
+    "suggested_primary_sources": "ASML lithography pages; SMEE product and recruitment pages; CNIPA"
+  },
+  {
+    "segment_id": "LIT",
+    "segment": "lithography_sidebar",
+    "segment_name": "Lithography Sidebar",
+    "likely_bottleneck": "Service calibration, contamination discipline, and process-window recovery",
+    "bottleneck_type": "Tacit plus field-service bottleneck",
+    "why_likely": "Lithography performance degrades when optics-path cleanliness, calibration, or process window drifts; service and recovery routines are highly experience-based.",
+    "observable_signals": "Service pages; training academy pages; field-service hiring; support network disclosures.",
+    "caveats": "Public pages expose training structures more than the true content of recovery know-how.",
+    "suggested_primary_sources": "ASML lithography pages; SMEE service and training pages; official recruitment pages"
+  }
+]

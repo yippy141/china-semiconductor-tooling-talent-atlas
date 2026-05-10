@@ -1,0 +1,12 @@
+{
+  "sources": 43,
+  "capabilities": 14,
+  "role_families": 16,
+  "disciplines": 14,
+  "institutions": 6,
+  "industry_entities": 11,
+  "city_signals": 31,
+  "observations": 172,
+  "missing_source_ids": [],
+  "missing_capability_ids": []
+}

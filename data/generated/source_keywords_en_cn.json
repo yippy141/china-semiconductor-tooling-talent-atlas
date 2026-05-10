@@ -1,0 +1,110 @@
+[
+  {
+    "use_case": "Segment-defining patents and products",
+    "segment_id": "ECS",
+    "segment": "etch_clean",
+    "keyword_en": "ICP etch selectivity anisotropy electrostatic chuck chamber matching",
+    "keyword_cn": "ICP刻蚀 选择比 各向异性 静电卡盘 腔体匹配",
+    "where_to_search": "CNIPA; AMEC official product pages",
+    "why_useful": "Find hardware-plus-process inventions and the language firms use for technical bottlenecks"
+  },
+  {
+    "use_case": "Cleaning and strip know-how",
+    "segment_id": "ECS",
+    "segment": "etch_clean",
+    "keyword_en": "post-etch clean residue polymer damage megasonic strip",
+    "keyword_cn": "刻蚀后清洗 残留物 聚合物 损伤 兆声波 去胶",
+    "where_to_search": "CNKI; CNIPA; ACM Research Shanghai product pages",
+    "why_useful": "Captures the wet-chemistry and residue-control side that patents alone can miss"
+  },
+  {
+    "use_case": "Etch/clean hiring demand",
+    "segment_id": "ECS",
+    "segment": "etch_clean",
+    "keyword_en": "etch process engineer clean strip application engineer RF engineer",
+    "keyword_cn": "刻蚀 工艺工程师 清洗 去胶 应用工程师 射频工程师",
+    "where_to_search": "Company ATS pages; MOHRSS public recruitment; NCSS",
+    "why_useful": "Best public signal for active demand by sub-role"
+  },
+  {
+    "use_case": "Deposition core problems",
+    "segment_id": "DEP",
+    "segment": "deposition",
+    "keyword_en": "ALD CVD PVD precursor conformality gap fill particle control",
+    "keyword_cn": "ALD CVD PVD 前驱体 保形性 填孔 颗粒控制",
+    "where_to_search": "CNIPA; CNKI; NAURA and AMEC product pages",
+    "why_useful": "Maps directly to film-growth challenges"
+  },
+  {
+    "use_case": "Deposition scaling and validation",
+    "segment_id": "DEP",
+    "segment": "deposition",
+    "keyword_en": "thin film process engineer chamber matching in situ clean productivity",
+    "keyword_cn": "薄膜 工艺工程师 腔体匹配 原位清洗 产能",
+    "where_to_search": "Company ATS pages; CNINFO annual reports",
+    "why_useful": "Helps separate lab capability from high-volume capability"
+  },
+  {
+    "use_case": "Metrology architecture",
+    "segment_id": "MI",
+    "segment": "metrology_inspection",
+    "keyword_en": "defect inspection CD overlay thickness topography autofocus stage calibration",
+    "keyword_cn": "缺陷检测 CD 套刻 膜厚 三维形貌 自动聚焦 运动台 校准",
+    "where_to_search": "Skyverse and SMEE product pages; CNIPA",
+    "why_useful": "Good for distinguishing inspection from metrology and for identifying subsystem breadth"
+  },
+  {
+    "use_case": "Metrology algorithms",
+    "segment_id": "MI",
+    "segment": "metrology_inspection",
+    "keyword_en": "optical algorithm image processing defect classification SPC yield management",
+    "keyword_cn": "光学算法 图像处理 缺陷分类 SPC 良率管理",
+    "where_to_search": "Company ATS pages; CNKI; CNIPA",
+    "why_useful": "Useful for finding the software/data layer of measurement tools"
+  },
+  {
+    "use_case": "Metrology field service",
+    "segment_id": "MI",
+    "segment": "metrology_inspection",
+    "keyword_en": "metrology application engineer field technical support calibration engineer",
+    "keyword_cn": "量测 应用工程师 现场技术支持 校准工程师",
+    "where_to_search": "Company ATS pages; MOHRSS and NCSS platforms",
+    "why_useful": "Best proxy for customer-ramp and site-calibration demand"
+  },
+  {
+    "use_case": "Lithography optics and overlay",
+    "segment_id": "LIT",
+    "segment": "lithography_sidebar",
+    "keyword_en": "projection optics overlay focus leveling alignment lithography",
+    "keyword_cn": "投影光学 套刻 调焦调平 对准 光刻",
+    "where_to_search": "ASML and SMEE official product pages; CNIPA",
+    "why_useful": "Useful for the opto-mechatronic talent cluster"
+  },
+  {
+    "use_case": "Lithography talent demand",
+    "segment_id": "LIT",
+    "segment": "lithography_sidebar",
+    "keyword_en": "optical design engineer Zemax CODE V tolerance alignment lithography",
+    "keyword_cn": "光学设计工程师 Zemax CODE V 公差分析 光学装调 光刻",
+    "where_to_search": "SMEE official recruitment pages; official job platforms",
+    "why_useful": "Directly surfaces skill requirements rather than only product claims"
+  },
+  {
+    "use_case": "Annual-report organizational proxy",
+    "segment_id": "ALL",
+    "segment": "all",
+    "keyword_en": "annual report R&D personnel production personnel technical support semiconductor equipment",
+    "keyword_cn": "年报 研发人员 生产人员 技术支持 半导体设备",
+    "where_to_search": "CNINFO; SSE/STAR Market disclosures where applicable",
+    "why_useful": "Best public source for headcount mix and disclosed training plans"
+  },
+  {
+    "use_case": "Training and tacit-knowledge proxy",
+    "segment_id": "ALL",
+    "segment": "all",
+    "keyword_en": "integrated circuit engineering technician standard chief technician studio innovation academy mentor OJT",
+    "keyword_cn": "集成电路工程技术人员 国家职业技术技能标准 首席技师工作室 创新学院 导师带教 OJT",
+    "where_to_search": "MOE; MHRSS; company training pages",
+    "why_useful": "Best public route into weakly observable know-how-transfer infrastructure"
+  }
+]

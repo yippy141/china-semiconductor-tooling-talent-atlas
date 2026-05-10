@@ -1,0 +1,62 @@
+[
+  {
+    "table": "capabilities",
+    "source": "data/raw/capabilities.csv",
+    "output": "data/generated/capabilities.json",
+    "rows": 14
+  },
+  {
+    "table": "city_signals",
+    "source": "data/raw/city_signals.csv",
+    "output": "data/generated/city_signals.json",
+    "rows": 31
+  },
+  {
+    "table": "disciplines",
+    "source": "data/raw/disciplines.csv",
+    "output": "data/generated/disciplines.json",
+    "rows": 14
+  },
+  {
+    "table": "industry_entities",
+    "source": "data/raw/industry_entities.csv",
+    "output": "data/generated/industry_entities.json",
+    "rows": 11
+  },
+  {
+    "table": "institutions",
+    "source": "data/raw/institutions.csv",
+    "output": "data/generated/institutions.json",
+    "rows": 6
+  },
+  {
+    "table": "observations",
+    "source": "data/raw/observations.csv",
+    "output": "data/generated/observations.json",
+    "rows": 172
+  },
+  {
+    "table": "role_families",
+    "source": "data/raw/role_families.csv",
+    "output": "data/generated/role_families.json",
+    "rows": 16
+  },
+  {
+    "table": "segment_bottlenecks",
+    "source": "data/raw/segment_bottlenecks.csv",
+    "output": "data/generated/segment_bottlenecks.json",
+    "rows": 8
+  },
+  {
+    "table": "source_keywords_en_cn",
+    "source": "data/raw/source_keywords_en_cn.csv",
+    "output": "data/generated/source_keywords_en_cn.json",
+    "rows": 12
+  },
+  {
+    "table": "sources",
+    "source": "data/raw/sources.csv",
+    "output": "data/generated/sources.json",
+    "rows": 43
+  }
+]
