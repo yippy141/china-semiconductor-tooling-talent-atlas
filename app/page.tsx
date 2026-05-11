@@ -365,26 +365,26 @@ export default function HomePage() {
               </span>
             </Link>
 
-            <div
-              aria-disabled
-              className="flex h-full flex-col justify-between gap-6 bg-stone-950 p-7 opacity-70"
+            <Link
+              href="/sources"
+              className="group flex h-full flex-col justify-between gap-6 bg-stone-950 p-7 transition-colors hover:bg-stone-900"
             >
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500">
-                  Coming soon
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-200/80">
+                  Audit
                 </p>
-                <h3 className="mt-3 text-xl font-semibold tracking-tight text-stone-200">
+                <h3 className="mt-3 text-xl font-semibold tracking-tight text-stone-50">
                   Source ledger
                 </h3>
                 <p className="mt-3 text-sm leading-7 text-stone-400">
-                  A full register of public records behind the atlas, with
-                  retrieval dates and notes. Not yet published.
+                  Every public record behind the atlas, with publisher, type,
+                  reuse value, and retrieval dates.
                 </p>
               </div>
-              <span className="text-sm font-semibold uppercase tracking-[0.2em] text-stone-500">
-                In preparation
+              <span className="text-sm font-semibold uppercase tracking-[0.2em] text-stone-200 group-hover:text-white">
+                Open ledger →
               </span>
-            </div>
+            </Link>
           </div>
 
           <p className="mt-12 max-w-3xl text-xs leading-6 text-stone-500">
