@@ -92,6 +92,11 @@ export function CapabilityRoleMatrix() {
                 items={profile.publicSignals}
               />
 
+              <MatrixBlock
+                label="What to watch"
+                items={profile.whatToWatch}
+              />
+
               <div className="mt-auto border-t border-dashed border-stone-300 pt-4">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-700">
                   Caveat

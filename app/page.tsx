@@ -52,9 +52,15 @@ export default function HomePage() {
           }}
         />
         <div className="relative mx-auto flex w-full max-w-6xl flex-col px-6 pb-20 pt-16 sm:px-10 sm:pt-20 lg:px-12">
-          <div className="flex items-center justify-between gap-4 text-xs uppercase tracking-[0.22em] text-stone-400">
-            <span>China Semiconductor Tooling Talent Atlas</span>
-            <span className="hidden sm:inline">Visual brief · v1</span>
+          <div className="flex items-center justify-between gap-4 text-[11px] uppercase tracking-[0.22em] text-stone-400">
+            <span className="flex items-baseline gap-2">
+              <span aria-hidden className="font-mono text-stone-500">CN · TOOL</span>
+              <span aria-hidden className="text-stone-700">/</span>
+              <span>China Semiconductor Tooling Talent Atlas</span>
+            </span>
+            <span className="hidden font-mono text-stone-500 sm:inline">
+              Edition 01 · Beta dataset
+            </span>
           </div>
 
           <div className="mt-16 max-w-4xl">
@@ -125,15 +131,17 @@ export default function HomePage() {
       <section className="border-b border-stone-200 bg-stone-100">
         <div className="mx-auto w-full max-w-6xl px-6 py-20 sm:px-10 lg:px-12">
           <div className="max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-stone-500">
-              Four arguments
-            </p>
+            <div className="flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
+              <span className="font-mono text-stone-800">Findings</span>
+              <span aria-hidden className="text-stone-400">·</span>
+              <span className="text-stone-500">01–04</span>
+            </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
               What the visible layer does, and does not, show.
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
               Each card states a finding, the evidence pattern behind it, and
-              why it matters when reading the rest of the atlas.
+              the bottom line for reading the rest of the atlas.
             </p>
           </div>
 
@@ -144,8 +152,10 @@ export default function HomePage() {
                 className="flex flex-col border border-stone-300 bg-white p-7 shadow-[0_1px_0_rgba(0,0,0,0.04)]"
               >
                 <div className="flex items-baseline justify-between gap-4 border-b border-stone-200 pb-4">
-                  <span className="text-xs font-semibold uppercase tracking-[0.22em] text-stone-500">
-                    Argument {String(index + 1).padStart(2, "0")}
+                  <span className="flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
+                    <span className="font-mono text-stone-800">
+                      Finding {String(index + 1).padStart(2, "0")}
+                    </span>
                   </span>
                   <span className="text-[11px] uppercase tracking-[0.18em] text-stone-400">
                     {insight.source_ids.length} sources cited
@@ -163,7 +173,7 @@ export default function HomePage() {
                   </div>
                   <div className="border-t border-dashed border-stone-200 pt-4">
                     <dt className="text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-500">
-                      Why it matters
+                      Bottom line
                     </dt>
                     <dd className="mt-2 text-stone-800">
                       {insight.implication}
@@ -177,17 +187,22 @@ export default function HomePage() {
       </section>
 
       <section className="border-b border-stone-200 bg-stone-100">
-        <div className="mx-auto w-full max-w-6xl px-6 pb-20 pt-4 sm:px-10 lg:px-12">
+        <div className="mx-auto w-full max-w-6xl px-6 pb-14 pt-4 sm:px-10 sm:pb-20 lg:px-12">
           <div className="mb-8 max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-stone-500">
-              Geography of visibility
-            </p>
+            <div className="flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
+              <span className="font-mono text-stone-800">Exhibit A</span>
+              <span aria-hidden className="text-stone-400">·</span>
+              <span className="text-stone-500">Geography of visibility</span>
+            </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
               A schematic read of where evidence shows up.
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
-              City placement is for visual navigation, not geospatial accuracy.
-              Hover or focus a node to inspect its evidence.
+              <span className="mr-2 font-semibold uppercase tracking-[0.18em] text-stone-500">
+                Bottom line —
+              </span>
+              Public evidence concentrates in a handful of cities. The atlas
+              reads this as visibility coverage, not capability depth.
             </p>
           </div>
           <CitySignalMap />
@@ -195,18 +210,22 @@ export default function HomePage() {
       </section>
 
       <section className="border-b border-stone-200 bg-stone-100">
-        <div className="mx-auto w-full max-w-6xl px-6 pb-20 pt-4 sm:px-10 lg:px-12">
+        <div className="mx-auto w-full max-w-6xl px-6 pb-14 pt-4 sm:px-10 sm:pb-20 lg:px-12">
           <div className="mb-8 max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-stone-500">
-              The work behind the equipment
-            </p>
+            <div className="flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
+              <span className="font-mono text-stone-800">Exhibit B</span>
+              <span aria-hidden className="text-stone-400">·</span>
+              <span className="text-stone-500">What the work looks like</span>
+            </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
               What &ldquo;tooling talent&rdquo; actually means.
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
-              A side-by-side read of the four tool families: definition, the
-              role families they rely on, where they typically hit walls, what
-              public sources reveal, and where to stay sceptical.
+              <span className="mr-2 font-semibold uppercase tracking-[0.18em] text-stone-500">
+                Bottom line —
+              </span>
+              Each tool family relies on a distinct mix of roles,
+              bottlenecks, and public signals — not generic STEM headcount.
             </p>
           </div>
           <CapabilityRoleMatrix />
@@ -214,18 +233,22 @@ export default function HomePage() {
       </section>
 
       <section className="border-b border-stone-200 bg-stone-50">
-        <div className="mx-auto w-full max-w-6xl px-6 py-20 sm:px-10 lg:px-12">
+        <div className="mx-auto w-full max-w-6xl px-6 py-14 sm:px-10 sm:py-20 lg:px-12">
           <div className="mb-8 max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-stone-500">
-              The employer-side evidence
-            </p>
+            <div className="flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
+              <span className="font-mono text-stone-800">Exhibit C</span>
+              <span aria-hidden className="text-stone-400">·</span>
+              <span className="text-stone-500">Employer-side evidence</span>
+            </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
               What three listed equipment firms actually disclose.
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
-              Annual reports are the most structured public window into
-              workforce composition. Read these as firm-level scale and R&D
-              intensity, not as tooling-segment headcount.
+              <span className="mr-2 font-semibold uppercase tracking-[0.18em] text-stone-500">
+                Bottom line —
+              </span>
+              Three listed firms publish enough workforce structure to anchor
+              the picture. Categories are firm-level, not segment-level.
             </p>
           </div>
           <FirmWorkforceSnapshots />
@@ -233,11 +256,13 @@ export default function HomePage() {
       </section>
 
       <section className="border-b border-stone-200 bg-stone-50">
-        <div className="mx-auto w-full max-w-6xl px-6 py-20 sm:px-10 lg:px-12">
+        <div className="mx-auto w-full max-w-6xl px-6 py-14 sm:px-10 sm:py-20 lg:px-12">
           <div className="max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-stone-500">
-              Who this is for
-            </p>
+            <div className="flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
+              <span className="font-mono text-stone-800">Implications</span>
+              <span aria-hidden className="text-stone-400">·</span>
+              <span className="text-stone-500">Who this is for</span>
+            </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
               How different readers should use the atlas.
             </h2>
@@ -287,31 +312,46 @@ export default function HomePage() {
       </section>
 
       <section className="border-b border-stone-200 bg-stone-100">
-        <div className="mx-auto w-full max-w-6xl px-6 py-20 sm:px-10 lg:px-12">
+        <div className="mx-auto w-full max-w-6xl px-6 py-14 sm:px-10 sm:py-20 lg:px-12">
           <div className="mb-8 max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-stone-500">
-              How to read the rows
-            </p>
+            <div className="flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
+              <span className="font-mono text-stone-800">Exhibit D</span>
+              <span aria-hidden className="text-stone-400">·</span>
+              <span className="text-stone-500">Evidence ladder</span>
+            </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
               An evidence ladder, not a leaderboard.
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
-              Before opening the explorer or the methodology, see how the
-              observation set is layered — and which rows should carry weight
-              when you draw conclusions.
+              <span className="mr-2 font-semibold uppercase tracking-[0.18em] text-stone-500">
+                Bottom line —
+              </span>
+              Three tiers sit under the headline counts. Reading them as
+              equal would overstate what the public record shows.
             </p>
           </div>
           <EvidenceLadder />
         </div>
       </section>
 
-      <section className="bg-stone-950 text-stone-100">
-        <div className="mx-auto w-full max-w-6xl px-6 py-20 sm:px-10 lg:px-12">
+      <section className="relative overflow-hidden bg-stone-950 text-stone-100">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.06]"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
+            backgroundSize: "28px 28px",
+          }}
+        />
+        <div className="relative mx-auto w-full max-w-6xl px-6 py-14 sm:px-10 sm:py-20 lg:px-12">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-stone-400">
-                Continue reading
-              </p>
+              <div className="flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
+                <span className="font-mono text-amber-200/80">What to watch</span>
+                <span aria-hidden className="text-stone-600">·</span>
+                <span className="text-stone-400">Continue reading</span>
+              </div>
               <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
                 Pick how you want to dig in.
               </h2>
@@ -389,8 +429,8 @@ export default function HomePage() {
 
           <p className="mt-12 max-w-3xl text-xs leading-6 text-stone-500">
             This is an editorial evidence product, not a capability index.
-            Counts describe public-evidence coverage; observations are staging
-            data until manually verified. Mainland PRC only.
+            Counts describe public-evidence coverage; observations are evidence
+            rows in the beta dataset until manually verified. Mainland PRC only.
           </p>
         </div>
       </section>

@@ -79,10 +79,10 @@ export default function SourcesPage() {
   return (
     <main className="min-h-screen bg-stone-100 text-stone-950">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-5 py-10 sm:px-8 lg:px-10">
-        <header className="border-b border-stone-300 pb-8">
+        <header className="border-b border-stone-300 pb-6">
           <nav
             aria-label="Atlas sections"
-            className="flex flex-wrap gap-x-5 gap-y-2 text-xs font-semibold uppercase tracking-[0.22em] text-stone-500"
+            className="flex flex-wrap gap-x-5 gap-y-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500"
           >
             <Link href="/" className="hover:text-stone-950">
               Home
@@ -94,20 +94,18 @@ export default function SourcesPage() {
               Methodology
             </Link>
           </nav>
-          <p className="mt-6 text-xs font-semibold uppercase tracking-[0.22em] text-stone-500">
-            Source ledger
-          </p>
-          <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">
+          <div className="mt-5 flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
+            <span className="font-mono text-stone-800">Audit layer</span>
+            <span aria-hidden className="text-stone-400">·</span>
+            <span className="text-stone-500">Source ledger</span>
+          </div>
+          <h1 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
             Source Ledger
           </h1>
-          <p className="mt-4 max-w-3xl text-lg leading-8 text-stone-700">
-            Every observation in the explorer links back to this ledger.
-          </p>
-          <p className="mt-6 max-w-3xl border-l-2 border-stone-400 pl-4 text-sm leading-6 text-stone-600">
-            Use this page to audit the public records behind a claim. Open the
-            audit panel on a row to see its raw{" "}
-            <code className="font-mono text-xs">source_id</code>, publication
-            and access dates, and analyst notes.
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-stone-700 sm:text-base">
+            Every observation in the explorer links back to this ledger. Open
+            the audit panel on a row to see its publication and access dates,
+            analyst notes, and full identifier.
           </p>
         </header>
 
@@ -372,14 +370,14 @@ function LedgerStat({
   note: string;
 }) {
   return (
-    <div className="border border-stone-300 bg-white p-5">
-      <p className="text-xs uppercase tracking-[0.18em] text-stone-500">
+    <div className="border border-stone-300 bg-white p-4">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500">
         {label}
       </p>
-      <p className="mt-3 text-4xl font-semibold tracking-tight">
+      <p className="mt-2 font-mono text-2xl font-semibold tracking-tight text-stone-950">
         {numberFormatter.format(value)}
       </p>
-      <p className="mt-2 text-sm text-stone-600">{note}</p>
+      <p className="mt-1 text-xs leading-5 text-stone-600">{note}</p>
     </div>
   );
 }

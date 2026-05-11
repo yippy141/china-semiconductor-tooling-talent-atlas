@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Fragment, useMemo, useState } from "react";
 import capabilitiesData from "@/data/generated/capabilities.json";
 import institutionsData from "@/data/generated/institutions.json";
@@ -144,19 +145,32 @@ export default function ExplorerPage() {
   return (
     <main className="min-h-screen bg-stone-100 text-stone-950">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-5 py-10 sm:px-8 lg:px-10">
-        <header className="border-b border-stone-300 pb-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-stone-500">
-            Evidence explorer
-          </p>
-          <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">
+        <header className="border-b border-stone-300 pb-6">
+          <nav
+            aria-label="Atlas sections"
+            className="flex flex-wrap gap-x-5 gap-y-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500"
+          >
+            <Link href="/" className="hover:text-stone-950">
+              Home
+            </Link>
+            <Link href="/methodology" className="hover:text-stone-950">
+              Methodology
+            </Link>
+            <Link href="/sources" className="hover:text-stone-950">
+              Source ledger
+            </Link>
+          </nav>
+          <div className="mt-5 flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
+            <span className="font-mono text-stone-800">Audit layer</span>
+            <span aria-hidden className="text-stone-400">·</span>
+            <span className="text-stone-500">Evidence rows</span>
+          </div>
+          <h1 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
             Evidence Explorer
           </h1>
-          <p className="mt-4 max-w-3xl text-lg leading-8 text-stone-700">
-            Filter the public evidence signals behind the visual brief.
-          </p>
-          <p className="mt-6 max-w-3xl border-l-2 border-stone-400 pl-4 text-sm leading-6 text-stone-600">
-            This explorer is for auditability. The homepage interprets the
-            evidence; this page exposes the rows.
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-stone-700 sm:text-base">
+            Filter the public evidence signals behind the visual brief. The
+            homepage interprets the evidence; this page exposes the rows.
           </p>
         </header>
 
@@ -415,14 +429,14 @@ function KpiCard({
   note: string;
 }) {
   return (
-    <div className="border border-stone-300 bg-white p-5">
-      <p className="text-xs uppercase tracking-[0.18em] text-stone-500">
+    <div className="border border-stone-300 bg-white p-4">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500">
         {label}
       </p>
-      <p className="mt-3 text-4xl font-semibold tracking-tight">
+      <p className="mt-2 font-mono text-2xl font-semibold tracking-tight text-stone-950">
         {numberFormatter.format(value)}
       </p>
-      <p className="mt-2 text-sm text-stone-600">{note}</p>
+      <p className="mt-1 text-xs leading-5 text-stone-600">{note}</p>
     </div>
   );
 }

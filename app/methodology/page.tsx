@@ -98,10 +98,10 @@ export default function MethodologyPage() {
   return (
     <main className="min-h-screen bg-stone-100 text-stone-950">
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-10 px-5 py-10 sm:px-8 lg:px-10">
-        <header className="border-b border-stone-300 pb-8">
+        <header className="border-b-2 border-stone-900 pb-8">
           <nav
             aria-label="Atlas sections"
-            className="flex flex-wrap gap-x-5 gap-y-2 text-xs font-semibold uppercase tracking-[0.18em] text-stone-500"
+            className="flex flex-wrap gap-x-5 gap-y-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500"
           >
             <Link href="/" className="hover:text-stone-950">
               Home
@@ -109,18 +109,23 @@ export default function MethodologyPage() {
             <Link href="/explorer" className="hover:text-stone-950">
               Explorer
             </Link>
+            <Link href="/sources" className="hover:text-stone-950">
+              Source ledger
+            </Link>
           </nav>
-          <p className="mt-6 text-xs font-semibold uppercase tracking-[0.22em] text-stone-500">
-            Methodology
-          </p>
+          <div className="mt-6 flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
+            <span className="font-mono text-stone-800">Source contract</span>
+            <span aria-hidden className="text-stone-400">·</span>
+            <span className="text-stone-500">Methodology · Beta dataset v1</span>
+          </div>
           <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">
             How to read this atlas.
           </h1>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-stone-700">
             The China Semiconductor Tooling Talent Atlas is an editorial
             evidence product. This page describes what the atlas measures, what
-            it deliberately does not measure, and how to read each row
-            responsibly.
+            it deliberately does not measure, and the contract this product
+            keeps with the public sources behind every row.
           </p>
         </header>
 
