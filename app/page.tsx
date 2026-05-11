@@ -11,6 +11,7 @@ import { audienceImplications } from "@/data/editorial/audience-implications";
 import { CitySignalMap } from "@/components/atlas/city-signal-map";
 import { CapabilityRoleMatrix } from "@/components/atlas/capability-role-matrix";
 import { EvidenceLadder } from "@/components/atlas/evidence-ladder";
+import { FirmWorkforceSnapshots } from "@/components/atlas/firm-workforce-snapshots";
 
 const numberFormatter = new Intl.NumberFormat("en-US");
 
@@ -209,6 +210,25 @@ export default function HomePage() {
             </p>
           </div>
           <CapabilityRoleMatrix />
+        </div>
+      </section>
+
+      <section className="border-b border-stone-200 bg-stone-50">
+        <div className="mx-auto w-full max-w-6xl px-6 py-20 sm:px-10 lg:px-12">
+          <div className="mb-8 max-w-3xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-stone-500">
+              The employer-side evidence
+            </p>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+              What three listed equipment firms actually disclose.
+            </h2>
+            <p className="mt-4 text-base leading-7 text-stone-700">
+              Annual reports are the most structured public window into
+              workforce composition. Read these as firm-level scale and R&D
+              intensity, not as tooling-segment headcount.
+            </p>
+          </div>
+          <FirmWorkforceSnapshots />
         </div>
       </section>
 
