@@ -8,6 +8,7 @@ import { formatSegment } from "@/lib/atlas-labels";
 import { insights } from "@/data/editorial/insights";
 import { segmentProfiles } from "@/data/editorial/segment-profiles";
 import { audienceImplications } from "@/data/editorial/audience-implications";
+import { CitySignalMap } from "@/components/atlas/city-signal-map";
 
 const numberFormatter = new Intl.NumberFormat("en-US");
 
@@ -169,6 +170,24 @@ export default function HomePage() {
               </li>
             ))}
           </ol>
+        </div>
+      </section>
+
+      <section className="border-b border-stone-200 bg-stone-100">
+        <div className="mx-auto w-full max-w-6xl px-6 pb-20 pt-4 sm:px-10 lg:px-12">
+          <div className="mb-8 max-w-3xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-stone-500">
+              Geography of visibility
+            </p>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+              A schematic read of where evidence shows up.
+            </h2>
+            <p className="mt-4 text-base leading-7 text-stone-700">
+              City placement is for visual navigation, not geospatial accuracy.
+              Hover or focus a node to inspect its evidence.
+            </p>
+          </div>
+          <CitySignalMap />
         </div>
       </section>
 
