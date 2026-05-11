@@ -10,6 +10,7 @@ import { segmentProfiles } from "@/data/editorial/segment-profiles";
 import { audienceImplications } from "@/data/editorial/audience-implications";
 import { CitySignalMap } from "@/components/atlas/city-signal-map";
 import { CapabilityRoleMatrix } from "@/components/atlas/capability-role-matrix";
+import { EvidenceLadder } from "@/components/atlas/evidence-ladder";
 
 const numberFormatter = new Intl.NumberFormat("en-US");
 
@@ -262,6 +263,25 @@ export default function HomePage() {
               </article>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="border-b border-stone-200 bg-stone-100">
+        <div className="mx-auto w-full max-w-6xl px-6 py-20 sm:px-10 lg:px-12">
+          <div className="mb-8 max-w-3xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-stone-500">
+              How to read the rows
+            </p>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+              An evidence ladder, not a leaderboard.
+            </h2>
+            <p className="mt-4 text-base leading-7 text-stone-700">
+              Before opening the explorer or the methodology, see how the
+              observation set is layered — and which rows should carry weight
+              when you draw conclusions.
+            </p>
+          </div>
+          <EvidenceLadder />
         </div>
       </section>
 
