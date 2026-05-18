@@ -8,44 +8,47 @@ export type EditorialInsight = {
 
 export const insights: EditorialInsight[] = [
   {
-    id: "visible-layer-thinner-than-headline-count",
-    title: "Visible layer is thinner than headline count.",
+    id: "taxonomy-scaffold-share",
+    title: "Thirty-eight percent of rows are structural scaffolding.",
     summary:
-      "The atlas contains many public evidence signals, but a meaningful share is taxonomy scaffolding or proxy evidence rather than direct workforce observation.",
+      "Sixty-five of 172 rows map disciplines, roles, and segments. They make the monitor navigable, but they do not show firms hiring, training, or deploying people.",
     implication:
-      "Use the evidence layer to ask sharper questions, not to claim a measured talent pool.",
+      "Broad STEM counts cannot tell a toolmaker where Chinese competitors are building production support.",
     source_ids: ["CN_EDU_MOE_GRAD_DIR_2022", "CN_FILING_AMEC_2025"],
   },
   {
-    id: "segment-rankings-are-fragile",
-    title: "Segment rankings are fragile.",
+    id: "employer-disclosures-carry-signal",
+    title: "Employer disclosures carry the strongest public signal.",
     summary:
-      "A segment can look stronger because its firms, parks, or policy directories disclose more, not because the underlying know-how is deeper.",
+      "AMEC, ACM Research Shanghai, and NAURA publish workforce categories that expose R&D, technical, and service structure better than most education data.",
     implication:
-      "The homepage should compare evidence strength and visibility, not rank capability.",
-    source_ids: ["CN_FIRM_AMEC", "CN_FIRM_NAURA", "CN_FIRM_ACM_SH"],
-  },
-  {
-    id: "geography-clustered-visibility-not-depth",
-    title: "Geography is clustered but visibility is not depth.",
-    summary:
-      "Shanghai, Beijing, Suzhou, Shenzhen, and several inland or northeast cities show visible signals, but city presence is not the same as production depth.",
-    implication:
-      "Treat the city view as a navigation layer for evidence, not as a geographic scorecard.",
+      "The conversion layer between R&D and customer support deserves more attention than raw graduate output.",
     source_ids: [
-      "CN_SHORT_SH_DIR_2020",
-      "CN_SHORT_SZ_SEMI_2024",
-      "CN_PARK_SIP_IC",
-      "CN_PARK_BEIJING_ETOWN_IC",
+      "CN_FILING_AMEC_2025",
+      "CN_FILING_ACM_SH_2025",
+      "CN_FILING_NAURA_2025",
     ],
   },
   {
-    id: "tacit-production-knowhow-silent-column",
-    title: "Tacit production know-how is the silent column.",
+    id: "city-records-cluster",
+    title: "Shanghai and Beijing dominate the visible record.",
     summary:
-      "The hardest skills, such as chamber recovery, field calibration, tool matching, and customer ramp judgment, are weakly visible in public sources.",
+      "Shanghai leads the city view, followed by Beijing. The concentration reflects firm filings, park records, and shortage notices, not a full labor-market map.",
     implication:
-      "The brief should make absence legible instead of filling it with invented precision.",
+      "The city layer points analysts to records worth checking first.",
+    source_ids: [
+      "CN_SHORT_SH_DIR_2020",
+      "CN_PARK_BEIJING_ETOWN_IC",
+      "CN_PARK_ORIENTAL_CHIP_PORT",
+    ],
+  },
+  {
+    id: "knowhow-hidden",
+    title: "The decisive know-how sits behind the public record.",
+    summary:
+      "Chamber recovery, field calibration, tool matching, and customer-ramp support rarely appear in public records, even when firms publish product lines and R&D counts.",
+    implication:
+      "The useful monitor looks for production-support signals, not product claims alone.",
     source_ids: ["CN_FILING_NAURA_2025", "CN_FILING_ACM_SH_2025"],
   },
 ];

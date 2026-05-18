@@ -29,7 +29,7 @@ const keyNumbers = [
   {
     label: "Taxonomy scaffold rows",
     value: taxonomyScaffoldRows.length,
-    note: "Structural placeholders that organise the atlas, not measurements.",
+    note: "Structural placeholders that organise the monitor, not measurements.",
   },
   {
     label: "Core tooling segments",
@@ -56,7 +56,7 @@ export default function HomePage() {
             <span className="flex items-baseline gap-2">
               <span aria-hidden className="font-mono text-stone-500">CN · TOOL</span>
               <span aria-hidden className="text-stone-700">/</span>
-              <span>China Semiconductor Tooling Talent Atlas</span>
+              <span>China Chip Tooling Talent Monitor</span>
             </span>
             <span className="hidden font-mono text-stone-500 sm:inline">
               Edition 01 · Beta dataset
@@ -68,13 +68,18 @@ export default function HomePage() {
               Editorial evidence brief
             </p>
             <h1 className="mt-6 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-6xl lg:text-[68px]">
-              The Talent Layer of
-              <br />
-              China&apos;s Chip Tooling Push
+              China Chip Tooling Talent Monitor
             </h1>
             <p className="mt-8 max-w-2xl text-lg leading-8 text-stone-300 sm:text-xl">
-              China&apos;s semiconductor equipment race is also a race for
-              role-specific know-how.
+              What public records reveal about the people and organizations
+              behind China&apos;s semiconductor-equipment push.
+            </p>
+            <p className="mt-5 max-w-3xl text-base leading-8 text-stone-400">
+              The monitor tracks firms, city clusters, role families, and
+              source records tied to etch/clean, deposition,
+              metrology/inspection, and lithography-adjacent tooling. It is
+              built for analysts watching how Chinese toolmakers convert
+              R&amp;D into production support.
             </p>
           </div>
 
@@ -91,8 +96,9 @@ export default function HomePage() {
             >
               Read methodology
             </Link>
-            <span className="ml-1 text-xs uppercase tracking-[0.18em] text-stone-500">
-              Beta · evidence under review
+            <span className="ml-1 max-w-xl text-xs leading-5 text-stone-500">
+              Beta dataset: 43 sources, 172 evidence rows. Counts track public
+              records, not workforce size.
             </span>
           </nav>
         </div>
@@ -105,7 +111,7 @@ export default function HomePage() {
               The brief in numbers
             </h2>
             <p className="max-w-md text-sm text-stone-600">
-              What the atlas catalogues today. Counts describe public-evidence
+              What the monitor catalogues today. Counts describe public-evidence
               coverage, not workforce size.
             </p>
           </div>
@@ -141,7 +147,7 @@ export default function HomePage() {
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
               Each card states a finding, the evidence pattern behind it, and
-              the bottom line for reading the rest of the atlas.
+              the analyst read for using the rest of the monitor.
             </p>
           </div>
 
@@ -173,7 +179,7 @@ export default function HomePage() {
                   </div>
                   <div className="border-t border-dashed border-stone-200 pt-4">
                     <dt className="text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-500">
-                      Bottom line
+                      Analyst read
                     </dt>
                     <dd className="mt-2 text-stone-800">
                       {insight.implication}
@@ -195,13 +201,10 @@ export default function HomePage() {
               <span className="text-stone-500">Geography of visibility</span>
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              A schematic read of where evidence shows up.
+              City evidence is concentrated, not comprehensive.
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
-              <span className="mr-2 font-semibold uppercase tracking-[0.18em] text-stone-500">
-                Bottom line —
-              </span>
-              Public evidence concentrates in a handful of cities. The atlas
+              Public evidence concentrates in a handful of cities. The monitor
               reads this as visibility coverage, not capability depth.
             </p>
           </div>
@@ -221,9 +224,6 @@ export default function HomePage() {
               What &ldquo;tooling talent&rdquo; actually means.
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
-              <span className="mr-2 font-semibold uppercase tracking-[0.18em] text-stone-500">
-                Bottom line —
-              </span>
               Each tool family relies on a distinct mix of roles,
               bottlenecks, and public signals — not generic STEM headcount.
             </p>
@@ -241,12 +241,9 @@ export default function HomePage() {
               <span className="text-stone-500">Employer-side evidence</span>
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              What three listed equipment firms actually disclose.
+              Employer disclosures anchor the public record.
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
-              <span className="mr-2 font-semibold uppercase tracking-[0.18em] text-stone-500">
-                Bottom line —
-              </span>
               Three listed firms publish enough workforce structure to anchor
               the picture. Categories are firm-level, not segment-level.
             </p>
@@ -264,7 +261,7 @@ export default function HomePage() {
               <span className="text-stone-500">Who this is for</span>
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              How different readers should use the atlas.
+              How different readers should use the monitor.
             </h2>
           </div>
 
@@ -320,12 +317,9 @@ export default function HomePage() {
               <span className="text-stone-500">Evidence ladder</span>
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              An evidence ladder, not a leaderboard.
+              Read evidence tiers separately.
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
-              <span className="mr-2 font-semibold uppercase tracking-[0.18em] text-stone-500">
-                Bottom line —
-              </span>
               Three tiers sit under the headline counts. Reading them as
               equal would overstate what the public record shows.
             </p>
@@ -417,7 +411,7 @@ export default function HomePage() {
                   Source ledger
                 </h3>
                 <p className="mt-3 text-sm leading-7 text-stone-400">
-                  Every public record behind the atlas, with publisher, type,
+                  Every public record behind the monitor, with publisher, type,
                   reuse value, and retrieval dates.
                 </p>
               </div>

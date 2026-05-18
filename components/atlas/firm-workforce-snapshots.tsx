@@ -1,3 +1,4 @@
+import Link from "next/link";
 import sourcesData from "@/data/generated/sources.json";
 import {
   firmWorkforceSnapshots,
@@ -91,7 +92,7 @@ export function FirmWorkforceSnapshots() {
           id="firm-workforce-heading"
           className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
         >
-          The strongest employer-side evidence sits in listed-company filings.
+          What AMEC, ACM Research, and NAURA publish about their workforce
         </h3>
         <p className="max-w-3xl text-sm leading-7 text-stone-600">
           Three firms disclose enough workforce structure for segment signals
@@ -132,7 +133,12 @@ export function FirmWorkforceSnapshots() {
                   ) : null}
                 </div>
                 <h4 className="text-xl font-semibold tracking-tight text-stone-950">
-                  {snapshot.firm}
+                  <Link
+                    href={`/firms/${snapshot.id}`}
+                    className="underline-offset-4 hover:underline"
+                  >
+                    {snapshot.firm}
+                  </Link>
                 </h4>
                 <ul className="flex flex-wrap gap-2">
                   {snapshot.segmentSignals.map((segment) => (
@@ -195,6 +201,13 @@ export function FirmWorkforceSnapshots() {
                 </span>
                 {snapshot.caveat}
               </p>
+
+              <Link
+                href={`/firms/${snapshot.id}`}
+                className="text-sm font-semibold text-stone-900 underline-offset-4 hover:underline"
+              >
+                Open firm dossier -&gt;
+              </Link>
 
               {sources.length > 0 ? (
                 <div className="mt-auto border-t border-stone-200 pt-4">

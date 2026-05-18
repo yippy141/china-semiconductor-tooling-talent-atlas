@@ -42,7 +42,7 @@ const tiers: Tier[] = [
     index: "03",
     framing: "Navigational",
     description:
-      "Manual inferences that link MOE disciplines and structural categories to tooling segments. They help readers navigate the atlas, but they are not evidence of real-world activity.",
+      "Manual inferences that link MOE disciplines and structural categories to tooling segments. They help readers navigate the monitor, but they are not evidence of real-world activity.",
     weightLabel: "Scaffolding only — not real-world signal",
     accent:
       "bg-[repeating-linear-gradient(135deg,#a8a29e_0,#a8a29e_4px,transparent_4px,transparent_8px)]",
@@ -85,12 +85,11 @@ export function EvidenceLadder() {
           id="evidence-ladder-heading"
           className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
         >
-          Not all observations carry the same analytical weight.
+          Three tiers of evidence
         </h3>
         <p className="max-w-3xl text-sm leading-7 text-stone-700">
-          The atlas mixes three kinds of rows. Reading them as if they were
-          equal would overstate what the public record actually shows. There is
-          no composite score — each tier should be read on its own terms.
+          The monitor combines direct public records, analytical proxies, and
+          taxonomy scaffolding. Each tier is reported separately.
         </p>
       </header>
 

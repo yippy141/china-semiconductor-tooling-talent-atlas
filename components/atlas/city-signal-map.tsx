@@ -105,7 +105,7 @@ export function CitySignalMap() {
             id={headingId}
             className="mt-2 text-xl font-semibold tracking-tight text-stone-50 sm:text-2xl"
           >
-            Where public evidence currently surfaces.
+            Where evidence concentrates across mainland China
           </h3>
         </div>
         <p className="max-w-sm text-xs leading-6 text-stone-400">

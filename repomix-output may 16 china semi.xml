@@ -43,7 +43,11 @@ The content is organized as follows:
 app/
   essay/
     page.tsx
+  explorer/
+    page.tsx
   methodology/
+    page.tsx
+  sources/
     page.tsx
   globals.css
   icon.svg
@@ -52,7 +56,19 @@ app/
 coding/
   00_vscode_beginner_checklist.md
   01_coding_agent_prompts.md
+components/
+  atlas/
+    capability-role-matrix.tsx
+    city-signal-map.tsx
+    evidence-ladder.tsx
+    firm-workforce-snapshots.tsx
 data/
+  editorial/
+    audience-implications.ts
+    city-positions.ts
+    firm-workforce-snapshots.ts
+    insights.ts
+    segment-profiles.ts
   generated/
     capabilities.json
     city_signals.json
@@ -82,6 +98,9 @@ docs/
   02_research_QA.md
   03_next_steps_vscode.md
   04_validation_summary.json
+lib/
+  atlas-analytics.ts
+  atlas-labels.ts
 prompts/
   01_literature_gap_deep_research.md
   02_capability_taxonomy_deep_research.md
@@ -156,76 +175,6 @@ export default function EssayPage() {
 }
 </file>
 
-<file path="app/methodology/page.tsx">
-import Link from "next/link";
-
-const boundaries = [
-  "Counts are public evidence signals, not capability scores or rankings.",
-  "Observations remain staging evidence until manually verified against source rows.",
-  "The atlas does not estimate headcount, yield learning, or tacit production know-how.",
-  "Mainland PRC is the default scope unless a row is explicitly labeled otherwise.",
-  "No individual-level personal data belongs in this product.",
-];
-
-export default function MethodologyPage() {
-  return (
-    <main className="min-h-screen bg-stone-100 text-stone-950">
-      <div className="mx-auto flex w-full max-w-4xl flex-col gap-8 px-5 py-8 sm:px-8 lg:px-10">
-        <header className="border-b border-stone-300 pb-8">
-          <nav className="flex flex-wrap gap-x-5 gap-y-2 text-xs font-semibold uppercase tracking-[0.16em] text-stone-500">
-            <Link href="/" className="hover:text-stone-950">
-              Dashboard
-            </Link>
-            <Link href="/essay" className="hover:text-stone-950">
-              Essay
-            </Link>
-          </nav>
-          <p className="mt-6 text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
-            Methodology
-          </p>
-          <h1 className="mt-3 text-4xl font-semibold tracking-tight">
-            How to read this atlas
-          </h1>
-          <p className="mt-5 text-lg leading-8 text-stone-700">
-            This project is an editorial evidence product. It organizes public
-            signals about semiconductor tooling talent, keeps source IDs
-            visible, and separates direct evidence from proxy evidence.
-          </p>
-        </header>
-
-        <section className="rounded-lg border border-stone-300 bg-white p-6 shadow-sm">
-          <h2 className="text-2xl font-semibold tracking-tight">
-            Reading Rules
-          </h2>
-          <ul className="mt-5 space-y-3 text-sm leading-6 text-stone-700">
-            {boundaries.map((boundary) => (
-              <li key={boundary} className="flex gap-3">
-                <span
-                  aria-hidden
-                  className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-stone-500"
-                />
-                <span>{boundary}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section className="rounded-lg border border-stone-300 bg-white p-6 shadow-sm">
-          <h2 className="text-2xl font-semibold tracking-tight">
-            Evidence Strength
-          </h2>
-          <p className="mt-3 text-sm leading-6 text-stone-700">
-            Evidence strength describes how clearly a public source supports an
-            observation. It is not a claim about engineering quality, market
-            share, production readiness, or labor-market size.
-          </p>
-        </section>
-      </div>
-    </main>
-  );
-}
-</file>
-
 <file path="app/globals.css">
 @import "tailwindcss";
 
@@ -277,873 +226,6 @@ export default function RootLayout({
     <html lang="en" className="h-full antialiased">
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
-  );
-}
-</file>
-
-<file path="app/page.tsx">
-"use client";
-
-import { useMemo, useState } from "react";
-import capabilitiesData from "@/data/generated/capabilities.json";
-import citySignalsData from "@/data/generated/city_signals.json";
-import industryEntitiesData from "@/data/generated/industry_entities.json";
-import institutionsData from "@/data/generated/institutions.json";
-import observationsData from "@/data/generated/observations.json";
-import sourcesData from "@/data/generated/sources.json";
-
-const segments = [
-  {
-    id: "etch_clean",
-    label: "Etch/Clean/Strip",
-    shortLabel: "etch/clean/strip",
-  },
-  {
-    id: "deposition",
-    label: "Deposition",
-    shortLabel: "deposition",
-  },
-  {
-    id: "metrology_inspection",
-    label: "Metrology/Inspection",
-    shortLabel: "metrology/inspection",
-  },
-  {
-    id: "lithography_sidebar",
-    label: "Lithography Sidebar",
-    shortLabel: "lithography sidebar",
-  },
-] as const;
-
-type SegmentId = (typeof segments)[number]["id"];
-type Capability = (typeof capabilitiesData)[number];
-type Observation = (typeof observationsData)[number];
-type Source = (typeof sourcesData)[number];
-
-const sourceTitleById = new Map<string, Source>(
-  sourcesData.map((source) => [source.source_id, source]),
-);
-
-const segmentLabelById = new Map<string, string>(
-  segments.map((segment) => [segment.id, segment.label]),
-);
-
-const confidencePalette: Record<string, string> = {
-  high: "#1c1917",
-  medium: "#a8a29e",
-  low: "#d6d3d1",
-};
-
-function titleCaseFromSnake(value: string) {
-  return value
-    .split("_")
-    .map((word) =>
-      word.length === 0 ? word : word[0].toUpperCase() + word.slice(1),
-    )
-    .join(" ");
-}
-
-const kpis = [
-  {
-    label: "Sources",
-    value: sourcesData.length,
-    note: "ledger entries",
-  },
-  {
-    label: "Observations",
-    value: observationsData.length,
-    note: "staging evidence rows",
-  },
-  {
-    label: "Capabilities",
-    value: capabilitiesData.length,
-    note: "taxonomy rows",
-  },
-  {
-    label: "Institutions",
-    value: institutionsData.length,
-    note: "public institution signals",
-  },
-];
-
-function normalizeList(value: string) {
-  return value
-    .split(";")
-    .map((item) => item.trim())
-    .filter(Boolean);
-}
-
-function includesSegment(value: string, segment: SegmentId) {
-  return normalizeList(value).includes(segment);
-}
-
-function uniqueCount(values: string[]) {
-  return new Set(values.filter(Boolean)).size;
-}
-
-function confidenceLabel(observations: Observation[]) {
-  const confidenceCounts = observations.reduce<Record<string, number>>(
-    (counts, observation) => {
-      const key = observation.confidence || "unspecified";
-      counts[key] = (counts[key] ?? 0) + 1;
-      return counts;
-    },
-    {},
-  );
-
-  return Object.entries(confidenceCounts)
-    .map(([confidence, count]) => `${confidence}: ${count}`)
-    .join(", ");
-}
-
-function sourceLabel(sourceId: string) {
-  const source = sourceTitleById.get(sourceId);
-  return source ? source.publisher : "Source not found";
-}
-
-function EmptyState({ message }: { message: string }) {
-  return (
-    <div className="rounded-lg border border-dashed border-stone-300 bg-stone-50 px-5 py-8 text-sm text-stone-600">
-      {message}
-    </div>
-  );
-}
-
-function DistributionCard({
-  eyebrow,
-  title,
-  description,
-  emptyMessage,
-  rows,
-}: {
-  eyebrow: string;
-  title: string;
-  description: string;
-  emptyMessage: string;
-  rows: { label: string; count: number }[];
-}) {
-  const maxCount = Math.max(...rows.map((row) => row.count), 0);
-
-  return (
-    <div className="flex flex-col rounded-lg border border-stone-300 bg-white p-5 shadow-sm">
-      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-stone-500">
-        {eyebrow}
-      </p>
-      <h3 className="mt-2 text-base font-semibold text-stone-950">{title}</h3>
-      <p className="mt-1 text-sm leading-6 text-stone-600">{description}</p>
-      <div className="mt-4">
-        {rows.length === 0 ? (
-          <EmptyState message={emptyMessage} />
-        ) : (
-          <div className="space-y-3">
-            {rows.map((row) => {
-              const width = maxCount === 0 ? 0 : (row.count / maxCount) * 100;
-
-              return (
-                <div key={row.label}>
-                  <div className="mb-1 flex items-center justify-between gap-4 text-xs text-stone-600">
-                    <span>{row.label}</span>
-                    <span className="font-mono text-stone-500">
-                      {row.count}
-                    </span>
-                  </div>
-                  <div className="h-2 overflow-hidden bg-stone-100">
-                    <div
-                      className="h-full bg-stone-800"
-                      style={{ width: `${width}%` }}
-                    />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function SectionHeading({
-  eyebrow,
-  title,
-  description,
-}: {
-  eyebrow: string;
-  title: string;
-  description: string;
-}) {
-  return (
-    <div className="mb-5 max-w-3xl">
-      <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-stone-500">
-        {eyebrow}
-      </p>
-      <h2 className="text-2xl font-semibold tracking-tight text-stone-950">
-        {title}
-      </h2>
-      <p className="mt-2 text-sm leading-6 text-stone-600">{description}</p>
-    </div>
-  );
-}
-
-export default function Home() {
-  const [activeSegment, setActiveSegment] = useState<SegmentId>("etch_clean");
-
-  const selectedSegment = segments.find((segment) => segment.id === activeSegment);
-
-  const filteredCapabilities = useMemo(
-    () =>
-      capabilitiesData.filter(
-        (capability) => capability.segment === activeSegment,
-      ),
-    [activeSegment],
-  );
-
-  const filteredObservations = useMemo(
-    () =>
-      observationsData.filter(
-        (observation) => observation.segment === activeSegment,
-      ),
-    [activeSegment],
-  );
-
-  const observationsBySegment = useMemo(() => {
-    const counts = new Map<string, number>();
-    for (const observation of observationsData) {
-      const key = observation.segment || "unspecified";
-      counts.set(key, (counts.get(key) ?? 0) + 1);
-    }
-    return Array.from(counts, ([segmentId, count]) => ({
-      segmentId,
-      label: segmentLabelById.get(segmentId) ?? titleCaseFromSnake(segmentId),
-      count,
-    })).sort((a, b) => b.count - a.count);
-  }, []);
-
-  const observationsByEvidenceType = useMemo(() => {
-    const counts = new Map<string, number>();
-    for (const observation of observationsData) {
-      const key = observation.evidence_type || "unspecified";
-      counts.set(key, (counts.get(key) ?? 0) + 1);
-    }
-    return Array.from(counts, ([evidenceType, count]) => ({
-      evidenceType,
-      label: titleCaseFromSnake(evidenceType),
-      count,
-    })).sort((a, b) => b.count - a.count);
-  }, []);
-
-  const cityClusters = useMemo(() => {
-    type Row = {
-      city: string;
-      province: string;
-      segment: string;
-      evidence_type: string;
-      confidence: string;
-    };
-
-    const signalRows: Row[] = citySignalsData.map((signal) => ({
-      city: signal.city,
-      province: signal.province,
-      segment: signal.segment,
-      evidence_type: signal.evidence_type,
-      confidence: signal.confidence,
-    }));
-
-    const observationRows: Row[] = observationsData.map((observation) => ({
-      city: observation.city,
-      province: observation.province,
-      segment: observation.segment,
-      evidence_type: observation.evidence_type,
-      confidence: observation.confidence,
-    }));
-
-    const allRows: Row[] = signalRows
-      .concat(observationRows)
-      .filter((row) => Boolean(row.city) && Boolean(row.segment));
-
-    const groups = allRows.reduce<Record<string, Row[]>>((acc, row) => {
-      const key = `${row.city}|${row.province}|${row.segment}`;
-      acc[key] = (acc[key] ?? []).concat(row);
-      return acc;
-    }, {});
-
-    const clusters = Object.entries(groups).map(([key, rows]) => {
-      const [city, province, segment] = key.split("|");
-
-      const evidenceCounts = rows.reduce<Record<string, number>>(
-        (acc, row) =>
-          row.evidence_type
-            ? { ...acc, [row.evidence_type]: (acc[row.evidence_type] ?? 0) + 1 }
-            : acc,
-        {},
-      );
-      const topEvidenceTypes = Object.entries(evidenceCounts)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 3)
-        .map(([type, count]) => ({ label: titleCaseFromSnake(type), count }));
-
-      const confidenceCounts = rows.reduce<Record<string, number>>(
-        (acc, row) =>
-          row.confidence
-            ? { ...acc, [row.confidence]: (acc[row.confidence] ?? 0) + 1 }
-            : acc,
-        {},
-      );
-      const confidenceMix = Object.entries(confidenceCounts)
-        .sort((a, b) => b[1] - a[1])
-        .map(([confidence, count]) => ({
-          confidence,
-          label: titleCaseFromSnake(confidence),
-          count,
-        }));
-
-      const institutions = institutionsData
-        .filter(
-          (institution) =>
-            institution.city === city &&
-            normalizeList(institution.segments).includes(segment),
-        )
-        .map((institution) => ({
-          id: institution.institution_id,
-          name: institution.name_en,
-        }));
-
-      const entities = industryEntitiesData
-        .filter(
-          (entity) =>
-            entity.city === city &&
-            normalizeList(entity.segment).includes(segment),
-        )
-        .map((entity) => ({ id: entity.entity_id, name: entity.name_en }));
-
-      return {
-        key,
-        city,
-        province,
-        segment,
-        segmentLabel:
-          segmentLabelById.get(segment) ?? titleCaseFromSnake(segment),
-        observationCount: rows.length,
-        topEvidenceTypes,
-        confidenceMix,
-        institutions,
-        entities,
-      };
-    });
-
-    return clusters.sort((a, b) => {
-      if (b.observationCount !== a.observationCount) {
-        return b.observationCount - a.observationCount;
-      }
-      if (a.city !== b.city) return a.city.localeCompare(b.city);
-      return a.segmentLabel.localeCompare(b.segmentLabel);
-    });
-  }, []);
-
-  const observationsByConfidence = useMemo(() => {
-    const counts = new Map<string, number>();
-    for (const observation of observationsData) {
-      const key = observation.confidence || "unspecified";
-      counts.set(key, (counts.get(key) ?? 0) + 1);
-    }
-    return Array.from(counts, ([confidence, count]) => ({
-      confidence,
-      label: titleCaseFromSnake(confidence),
-      count,
-    })).sort((a, b) => b.count - a.count);
-  }, []);
-
-  const filteredInstitutions = useMemo(
-    () =>
-      institutionsData.filter((institution) =>
-        includesSegment(institution.segments, activeSegment),
-      ),
-    [activeSegment],
-  );
-
-  const segmentSummary = [
-    {
-      label: "Capability rows",
-      value: filteredCapabilities.length,
-    },
-    {
-      label: "Evidence rows",
-      value: filteredObservations.length,
-    },
-    {
-      label: "Source IDs",
-      value: uniqueCount(
-        filteredObservations.map((observation) => observation.source_id),
-      ),
-    },
-    {
-      label: "Institution signals",
-      value: filteredInstitutions.length,
-    },
-  ];
-
-  return (
-    <main className="min-h-screen bg-stone-100 text-stone-950">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-10 px-5 py-8 sm:px-8 lg:px-10">
-        <header className="border-b border-stone-300 pb-8">
-          <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-4xl">
-              <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
-                Editorial evidence product
-              </p>
-              <h1 className="text-4xl font-semibold tracking-tight text-stone-950 sm:text-5xl">
-                China Semiconductor Tooling Talent Atlas
-              </h1>
-              <p className="mt-5 max-w-3xl text-lg leading-8 text-stone-700">
-                A public-evidence view of where tooling-relevant talent signals
-                appear across mainland PRC semiconductor equipment segments.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <a
-                href="/essay"
-                className="inline-flex h-11 w-fit items-center border border-stone-300 bg-stone-50 px-4 text-sm font-medium text-stone-700 transition-colors hover:border-stone-500 hover:bg-white"
-              >
-                Read the essay
-              </a>
-              <a
-                href="/methodology"
-                className="inline-flex h-11 w-fit items-center border border-stone-900 px-4 text-sm font-medium text-stone-950 transition-colors hover:bg-stone-950 hover:text-white"
-              >
-                Methodology
-              </a>
-            </div>
-          </div>
-          <div className="mt-6 max-w-4xl border-l-2 border-stone-400 pl-4 text-sm leading-6 text-stone-600">
-            Caveat: this page uses generated JSON from local CSV files. The
-            observations remain staging evidence until manually verified, and
-            the counts below are public evidence signals, not capability scores
-            or labor-market totals.
-          </div>
-        </header>
-
-        <section
-          aria-label="Dataset totals"
-          className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
-        >
-          {kpis.map((kpi) => (
-            <div
-              key={kpi.label}
-              className="rounded-lg border border-stone-300 bg-white p-5 shadow-sm"
-            >
-              <p className="text-sm text-stone-500">{kpi.label}</p>
-              <p className="mt-3 text-4xl font-semibold tracking-tight">
-                {kpi.value.toLocaleString()}
-              </p>
-              <p className="mt-2 text-sm text-stone-600">{kpi.note}</p>
-            </div>
-          ))}
-        </section>
-
-        <section aria-label="Dataset shape" className="flex flex-col gap-4">
-          <SectionHeading
-            eyebrow="Dataset shape"
-            title="How observations distribute across the atlas"
-            description="Counts are calculated from the full observations.json file, not the segment filter below. Read these as public evidence signals, not capability."
-          />
-          <div className="grid gap-4 lg:grid-cols-2">
-            <DistributionCard
-              eyebrow="By segment"
-              title="Observations per tooling segment"
-              description="Number of evidence rows assigned to each segment in the staging data."
-              emptyMessage="No observations are loaded for any segment."
-              rows={observationsBySegment}
-            />
-
-            <DistributionCard
-              eyebrow="By confidence"
-              title="Confidence breakdown"
-              description="Confidence describes the link between source and observation, not how important the observation is."
-              emptyMessage="No observations carry a confidence value yet."
-              rows={observationsByConfidence}
-            />
-          </div>
-
-          <DistributionCard
-            eyebrow="By evidence type"
-            title="Observations per evidence type"
-            description="Definitions for each label live on the methodology page. Bars are sorted by count to surface the most-cited evidence types first."
-            emptyMessage="No observations are tagged with an evidence type."
-            rows={observationsByEvidenceType}
-          />
-        </section>
-
-        <section aria-label="City clusters">
-          <SectionHeading
-            eyebrow="City clusters"
-            title="Public-evidence signals by city and segment"
-            description="Each row groups public evidence rows for one city, province, and tooling segment. Counts are public evidence signals, not capability scores, talent rankings, or labor-market totals."
-          />
-          {cityClusters.length === 0 ? (
-            <EmptyState message="No city-level evidence is loaded yet." />
-          ) : (
-            <div className="overflow-hidden rounded-lg border border-stone-300 bg-white shadow-sm">
-              <div className="max-h-[680px] overflow-auto">
-                <table className="min-w-full divide-y divide-stone-200 text-left text-sm">
-                  <thead className="sticky top-0 bg-stone-50 text-xs uppercase tracking-[0.12em] text-stone-500">
-                    <tr>
-                      <th className="min-w-44 px-4 py-3 font-semibold">City</th>
-                      <th className="min-w-44 px-4 py-3 font-semibold">Segment</th>
-                      <th className="w-36 px-4 py-3 font-semibold">
-                        Public evidence signal
-                      </th>
-                      <th className="min-w-56 px-4 py-3 font-semibold">
-                        Top evidence types
-                      </th>
-                      <th className="min-w-44 px-4 py-3 font-semibold">
-                        Confidence mix
-                      </th>
-                      <th className="min-w-56 px-4 py-3 font-semibold">
-                        Key institutions
-                      </th>
-                      <th className="min-w-56 px-4 py-3 font-semibold">
-                        Key industry entities
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-stone-200">
-                    {cityClusters.map((cluster) => (
-                      <tr key={cluster.key}>
-                        <td className="px-4 py-4 align-top">
-                          <p className="font-medium text-stone-950">
-                            {cluster.city}
-                          </p>
-                          <p className="mt-1 text-xs text-stone-500">
-                            {cluster.province || "Province not recorded"}
-                          </p>
-                        </td>
-                        <td className="px-4 py-4 align-top">
-                          <p className="text-stone-800">{cluster.segmentLabel}</p>
-                          <p className="mt-1 font-mono text-xs text-stone-500">
-                            {cluster.segment}
-                          </p>
-                        </td>
-                        <td className="px-4 py-4 align-top">
-                          <p className="text-2xl font-semibold text-stone-950">
-                            {cluster.observationCount}
-                          </p>
-                          <p className="mt-1 text-xs text-stone-500">
-                            evidence row
-                            {cluster.observationCount === 1 ? "" : "s"}
-                          </p>
-                        </td>
-                        <td className="px-4 py-4 align-top text-stone-600">
-                          {cluster.topEvidenceTypes.length === 0 ? (
-                            <span className="text-stone-400">—</span>
-                          ) : (
-                            <ul className="space-y-1">
-                              {cluster.topEvidenceTypes.map((type) => (
-                                <li key={type.label} className="leading-5">
-                                  {type.label}
-                                  <span className="ml-1 text-xs text-stone-500">
-                                    · {type.count}
-                                  </span>
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        </td>
-                        <td className="px-4 py-4 align-top">
-                          {cluster.confidenceMix.length === 0 ? (
-                            <span className="text-stone-400">—</span>
-                          ) : (
-                            <ul className="flex flex-wrap gap-1.5">
-                              {cluster.confidenceMix.map((entry) => (
-                                <li
-                                  key={entry.confidence}
-                                  className="inline-flex items-center gap-1.5 border border-stone-200 bg-stone-50 px-2 py-1 text-xs text-stone-700"
-                                >
-                                  <span
-                                    aria-hidden
-                                    className="inline-block h-2 w-2 rounded-full"
-                                    style={{
-                                      backgroundColor:
-                                        confidencePalette[entry.confidence] ??
-                                        "#a8a29e",
-                                    }}
-                                  />
-                                  {entry.label}
-                                  <span className="text-stone-500">
-                                    · {entry.count}
-                                  </span>
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        </td>
-                        <td className="px-4 py-4 align-top text-stone-600">
-                          {cluster.institutions.length === 0 ? (
-                            <span className="text-stone-400">—</span>
-                          ) : (
-                            <ul className="space-y-1 leading-5">
-                              {cluster.institutions.map((institution) => (
-                                <li key={institution.id}>{institution.name}</li>
-                              ))}
-                            </ul>
-                          )}
-                        </td>
-                        <td className="px-4 py-4 align-top text-stone-600">
-                          {cluster.entities.length === 0 ? (
-                            <span className="text-stone-400">—</span>
-                          ) : (
-                            <ul className="space-y-1 leading-5">
-                              {cluster.entities.map((entity) => (
-                                <li key={entity.id}>{entity.name}</li>
-                              ))}
-                            </ul>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-        </section>
-
-        <section className="rounded-lg border border-stone-300 bg-white p-5 shadow-sm">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-stone-500">
-                Segment filter
-              </p>
-              <h2 className="mt-2 text-xl font-semibold text-stone-950">
-                {selectedSegment?.label}
-              </h2>
-            </div>
-            <div className="grid gap-2 sm:grid-cols-2 lg:flex">
-              {segments.map((segment) => {
-                const isActive = segment.id === activeSegment;
-
-                return (
-                  <button
-                    key={segment.id}
-                    type="button"
-                    onClick={() => setActiveSegment(segment.id)}
-                    className={`h-10 border px-3 text-sm font-medium transition-colors ${
-                      isActive
-                        ? "border-stone-950 bg-stone-950 text-white"
-                        : "border-stone-300 bg-stone-50 text-stone-700 hover:border-stone-500 hover:bg-white"
-                    }`}
-                  >
-                    {segment.shortLabel}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {segmentSummary.map((item) => (
-              <div
-                key={item.label}
-                className="border border-stone-200 bg-stone-50 p-4"
-              >
-                <p className="text-xs uppercase tracking-[0.14em] text-stone-500">
-                  {item.label}
-                </p>
-                <p className="mt-2 text-2xl font-semibold">{item.value}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section>
-          <SectionHeading
-            eyebrow="Capability matrix"
-            title="Capabilities and attached public evidence signals"
-            description="Rows come from the generated capability taxonomy. Evidence counts are calculated only from observations that name the same capability_id."
-          />
-
-          {filteredCapabilities.length === 0 ? (
-            <EmptyState message="No capability rows are available for this segment." />
-          ) : (
-            <div className="overflow-hidden rounded-lg border border-stone-300 bg-white shadow-sm">
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-stone-200 text-left text-sm">
-                  <thead className="bg-stone-50 text-xs uppercase tracking-[0.12em] text-stone-500">
-                    <tr>
-                      <th className="w-28 px-4 py-3 font-semibold">ID</th>
-                      <th className="min-w-72 px-4 py-3 font-semibold">
-                        Capability
-                      </th>
-                      <th className="min-w-64 px-4 py-3 font-semibold">
-                        Public proxy examples
-                      </th>
-                      <th className="w-36 px-4 py-3 font-semibold">
-                        Evidence rows
-                      </th>
-                      <th className="w-44 px-4 py-3 font-semibold">
-                        Evidence strength
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-stone-200">
-                    {filteredCapabilities.map((capability: Capability) => {
-                      const capabilityObservations = filteredObservations.filter(
-                        (observation) =>
-                          observation.capability_id ===
-                          capability.capability_id,
-                      );
-                      const sourceCount = uniqueCount(
-                        capabilityObservations.map(
-                          (observation) => observation.source_id,
-                        ),
-                      );
-
-                      return (
-                        <tr key={capability.capability_id}>
-                          <td className="px-4 py-4 align-top font-mono text-xs text-stone-500">
-                            {capability.capability_id}
-                          </td>
-                          <td className="px-4 py-4 align-top">
-                            <p className="font-medium text-stone-950">
-                              {capability.capability_name}
-                            </p>
-                            <p className="mt-2 leading-6 text-stone-600">
-                              {capability.plain_english_description}
-                            </p>
-                          </td>
-                          <td className="px-4 py-4 align-top leading-6 text-stone-600">
-                            {capability.public_proxy_examples}
-                          </td>
-                          <td className="px-4 py-4 align-top">
-                            <p className="font-semibold text-stone-950">
-                              {capabilityObservations.length}
-                            </p>
-                            <p className="mt-1 text-xs text-stone-500">
-                              {sourceCount} source ID
-                              {sourceCount === 1 ? "" : "s"}
-                            </p>
-                          </td>
-                          <td className="px-4 py-4 align-top text-stone-600">
-                            {capabilityObservations.length > 0
-                              ? confidenceLabel(capabilityObservations)
-                              : "No capability-linked observations yet"}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-        </section>
-
-        <section>
-          <SectionHeading
-            eyebrow="Evidence table"
-            title="Observation rows for the selected segment"
-            description="Each row is sourced by source_id. Empty capability_id cells mean the observation is segment-level or entity-level rather than capability-specific."
-          />
-
-          {filteredObservations.length === 0 ? (
-            <EmptyState message="No observations are available for this segment." />
-          ) : (
-            <div className="overflow-hidden rounded-lg border border-stone-300 bg-white shadow-sm">
-              <div className="max-h-[680px] overflow-auto">
-                <table className="min-w-full divide-y divide-stone-200 text-left text-sm">
-                  <thead className="sticky top-0 bg-stone-50 text-xs uppercase tracking-[0.12em] text-stone-500">
-                    <tr>
-                      <th className="w-28 px-4 py-3 font-semibold">ID</th>
-                      <th className="min-w-64 px-4 py-3 font-semibold">
-                        Observation
-                      </th>
-                      <th className="min-w-52 px-4 py-3 font-semibold">
-                        Entity
-                      </th>
-                      <th className="w-40 px-4 py-3 font-semibold">
-                        Evidence type
-                      </th>
-                      <th className="w-32 px-4 py-3 font-semibold">
-                        Confidence
-                      </th>
-                      <th className="min-w-52 px-4 py-3 font-semibold">
-                        Source
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-stone-200">
-                    {filteredObservations.map((observation) => (
-                      <tr key={observation.observation_id}>
-                        <td className="px-4 py-4 align-top font-mono text-xs text-stone-500">
-                          {observation.observation_id}
-                        </td>
-                        <td className="px-4 py-4 align-top">
-                          <p className="font-medium text-stone-950">
-                            {observation.indicator_name}
-                          </p>
-                          <p className="mt-2 leading-6 text-stone-600">
-                            {observation.indicator_value}
-                          </p>
-                          {observation.capability_id ? (
-                            <p className="mt-2 font-mono text-xs text-stone-500">
-                              capability_id: {observation.capability_id}
-                            </p>
-                          ) : null}
-                        </td>
-                        <td className="px-4 py-4 align-top text-stone-600">
-                          <p>{observation.entity_type}</p>
-                          <p className="mt-1 font-mono text-xs text-stone-500">
-                            {observation.entity_id}
-                          </p>
-                        </td>
-                        <td className="px-4 py-4 align-top text-stone-600">
-                          {observation.evidence_type}
-                        </td>
-                        <td className="px-4 py-4 align-top text-stone-600">
-                          {observation.confidence}
-                        </td>
-                        <td className="px-4 py-4 align-top">
-                          <p className="font-mono text-xs text-stone-700">
-                            {observation.source_id}
-                          </p>
-                          <p className="mt-2 leading-5 text-stone-500">
-                            {sourceLabel(observation.source_id)}
-                          </p>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-        </section>
-
-        <section
-          id="methodology"
-          className="rounded-lg border border-stone-300 bg-white p-6 shadow-sm"
-        >
-          <SectionHeading
-            eyebrow="Methodology"
-            title="What this first dashboard does and does not claim"
-            description="The page reads local generated JSON only. It shows public evidence signals by segment and source_id, keeps observations in staging language, and avoids maps, rankings, exact labor counts, or individual-level data."
-          />
-          <div className="grid gap-4 text-sm leading-6 text-stone-600 lg:grid-cols-3">
-            <p>
-              Capability rows describe tooling problems and public proxy
-              examples from the local taxonomy.
-            </p>
-            <p>
-              Evidence rows are filtered observations and should be read as
-              source-backed signals, not as a neutral census.
-            </p>
-            <p>
-              Source IDs stay visible so every observation can be traced back to
-              the ledger before publication.
-            </p>
-          </div>
-        </section>
-      </div>
-    </main>
   );
 }
 </file>
@@ -1253,6 +335,1206 @@ Visuals:
 
 Use Recharts.
 Do not add maps yet.
+</file>
+
+<file path="components/atlas/city-signal-map.tsx">
+"use client";
+
+import { useId, useState } from "react";
+import observationsData from "@/data/generated/observations.json";
+import { cityPositions } from "@/data/editorial/city-positions";
+import { topCitiesByEvidence } from "@/lib/atlas-analytics";
+import { formatSegment } from "@/lib/atlas-labels";
+
+type SegmentCount = { label: string; count: number };
+
+type CityNode = {
+  city: string;
+  province: string;
+  count: number;
+  sourceCount: number;
+  x: number;
+  y: number;
+  topSegments: SegmentCount[];
+};
+
+const positionByCity = new Map(
+  cityPositions.map((position) => [position.city, position]),
+);
+
+const segmentCountsByCity = (() => {
+  const cities = new Map<string, Map<string, number>>();
+
+  for (const observation of observationsData) {
+    if (!observation.city) continue;
+    if (observation.evidence_type === "manual_inference") continue;
+    if (!observation.segment) continue;
+
+    const segments =
+      cities.get(observation.city) ?? new Map<string, number>();
+    segments.set(
+      observation.segment,
+      (segments.get(observation.segment) ?? 0) + 1,
+    );
+    cities.set(observation.city, segments);
+  }
+
+  return cities;
+})();
+
+function topSegmentsFor(city: string, max = 3): SegmentCount[] {
+  const segments = segmentCountsByCity.get(city);
+  if (!segments) return [];
+
+  return Array.from(segments.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, max)
+    .map(([segmentId, count]) => ({
+      label: formatSegment(segmentId),
+      count,
+    }));
+}
+
+const nodes: CityNode[] = topCitiesByEvidence
+  .map((row) => {
+    const position = positionByCity.get(row.city);
+    if (!position) return null;
+
+    return {
+      city: row.city,
+      province: row.province,
+      count: row.count,
+      sourceCount: row.sourceCount,
+      x: position.x,
+      y: position.y,
+      topSegments: topSegmentsFor(row.city),
+    };
+  })
+  .filter((node): node is CityNode => node !== null);
+
+const maxCount = nodes.reduce((peak, node) => Math.max(peak, node.count), 0) || 1;
+const labelledCities = new Set(nodes.slice(0, 8).map((node) => node.city));
+
+const MIN_RADIUS = 8;
+const MAX_RADIUS = 26;
+
+function nodeDiameter(count: number) {
+  const ratio = Math.sqrt(count / maxCount);
+  return MIN_RADIUS + ratio * (MAX_RADIUS - MIN_RADIUS);
+}
+
+export function CitySignalMap() {
+  const [activeCity, setActiveCity] = useState<string | null>(null);
+  const headingId = useId();
+
+  const activeNode: CityNode | undefined = activeCity
+    ? nodes.find((node) => node.city === activeCity) ?? nodes[0]
+    : nodes[0];
+
+  return (
+    <section
+      aria-labelledby={headingId}
+      className="border border-stone-800 bg-stone-950 text-stone-100"
+    >
+      <header className="flex flex-col gap-3 border-b border-stone-800 px-6 py-5 sm:flex-row sm:items-end sm:justify-between sm:px-8">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-200/80">
+            City signal map · schematic
+          </p>
+          <h3
+            id={headingId}
+            className="mt-2 text-xl font-semibold tracking-tight text-stone-50 sm:text-2xl"
+          >
+            Where public evidence currently surfaces.
+          </h3>
+        </div>
+        <p className="max-w-sm text-xs leading-6 text-stone-400">
+          Node size scales with the count of non-taxonomy evidence rows tied
+          to a city. This is visibility coverage, not a talent ranking.
+        </p>
+      </header>
+
+      <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr]">
+        <div className="flex flex-col">
+          <div
+            className="relative w-full overflow-hidden"
+            style={{ aspectRatio: "4 / 3" }}
+          >
+            <div
+              aria-hidden
+              className="absolute inset-0 opacity-[0.14]"
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right, #d6d3d1 1px, transparent 1px), linear-gradient(to bottom, #d6d3d1 1px, transparent 1px)",
+                backgroundSize: "8% 8%",
+              }}
+            />
+            <div
+              aria-hidden
+              className="absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(circle at 70% 50%, rgba(251,191,36,0.06), transparent 65%)",
+              }}
+            />
+            <p
+              aria-hidden
+              className="absolute left-4 top-3 text-[10px] uppercase tracking-[0.22em] text-stone-500"
+            >
+              Mainland PRC · schematic
+            </p>
+            <p
+              aria-hidden
+              className="absolute bottom-3 right-4 text-[10px] uppercase tracking-[0.22em] text-stone-500"
+            >
+              Not to geographic scale
+            </p>
+
+            {nodes.map((node) => {
+              const diameter = nodeDiameter(node.count);
+              const isActive = activeNode?.city === node.city;
+              const showLabel = labelledCities.has(node.city);
+              const labelOnLeft = node.x > 70;
+
+              return (
+                <button
+                  key={node.city}
+                  type="button"
+                  onMouseEnter={() => setActiveCity(node.city)}
+                  onMouseLeave={() =>
+                    setActiveCity((current) =>
+                      current === node.city ? null : current,
+                    )
+                  }
+                  onFocus={() => setActiveCity(node.city)}
+                  onBlur={() =>
+                    setActiveCity((current) =>
+                      current === node.city ? null : current,
+                    )
+                  }
+                  className="group absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none"
+                  style={{ left: `${node.x}%`, top: `${node.y}%` }}
+                  aria-label={`${node.city}, ${node.province}: ${node.count} evidence rows`}
+                >
+                  <span
+                    aria-hidden
+                    className={`block rounded-full border transition-all duration-150 ${
+                      isActive
+                        ? "border-amber-200 bg-amber-200/80 shadow-[0_0_0_4px_rgba(251,191,36,0.18)]"
+                        : "border-stone-200/70 bg-stone-100/30 group-hover:bg-stone-100/60 group-focus-visible:border-amber-200"
+                    }`}
+                    style={{ width: diameter, height: diameter }}
+                  />
+                  {showLabel && (
+                    <span
+                      aria-hidden
+                      className={`pointer-events-none absolute top-1/2 -translate-y-1/2 whitespace-nowrap text-[11px] font-medium tracking-tight ${
+                        labelOnLeft ? "right-full mr-2" : "left-full ml-2"
+                      } ${isActive ? "text-amber-100" : "text-stone-200"}`}
+                    >
+                      {node.city}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-stone-800 px-6 py-4 text-[11px] text-stone-400 sm:px-8">
+            <span className="flex items-end gap-2">
+              <span
+                aria-hidden
+                className="inline-block rounded-full bg-stone-100/40"
+                style={{ width: 6, height: 6 }}
+              />
+              <span
+                aria-hidden
+                className="inline-block rounded-full bg-stone-100/40"
+                style={{ width: 12, height: 12 }}
+              />
+              <span
+                aria-hidden
+                className="inline-block rounded-full bg-stone-100/40"
+                style={{ width: 20, height: 20 }}
+              />
+              <span className="ml-1">Node size = public evidence signal</span>
+            </span>
+            <span>Schematic placement, not precise GIS</span>
+          </div>
+        </div>
+
+        <aside className="flex flex-col gap-5 border-t border-stone-800 p-6 sm:p-8 lg:border-l lg:border-t-0">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-stone-500">
+            City inspector{" "}
+            <span className="ml-1 normal-case tracking-normal text-stone-600">
+              {activeCity ? "· focused" : "· default view"}
+            </span>
+          </p>
+
+          {activeNode ? (
+            <>
+              <div>
+                <p className="text-2xl font-semibold tracking-tight text-stone-50">
+                  {activeNode.city}
+                </p>
+                <p className="mt-1 text-sm text-stone-400">
+                  {activeNode.province}
+                </p>
+              </div>
+              <dl className="grid grid-cols-2 gap-4 border-y border-stone-800 py-4">
+                <div>
+                  <dt className="text-[10px] uppercase tracking-[0.2em] text-stone-500">
+                    Evidence rows
+                  </dt>
+                  <dd className="mt-1 text-2xl font-semibold text-stone-50">
+                    {activeNode.count}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-[10px] uppercase tracking-[0.2em] text-stone-500">
+                    Distinct sources
+                  </dt>
+                  <dd className="mt-1 text-2xl font-semibold text-stone-50">
+                    {activeNode.sourceCount}
+                  </dd>
+                </div>
+              </dl>
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.2em] text-stone-500">
+                  Top segments
+                </p>
+                {activeNode.topSegments.length > 0 ? (
+                  <ul className="mt-3 space-y-2 text-sm text-stone-200">
+                    {activeNode.topSegments.map((segment) => (
+                      <li
+                        key={segment.label}
+                        className="flex items-baseline justify-between gap-3 border-b border-dashed border-stone-800/80 pb-2 last:border-b-0 last:pb-0"
+                      >
+                        <span>{segment.label}</span>
+                        <span className="text-xs text-stone-500">
+                          {segment.count} rows
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="mt-3 text-sm text-stone-500">
+                    No non-taxonomy segment rows recorded for this city yet.
+                  </p>
+                )}
+              </div>
+            </>
+          ) : (
+            <p className="text-sm text-stone-400">
+              Hover or focus a city node to inspect its evidence.
+            </p>
+          )}
+
+          <p className="mt-auto text-[11px] leading-5 text-stone-500">
+            Visibility reflects what public records currently disclose. It is
+            not a talent ranking.
+          </p>
+        </aside>
+      </div>
+    </section>
+  );
+}
+</file>
+
+<file path="components/atlas/evidence-ladder.tsx">
+import {
+  evidenceGroupLabels,
+  evidenceTypeGroups,
+  observationsByEvidenceGroup,
+  observationsByEvidenceType,
+  type EvidenceGroup,
+} from "@/lib/atlas-analytics";
+
+type Tier = {
+  group: EvidenceGroup;
+  index: string;
+  framing: string;
+  description: string;
+  weightLabel: string;
+  accent: string;
+  rule: string;
+};
+
+const tiers: Tier[] = [
+  {
+    group: "direct_public_record",
+    index: "01",
+    framing: "Load-bearing",
+    description:
+      "Filings, official directories, industry presence, and shortage notices. These are disclosures that exist on the public record and can be re-checked at source.",
+    weightLabel: "Strongest analytical weight",
+    accent: "bg-stone-900",
+    rule: "border-stone-900",
+  },
+  {
+    group: "analytical_proxy",
+    index: "02",
+    framing: "Supporting",
+    description:
+      "Job postings, research-output indicators, and expert secondary sources. Directional context that helps frame the picture but should not be read as a measurement.",
+    weightLabel: "Use as context, not as measurement",
+    accent: "bg-amber-700",
+    rule: "border-amber-700",
+  },
+  {
+    group: "taxonomy_scaffold",
+    index: "03",
+    framing: "Navigational",
+    description:
+      "Manual inferences that link MOE disciplines and structural categories to tooling segments. They help readers navigate the atlas, but they are not evidence of real-world activity.",
+    weightLabel: "Scaffolding only — not real-world signal",
+    accent:
+      "bg-[repeating-linear-gradient(135deg,#a8a29e_0,#a8a29e_4px,transparent_4px,transparent_8px)]",
+    rule: "border-stone-400 border-dashed",
+  },
+];
+
+const countByGroup = new Map<string, number>(
+  observationsByEvidenceGroup.map((row) => [row.id, row.count]),
+);
+
+const subTypesByGroup: Record<
+  EvidenceGroup,
+  { label: string; count: number }[]
+> = {
+  direct_public_record: [],
+  analytical_proxy: [],
+  taxonomy_scaffold: [],
+};
+
+for (const row of observationsByEvidenceType) {
+  const group = evidenceTypeGroups[row.id];
+  if (!group) continue;
+  subTypesByGroup[group].push({ label: row.label, count: row.count });
+}
+
+const numberFormatter = new Intl.NumberFormat("en-US");
+
+export function EvidenceLadder() {
+  return (
+    <section
+      aria-labelledby="evidence-ladder-heading"
+      className="border border-stone-300 bg-stone-50"
+    >
+      <header className="flex flex-col gap-3 border-b border-stone-200 px-6 py-6 sm:px-8">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500">
+          Evidence ladder
+        </p>
+        <h3
+          id="evidence-ladder-heading"
+          className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
+        >
+          Not all observations carry the same analytical weight.
+        </h3>
+        <p className="max-w-3xl text-sm leading-7 text-stone-700">
+          The atlas mixes three kinds of rows. Reading them as if they were
+          equal would overstate what the public record actually shows. There is
+          no composite score — each tier should be read on its own terms.
+        </p>
+      </header>
+
+      <ol className="flex flex-col">
+        {tiers.map((tier) => {
+          const groupLabel = evidenceGroupLabels[tier.group];
+          const total = countByGroup.get(tier.group) ?? 0;
+          const subTypes = subTypesByGroup[tier.group];
+
+          return (
+            <li
+              key={tier.group}
+              className={`relative grid grid-cols-1 gap-6 border-b ${tier.rule} px-6 py-8 last:border-b-0 sm:px-8 md:grid-cols-[8.5rem_1fr_10rem] md:items-start md:gap-8`}
+            >
+              <span
+                aria-hidden
+                className={`absolute left-0 top-0 h-full w-1.5 ${tier.accent}`}
+              />
+
+              <div className="pl-2">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500">
+                  Tier {tier.index}
+                </p>
+                <p className="mt-2 text-lg font-semibold tracking-tight text-stone-900">
+                  {tier.framing}
+                </p>
+                <p className="mt-2 text-[11px] uppercase tracking-[0.18em] text-stone-500">
+                  {tier.weightLabel}
+                </p>
+              </div>
+
+              <div className="pl-2 md:pl-0">
+                <h4 className="text-xl font-semibold tracking-tight text-stone-950">
+                  {groupLabel}
+                </h4>
+                <p className="mt-2 text-sm leading-7 text-stone-700">
+                  {tier.description}
+                </p>
+                {subTypes.length > 0 ? (
+                  <ul className="mt-4 flex flex-wrap gap-2">
+                    {subTypes.map((subType) => (
+                      <li
+                        key={subType.label}
+                        className="inline-flex items-baseline gap-2 border border-stone-300 bg-white px-2.5 py-1 text-xs text-stone-700"
+                      >
+                        <span>{subType.label}</span>
+                        <span className="font-mono text-[11px] text-stone-500">
+                          {numberFormatter.format(subType.count)}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </div>
+
+              <div className="pl-2 md:border-l md:border-stone-200 md:pl-6">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-stone-500">
+                  Rows in tier
+                </p>
+                <p className="mt-1 text-4xl font-semibold tracking-tight text-stone-950 sm:text-5xl">
+                  {numberFormatter.format(total)}
+                </p>
+                {tier.group === "taxonomy_scaffold" ? (
+                  <p className="mt-3 text-[11px] leading-5 text-stone-500">
+                    Helps navigation. Does not, on its own, show real-world
+                    activity.
+                  </p>
+                ) : null}
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+
+      <p className="border-t border-stone-200 px-6 py-4 text-[11px] leading-6 text-stone-500 sm:px-8">
+        Counts reflect the current observation set. No tier is rolled up into a
+        single capability or visibility score.
+      </p>
+    </section>
+  );
+}
+</file>
+
+<file path="components/atlas/firm-workforce-snapshots.tsx">
+import sourcesData from "@/data/generated/sources.json";
+import {
+  firmWorkforceSnapshots,
+  type WorkforceFigure,
+} from "@/data/editorial/firm-workforce-snapshots";
+
+type Slot = "total" | "rnd" | "advanced_degree" | "service";
+
+const slotOrder: { key: Slot; label: string }[] = [
+  { key: "total", label: "Total employees" },
+  { key: "rnd", label: "R&D or technical staff" },
+  { key: "advanced_degree", label: "PhDs or master's degree holders" },
+  { key: "service", label: "After-sales or service staff" },
+];
+
+const NOT_DISCLOSED = "Not disclosed in current snapshot";
+
+function classifyFigure(label: string): Slot | "rnd_share" | null {
+  const lower = label.toLowerCase();
+  if (lower.includes("total employees")) return "total";
+  if (
+    lower.includes("master") ||
+    lower.includes("doctor") ||
+    lower.includes("phd")
+  )
+    return "advanced_degree";
+  if (
+    lower.includes("after-sales") ||
+    lower.includes("service") ||
+    lower.includes("support")
+  )
+    return "service";
+  if (lower.includes("r&d") || lower.includes("technical")) {
+    if (lower.includes("share")) return "rnd_share";
+    return "rnd";
+  }
+  return null;
+}
+
+type SourceRecord = {
+  source_id: string;
+  title: string;
+  publisher: string;
+};
+
+const sourceById = new Map<string, SourceRecord>(
+  (sourcesData as SourceRecord[]).map((source) => [source.source_id, source]),
+);
+
+type FigureSlots = {
+  total: WorkforceFigure | null;
+  rnd: WorkforceFigure | null;
+  rndShare: WorkforceFigure | null;
+  advanced_degree: WorkforceFigure | null;
+  service: WorkforceFigure | null;
+};
+
+function bucketFigures(figures: WorkforceFigure[]): FigureSlots {
+  const slots: FigureSlots = {
+    total: null,
+    rnd: null,
+    rndShare: null,
+    advanced_degree: null,
+    service: null,
+  };
+
+  for (const figure of figures) {
+    const classification = classifyFigure(figure.label);
+    if (classification === "total") slots.total = figure;
+    else if (classification === "rnd") slots.rnd = figure;
+    else if (classification === "rnd_share") slots.rndShare = figure;
+    else if (classification === "advanced_degree")
+      slots.advanced_degree = figure;
+    else if (classification === "service") slots.service = figure;
+  }
+
+  return slots;
+}
+
+export function FirmWorkforceSnapshots() {
+  return (
+    <section
+      aria-labelledby="firm-workforce-heading"
+      className="border border-stone-300 bg-white"
+    >
+      <header className="flex flex-col gap-3 border-b border-stone-200 px-6 py-6 sm:px-8">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500">
+          Firm workforce snapshots
+        </p>
+        <h3
+          id="firm-workforce-heading"
+          className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
+        >
+          The strongest employer-side evidence sits in listed-company filings.
+        </h3>
+        <p className="max-w-3xl text-sm leading-7 text-stone-600">
+          Three firms disclose enough workforce structure for segment signals
+          to become visible. Categories below are taken from each filing as
+          published — they are not directly comparable across firms and they
+          do not describe a tooling-specific workforce.
+        </p>
+      </header>
+
+      <div className="grid grid-cols-1 gap-px bg-stone-200 lg:grid-cols-3">
+        {firmWorkforceSnapshots.map((snapshot) => {
+          const slots = bucketFigures(snapshot.figures);
+          const needsVerification = snapshot.figures.some(
+            (figure) => figure.verificationStatus === "needs_verification",
+          );
+          const sources = snapshot.source_ids
+            .map((id) => sourceById.get(id))
+            .filter((source): source is SourceRecord => Boolean(source));
+
+          return (
+            <article
+              key={snapshot.id}
+              className="flex h-full flex-col gap-6 bg-white p-7"
+            >
+              <header className="flex flex-col gap-3 border-b border-stone-200 pb-5">
+                <div className="flex items-baseline justify-between gap-3">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500">
+                    {snapshot.homeBase}
+                  </p>
+                  {needsVerification ? (
+                    <span className="inline-flex items-center gap-1.5 border border-amber-300 bg-amber-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-amber-800">
+                      <span
+                        aria-hidden
+                        className="inline-block h-1.5 w-1.5 rounded-full bg-amber-500"
+                      />
+                      Needs manual filing check
+                    </span>
+                  ) : null}
+                </div>
+                <h4 className="text-xl font-semibold tracking-tight text-stone-950">
+                  {snapshot.firm}
+                </h4>
+                <ul className="flex flex-wrap gap-2">
+                  {snapshot.segmentSignals.map((segment) => (
+                    <li
+                      key={segment}
+                      className="border border-stone-300 bg-stone-50 px-2.5 py-1 text-[11px] text-stone-700"
+                    >
+                      {segment}
+                    </li>
+                  ))}
+                </ul>
+              </header>
+
+              <p className="text-sm leading-7 text-stone-700">
+                {snapshot.editorialRead}
+              </p>
+
+              <dl className="flex flex-col">
+                {slotOrder.map((slot, index) => {
+                  const figure = slots[slot.key];
+                  const showShare =
+                    slot.key === "rnd" && Boolean(slots.rndShare);
+
+                  return (
+                    <div
+                      key={slot.key}
+                      className={`flex items-baseline justify-between gap-4 py-3 ${
+                        index === 0 ? "" : "border-t border-stone-200"
+                      }`}
+                    >
+                      <dt className="text-xs leading-5 text-stone-600">
+                        {slot.label}
+                      </dt>
+                      <dd className="text-right">
+                        {figure ? (
+                          <>
+                            <span className="font-mono text-lg font-semibold tracking-tight text-stone-950">
+                              {figure.value}
+                            </span>
+                            {showShare && slots.rndShare ? (
+                              <span className="ml-2 text-[11px] text-stone-500">
+                                ({slots.rndShare.value} of total staff)
+                              </span>
+                            ) : null}
+                          </>
+                        ) : (
+                          <span className="text-xs italic text-stone-400">
+                            {NOT_DISCLOSED}
+                          </span>
+                        )}
+                      </dd>
+                    </div>
+                  );
+                })}
+              </dl>
+
+              <p className="border-t border-dashed border-stone-300 pt-4 text-xs leading-6 text-stone-600">
+                <span className="font-semibold uppercase tracking-[0.18em] text-stone-500">
+                  Caveat ·{" "}
+                </span>
+                {snapshot.caveat}
+              </p>
+
+              {sources.length > 0 ? (
+                <div className="mt-auto border-t border-stone-200 pt-4">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-stone-500">
+                    Source
+                  </p>
+                  <ul className="mt-2 space-y-1.5 text-xs leading-5 text-stone-700">
+                    {sources.map((source) => (
+                      <li key={source.source_id}>
+                        <span className="font-medium text-stone-900">
+                          {source.title}
+                        </span>
+                        <span className="text-stone-500">
+                          {" · "}
+                          {source.publisher}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+            </article>
+          );
+        })}
+      </div>
+
+      <p className="border-t border-stone-200 px-6 py-4 text-[11px] leading-6 text-stone-500 sm:px-8">
+        Workforce categories are aggregated by each firm and not directly
+        comparable. These figures describe whole-firm scale and R&D intensity —
+        they should not be read as full semiconductor-tooling workforce totals.
+      </p>
+    </section>
+  );
+}
+</file>
+
+<file path="data/editorial/audience-implications.ts">
+export type AudienceImplication = {
+  audience: string;
+  headline: string;
+  takeaway: string;
+  useTheExplorerFor: string[];
+  caution: string;
+  source_ids: string[];
+};
+
+export const audienceImplications: AudienceImplication[] = [
+  {
+    audience: "Equipment firms",
+    headline: "Look for scarce combinations, not generic STEM supply.",
+    takeaway:
+      "The useful signal is where role families, segment bottlenecks, and city or firm evidence overlap.",
+    useTheExplorerFor: [
+      "Comparing public evidence signals by segment",
+      "Finding where service, application, and production roles become visible",
+      "Separating R&D visibility from customer-ramp know-how",
+    ],
+    caution:
+      "Do not read public evidence strength as a hiring pipeline or competitor capability score.",
+    source_ids: ["CN_FILING_AMEC_2025", "CN_FILING_NAURA_2025"],
+  },
+  {
+    audience: "Policymakers",
+    headline: "Shortage lists are directional, not a census.",
+    takeaway:
+      "Local directories and park plans help identify where public institutions see pressure, but they rarely measure tacit production learning.",
+    useTheExplorerFor: [
+      "Checking which cities disclose shortage or cluster signals",
+      "Seeing which segments rely on proxy evidence",
+      "Identifying evidence gaps before funding or training claims harden",
+    ],
+    caution:
+      "Avoid converting qualitative shortage signals into exact workforce targets without separate validation.",
+    source_ids: [
+      "CN_SHORT_SZ_SEMI_2024",
+      "CN_SHORT_TJ_DIR_2023",
+      "CN_SHORT_CY_DIR_2023",
+      "CN_PARK_SIP_IC",
+    ],
+  },
+  {
+    audience: "Researchers / analysts",
+    headline: "The missing column is often the most important one.",
+    takeaway:
+      "Public data is best at showing institutions, filings, and role language; it is weaker at showing chamber recovery, calibration habits, and customer-specific learning.",
+    useTheExplorerFor: [
+      "Tracing each observation back to source_id",
+      "Distinguishing direct public records from analytical proxies",
+      "Building a verification queue for the most visible claims",
+    ],
+    caution:
+      "Treat observations.csv as staging until the visible claims are checked against primary sources.",
+    source_ids: ["CN_EDU_MOE_GRAD_DIR_2022", "CN_FILING_ACM_SH_2025"],
+  },
+];
+</file>
+
+<file path="data/editorial/city-positions.ts">
+export type CityPosition = {
+  city: string;
+  province: string;
+  x: number;
+  y: number;
+  note: string;
+  source_ids: string[];
+};
+
+const schematicNote =
+  "Schematic placement for visual navigation, not geospatial measurement.";
+
+export const cityPositions: CityPosition[] = [
+  {
+    city: "Shanghai",
+    province: "Shanghai",
+    x: 78,
+    y: 58,
+    note: schematicNote,
+    source_ids: ["CN_SHORT_SH_DIR_2020", "CN_PARK_ORIENTAL_CHIP_PORT"],
+  },
+  {
+    city: "Beijing",
+    province: "Beijing",
+    x: 62,
+    y: 25,
+    note: schematicNote,
+    source_ids: ["CN_PARK_BEIJING_ETOWN_IC", "CN_FIRM_NAURA"],
+  },
+  {
+    city: "Suzhou",
+    province: "Jiangsu",
+    x: 75,
+    y: 56,
+    note: schematicNote,
+    source_ids: ["CN_PARK_SIP_IC"],
+  },
+  {
+    city: "Shenzhen",
+    province: "Guangdong",
+    x: 64,
+    y: 83,
+    note: schematicNote,
+    source_ids: ["CN_SHORT_SZ_SEMI_2024"],
+  },
+  {
+    city: "Xiamen",
+    province: "Fujian",
+    x: 72,
+    y: 75,
+    note: schematicNote,
+    source_ids: ["CN_PARK_HAICANG_IC"],
+  },
+  {
+    city: "Tianjin",
+    province: "Tianjin",
+    x: 66,
+    y: 29,
+    note: schematicNote,
+    source_ids: ["CN_SHORT_TJ_DIR_2023"],
+  },
+  {
+    city: "Dalian",
+    province: "Liaoning",
+    x: 76,
+    y: 22,
+    note: schematicNote,
+    source_ids: [],
+  },
+  {
+    city: "Hangzhou",
+    province: "Zhejiang",
+    x: 76,
+    y: 62,
+    note: schematicNote,
+    source_ids: [],
+  },
+  {
+    city: "Harbin",
+    province: "Heilongjiang",
+    x: 79,
+    y: 8,
+    note: schematicNote,
+    source_ids: [],
+  },
+  {
+    city: "Chengdu",
+    province: "Sichuan",
+    x: 36,
+    y: 67,
+    note: schematicNote,
+    source_ids: ["CN_SHORT_CY_DIR_2023"],
+  },
+  {
+    city: "Chongqing",
+    province: "Chongqing",
+    x: 43,
+    y: 70,
+    note: schematicNote,
+    source_ids: ["CN_SHORT_CY_DIR_2023"],
+  },
+  {
+    city: "Wuhan",
+    province: "Hubei",
+    x: 59,
+    y: 63,
+    note: schematicNote,
+    source_ids: ["CN_FILING_JINGCE_2025"],
+  },
+  {
+    city: "Shenyang",
+    province: "Liaoning",
+    x: 73,
+    y: 18,
+    note: schematicNote,
+    source_ids: ["CN_FILING_PIOTECH_2025"],
+  },
+];
+</file>
+
+<file path="data/editorial/firm-workforce-snapshots.ts">
+export type VerificationStatus = "needs_verification" | "verified";
+
+export type WorkforceFigure = {
+  label: string;
+  value: string;
+  verificationStatus: VerificationStatus;
+};
+
+export type FirmWorkforceSnapshot = {
+  id: string;
+  firm: string;
+  homeBase: string;
+  segmentSignals: string[];
+  editorialRead: string;
+  figures: WorkforceFigure[];
+  caveat: string;
+  source_ids: string[];
+};
+
+export const firmWorkforceSnapshots: FirmWorkforceSnapshot[] = [
+  {
+    id: "amec",
+    firm: "AMEC",
+    homeBase: "Shanghai",
+    segmentSignals: ["Etch, clean, and strip", "Deposition"],
+    editorialRead:
+      "AMEC is the clearest public anchor for the etch story, with disclosed R&D staffing that points to a science-heavy equipment organization.",
+    figures: [
+      {
+        label: "R&D personnel",
+        value: "1,548",
+        verificationStatus: "needs_verification",
+      },
+      {
+        label: "R&D personnel share of total staff",
+        value: "52.24%",
+        verificationStatus: "needs_verification",
+      },
+      {
+        label: "Master's or doctoral degree share within R&D personnel",
+        value: "57.88%",
+        verificationStatus: "needs_verification",
+      },
+    ],
+    caveat:
+      "The filing figures are firm-level and do not split people by etch, deposition, service, or customer ramp work.",
+    source_ids: ["CN_FILING_AMEC_2025"],
+  },
+  {
+    id: "acm-research-shanghai",
+    firm: "ACM Research Shanghai",
+    homeBase: "Shanghai",
+    segmentSignals: ["Etch, clean, and strip", "Deposition"],
+    editorialRead:
+      "ACM Research Shanghai makes the wet-clean and strip workforce layer more visible than most firms, especially through R&D and service-heavy disclosures.",
+    figures: [
+      {
+        label: "Total employees",
+        value: "2,485",
+        verificationStatus: "needs_verification",
+      },
+      {
+        label: "R&D personnel",
+        value: "1,228",
+        verificationStatus: "needs_verification",
+      },
+      {
+        label: "R&D personnel share of total staff",
+        value: "49.42%",
+        verificationStatus: "needs_verification",
+      },
+    ],
+    caveat:
+      "Role categories are aggregated and cannot be read as clean/strip-specific headcount.",
+    source_ids: ["CN_FILING_ACM_SH_2025"],
+  },
+  {
+    id: "naura",
+    firm: "NAURA Technology Group",
+    homeBase: "Beijing",
+    segmentSignals: ["Deposition", "Etch, clean, and strip"],
+    editorialRead:
+      "NAURA gives the strongest scale signal among the listed equipment firms in this layer, but its breadth makes segment attribution especially risky.",
+    figures: [
+      {
+        label: "Total employees",
+        value: "21,101",
+        verificationStatus: "needs_verification",
+      },
+      {
+        label: "R&D personnel",
+        value: "6,511",
+        verificationStatus: "needs_verification",
+      },
+      {
+        label: "R&D personnel share of total staff",
+        value: "30.86%",
+        verificationStatus: "needs_verification",
+      },
+    ],
+    caveat:
+      "The filing covers a broad equipment group, so the figures should frame scale and R&D intensity rather than tooling-segment capacity.",
+    source_ids: ["CN_FILING_NAURA_2025"],
+  },
+];
+</file>
+
+<file path="data/editorial/insights.ts">
+export type EditorialInsight = {
+  id: string;
+  title: string;
+  summary: string;
+  implication: string;
+  source_ids: string[];
+};
+
+export const insights: EditorialInsight[] = [
+  {
+    id: "visible-layer-thinner-than-headline-count",
+    title: "Visible layer is thinner than headline count.",
+    summary:
+      "The atlas contains many public evidence signals, but a meaningful share is taxonomy scaffolding or proxy evidence rather than direct workforce observation.",
+    implication:
+      "Use the evidence layer to ask sharper questions, not to claim a measured talent pool.",
+    source_ids: ["CN_EDU_MOE_GRAD_DIR_2022", "CN_FILING_AMEC_2025"],
+  },
+  {
+    id: "segment-rankings-are-fragile",
+    title: "Segment rankings are fragile.",
+    summary:
+      "A segment can look stronger because its firms, parks, or policy directories disclose more, not because the underlying know-how is deeper.",
+    implication:
+      "The homepage should compare evidence strength and visibility, not rank capability.",
+    source_ids: ["CN_FIRM_AMEC", "CN_FIRM_NAURA", "CN_FIRM_ACM_SH"],
+  },
+  {
+    id: "geography-clustered-visibility-not-depth",
+    title: "Geography is clustered but visibility is not depth.",
+    summary:
+      "Shanghai, Beijing, Suzhou, Shenzhen, and several inland or northeast cities show visible signals, but city presence is not the same as production depth.",
+    implication:
+      "Treat the city view as a navigation layer for evidence, not as a geographic scorecard.",
+    source_ids: [
+      "CN_SHORT_SH_DIR_2020",
+      "CN_SHORT_SZ_SEMI_2024",
+      "CN_PARK_SIP_IC",
+      "CN_PARK_BEIJING_ETOWN_IC",
+    ],
+  },
+  {
+    id: "tacit-production-knowhow-silent-column",
+    title: "Tacit production know-how is the silent column.",
+    summary:
+      "The hardest skills, such as chamber recovery, field calibration, tool matching, and customer ramp judgment, are weakly visible in public sources.",
+    implication:
+      "The brief should make absence legible instead of filling it with invented precision.",
+    source_ids: ["CN_FILING_NAURA_2025", "CN_FILING_ACM_SH_2025"],
+  },
+];
+</file>
+
+<file path="data/editorial/segment-profiles.ts">
+export type SegmentProfile = {
+  id: string;
+  label: string;
+  plainEnglishDefinition: string;
+  keyRoleFamilies: string[];
+  likelyBottlenecks: string[];
+  publicSignals: string[];
+  caveat: string;
+  whatToWatch: string[];
+  source_ids: string[];
+};
+
+export const segmentProfiles: SegmentProfile[] = [
+  {
+    id: "etch_clean",
+    label: "Etch, clean, and strip",
+    plainEnglishDefinition:
+      "Tools and process work that remove material, residues, or photoresist without damaging the wafer pattern.",
+    keyRoleFamilies: [
+      "Plasma and surface scientists",
+      "Etch and clean process engineers",
+      "Field application engineers",
+      "Maintenance and debug technicians",
+    ],
+    likelyBottlenecks: [
+      "High-aspect-ratio profile control with low damage",
+      "Post-etch residue removal without pattern loss",
+      "Chamber matching and recovery after maintenance",
+    ],
+    publicSignals: [
+      "Etch and clean product pages",
+      "CNINFO annual-report disclosures",
+      "Process and application job language",
+      "Patents and technical papers on plasma or wet clean",
+    ],
+    caveat:
+      "Public sources expose product families and role language better than yield-learning depth.",
+    whatToWatch: [
+      "Repeat references to advanced memory and high-aspect-ratio use cases",
+      "Service and application-team expansion",
+      "Training language tied to customer-site ramps",
+    ],
+    source_ids: ["CN_FIRM_AMEC", "CN_FIRM_ACM_SH", "CN_FILING_AMEC_2025"],
+  },
+  {
+    id: "deposition",
+    label: "Deposition",
+    plainEnglishDefinition:
+      "Tools and process work that grow or place thin films with the right thickness, composition, coverage, and stability.",
+    keyRoleFamilies: [
+      "Thin-film scientists",
+      "ALD, CVD, and PVD process engineers",
+      "Vacuum and gas-delivery engineers",
+      "Customer validation and service engineers",
+    ],
+    likelyBottlenecks: [
+      "Conformal film growth at production-worthy throughput",
+      "Precursor and chamber behavior under high-volume use",
+      "Particle control and chamber matching",
+    ],
+    publicSignals: [
+      "ALD, CVD, PVD, and furnace product coverage",
+      "Annual-report language on scale and R&D intensity",
+      "Film-process and service job language",
+      "Patents on chamber architecture and gas delivery",
+    ],
+    caveat:
+      "Repeat orders and product breadth help, but they do not reveal full process-window or maintenance sensitivity.",
+    whatToWatch: [
+      "Batch or vertical tool claims tied to throughput",
+      "Customer validation and repeat-order language",
+      "Hiring or training for field support and application work",
+    ],
+    source_ids: ["CN_FIRM_NAURA", "CN_FIRM_AMEC", "CN_FILING_NAURA_2025"],
+  },
+  {
+    id: "metrology_inspection",
+    label: "Metrology and inspection",
+    plainEnglishDefinition:
+      "Tools and workflows that measure, inspect, classify, and feed defect or process information back into production.",
+    keyRoleFamilies: [
+      "Optical and imaging scientists",
+      "Algorithm and data engineers",
+      "Metrology application engineers",
+      "Calibration and field-support specialists",
+    ],
+    likelyBottlenecks: [
+      "Optics-plus-algorithms integration",
+      "False-alarm reduction without missing real defects",
+      "Fab-specific calibration and defect-library tuning",
+    ],
+    publicSignals: [
+      "Optical, algorithm, and system-engineering job language",
+      "Metrology product filings and product pages",
+      "Service-team and support-network disclosures",
+      "Research-output proxies in optics and instrumentation",
+    ],
+    caveat:
+      "Customer datasets, nuisance-signal handling, and calibration routines are usually private.",
+    whatToWatch: [
+      "Evidence of application engineers at customer sites",
+      "Training or support language around calibration",
+      "Product claims that link measurement to yield workflows",
+    ],
+    source_ids: ["CN_FILING_JINGCE_2025", "CN_EDU_MOE_GRAD_DIR_2022"],
+  },
+  {
+    id: "lithography_sidebar",
+    label: "Lithography sidebar",
+    plainEnglishDefinition:
+      "A sidebar category for optics, alignment, exposure, focus, and process-window signals adjacent to lithography bottlenecks.",
+    keyRoleFamilies: [
+      "Optical scientists",
+      "Stage, control, and mechatronics engineers",
+      "Lithography process engineers",
+      "Optical assembly and calibration technicians",
+    ],
+    likelyBottlenecks: [
+      "Opto-mechatronic integration for overlay and focus",
+      "Contamination discipline and calibration recovery",
+      "Process-window tuning under customer conditions",
+    ],
+    publicSignals: [
+      "Optics and control job language",
+      "Lithography product and service pages",
+      "University optics and instrumentation signals",
+      "Policy and park references to IC equipment ecosystems",
+    ],
+    caveat:
+      "This is a sidebar for context, not a claim that public evidence can measure lithography readiness.",
+    whatToWatch: [
+      "Specialized optics hiring",
+      "Service and training infrastructure",
+      "Connections between lithography, metrology, and precision motion",
+    ],
+    source_ids: ["CN_EDU_MOE_GRAD_DIR_2022", "CN_PARK_SIP_IC"],
+  },
+];
 </file>
 
 <file path="data/generated/capabilities.json">
@@ -6845,6 +7127,256 @@ After the data pipeline passes, ask the agent to create a simple homepage with K
 }
 </file>
 
+<file path="lib/atlas-analytics.ts">
+import capabilitiesData from "@/data/generated/capabilities.json";
+import observationsData from "@/data/generated/observations.json";
+import sourcesData from "@/data/generated/sources.json";
+import { formatEvidenceType, formatSegment } from "@/lib/atlas-labels";
+
+type Observation = (typeof observationsData)[number];
+type Capability = (typeof capabilitiesData)[number];
+
+export type EvidenceGroup =
+  | "direct_public_record"
+  | "analytical_proxy"
+  | "taxonomy_scaffold";
+
+export type CountRow = {
+  id: string;
+  label: string;
+  count: number;
+};
+
+export type CityEvidenceRow = {
+  city: string;
+  province: string;
+  count: number;
+  sourceCount: number;
+};
+
+export const evidenceGroupLabels: Record<EvidenceGroup, string> = {
+  direct_public_record: "Direct public record",
+  analytical_proxy: "Analytical proxy",
+  taxonomy_scaffold: "Taxonomy scaffold",
+};
+
+export const evidenceTypeGroups: Record<string, EvidenceGroup> = {
+  expert_secondary: "analytical_proxy",
+  industry_presence: "direct_public_record",
+  institutional_capacity: "direct_public_record",
+  job_posting_proxy: "analytical_proxy",
+  manual_inference: "taxonomy_scaffold",
+  official_policy: "direct_public_record",
+  research_output_proxy: "analytical_proxy",
+  shortage_signal: "direct_public_record",
+};
+
+export const totalSources = sourcesData.length;
+export const totalObservations = observationsData.length;
+
+export const taxonomyScaffoldRows = observationsData.filter(
+  (observation) => observation.evidence_type === "manual_inference",
+);
+
+export const nonTaxonomyEvidenceRows = observationsData.filter(
+  (observation) => observation.evidence_type !== "manual_inference",
+);
+
+function getEvidenceGroup(evidenceType: string): EvidenceGroup {
+  return evidenceTypeGroups[evidenceType] ?? "analytical_proxy";
+}
+
+function sortCountRows(rows: CountRow[]) {
+  return rows.sort((a, b) => {
+    if (b.count !== a.count) return b.count - a.count;
+    return a.label.localeCompare(b.label);
+  });
+}
+
+function countObservationsByValue(
+  observations: readonly Observation[],
+  getValue: (observation: Observation) => string,
+  getLabel: (value: string) => string,
+): CountRow[] {
+  const counts = new Map<string, number>();
+
+  for (const observation of observations) {
+    const value = getValue(observation) || "unspecified";
+    counts.set(value, (counts.get(value) ?? 0) + 1);
+  }
+
+  const rows = Array.from(counts, ([id, count]) => ({
+    id,
+    label: getLabel(id),
+    count,
+  }));
+
+  return sortCountRows(rows);
+}
+
+function countCapabilitiesByValue(
+  capabilities: readonly Capability[],
+  getValue: (capability: Capability) => string,
+  getLabel: (value: string) => string,
+): CountRow[] {
+  const counts = new Map<string, number>();
+
+  for (const capability of capabilities) {
+    const value = getValue(capability) || "unspecified";
+    counts.set(value, (counts.get(value) ?? 0) + 1);
+  }
+
+  const rows = Array.from(counts, ([id, count]) => ({
+    id,
+    label: getLabel(id),
+    count,
+  }));
+
+  return sortCountRows(rows);
+}
+
+export const observationsBySegment = countObservationsByValue(
+  observationsData,
+  (observation) => observation.segment,
+  formatSegment,
+);
+
+export const observationsByEvidenceType = countObservationsByValue(
+  observationsData,
+  (observation) => observation.evidence_type,
+  formatEvidenceType,
+);
+
+export const observationsByEvidenceGroup = countObservationsByValue(
+  observationsData,
+  (observation) => getEvidenceGroup(observation.evidence_type),
+  (value) => evidenceGroupLabels[value as EvidenceGroup] ?? value,
+);
+
+export const topCitiesByEvidence: CityEvidenceRow[] = (() => {
+  const groups = new Map<string, Observation[]>();
+
+  for (const observation of observationsData) {
+    if (!observation.city) continue;
+
+    const key = `${observation.city}|${observation.province}`;
+    const existingRows = groups.get(key) ?? [];
+    groups.set(key, existingRows.concat(observation));
+  }
+
+  const rows = Array.from(groups, ([key, observations]) => {
+    const [city, province] = key.split("|");
+    const sourceIds = observations.map((observation) => observation.source_id);
+
+    return {
+      city,
+      province,
+      count: observations.length,
+      sourceCount: new Set(sourceIds.filter(Boolean)).size,
+    };
+  });
+
+  return rows.sort((a, b) => {
+    if (b.count !== a.count) return b.count - a.count;
+    return a.city.localeCompare(b.city);
+  });
+})();
+
+export const sourceCountBySegment = (() => {
+  const sourceIdsBySegment = new Map<string, Set<string>>();
+
+  for (const observation of observationsData) {
+    const segment = observation.segment || "unspecified";
+    const sourceIds = sourceIdsBySegment.get(segment) ?? new Set<string>();
+
+    if (observation.source_id) {
+      sourceIds.add(observation.source_id);
+    }
+
+    sourceIdsBySegment.set(segment, sourceIds);
+  }
+
+  const rows = Array.from(sourceIdsBySegment, ([id, sourceIds]) => ({
+    id,
+    label: formatSegment(id),
+    count: sourceIds.size,
+  }));
+
+  return sortCountRows(rows);
+})();
+
+export const capabilityCountBySegment = countCapabilitiesByValue(
+  capabilitiesData,
+  (capability) => capability.segment,
+  formatSegment,
+);
+</file>
+
+<file path="lib/atlas-labels.ts">
+export const segmentLabels: Record<string, string> = {
+  deposition: "Deposition",
+  etch_clean: "Etch, clean, and strip",
+  lithography_sidebar: "Lithography sidebar",
+  metrology_inspection: "Metrology and inspection",
+};
+
+export const evidenceTypeLabels: Record<string, string> = {
+  expert_secondary: "Expert secondary source",
+  industry_presence: "Industry presence",
+  institutional_capacity: "Institutional capacity",
+  job_posting_proxy: "Job posting proxy",
+  manual_inference: "Manual taxonomy scaffold",
+  official_policy: "Official policy",
+  research_output_proxy: "Research output proxy",
+  shortage_signal: "Shortage signal",
+};
+
+export const confidenceLabels: Record<string, string> = {
+  high: "High",
+  medium: "Medium",
+  low: "Low",
+};
+
+export const entityTypeLabels: Record<string, string> = {
+  capability: "Capability",
+  city: "City",
+  company: "Company",
+  discipline: "Discipline",
+  industrial_cluster: "Industrial cluster",
+  industrial_park: "Industrial park",
+  institution: "Institution",
+  proxy_source: "Proxy source",
+  role_family: "Role family",
+  source: "Source",
+};
+
+function formatFallback(value: string) {
+  if (!value) return "Unspecified";
+
+  return value
+    .split("_")
+    .filter(Boolean)
+    .map((word) => word[0].toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
+export function formatSegment(value: string): string {
+  return segmentLabels[value] ?? formatFallback(value);
+}
+
+export function formatEvidenceType(value: string): string {
+  return evidenceTypeLabels[value] ?? formatFallback(value);
+}
+
+export function formatConfidence(value: string): string {
+  return confidenceLabels[value] ?? formatFallback(value);
+}
+
+export function formatEntityType(value: string): string {
+  return entityTypeLabels[value] ?? formatFallback(value);
+}
+</file>
+
 <file path="prompts/01_literature_gap_deep_research.md">
 Produce a literature and data-gap memo for a portfolio-grade project titled "China Semiconductor Tooling Talent Atlas."
 
@@ -7477,6 +8009,2019 @@ Create the Next.js dashboard repo, copy `data/raw` and `AGENTS.md` into it, then
     "**/*.mts"
   ],
   "exclude": ["node_modules"]
+}
+</file>
+
+<file path="app/sources/page.tsx">
+"use client";
+
+import Link from "next/link";
+import { Fragment, useMemo, useState } from "react";
+import sourcesData from "@/data/generated/sources.json";
+
+type SourceRecord = (typeof sourcesData)[number];
+
+const numberFormatter = new Intl.NumberFormat("en-US");
+
+const sourceTypeOptions = (() => {
+  const values = new Set<string>();
+  for (const source of sourcesData) {
+    if (source.source_type) values.add(source.source_type);
+  }
+  return Array.from(values)
+    .sort((a, b) => a.localeCompare(b))
+    .map((value) => ({ id: value, label: value }));
+})();
+
+const languageOptions = (() => {
+  const values = new Set<string>();
+  for (const source of sourcesData) {
+    if (source.language) values.add(source.language);
+  }
+  return Array.from(values)
+    .sort()
+    .map((value) => ({ id: value, label: value }));
+})();
+
+const reuseValueOptions = (() => {
+  const values = new Set<string>();
+  for (const source of sourcesData) {
+    if (source.reuse_value) values.add(source.reuse_value);
+  }
+  return Array.from(values)
+    .sort()
+    .map((value) => ({ id: value, label: value }));
+})();
+
+const publisherCount = new Set(
+  sourcesData.map((source) => source.publisher).filter(Boolean),
+).size;
+
+export default function SourcesPage() {
+  const [typeFilter, setTypeFilter] = useState("");
+  const [languageFilter, setLanguageFilter] = useState("");
+  const [reuseFilter, setReuseFilter] = useState("");
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+
+  const filtered = useMemo(() => {
+    return sourcesData.filter((source) => {
+      if (typeFilter && source.source_type !== typeFilter) return false;
+      if (languageFilter && source.language !== languageFilter) return false;
+      if (reuseFilter && source.reuse_value !== reuseFilter) return false;
+      return true;
+    });
+  }, [typeFilter, languageFilter, reuseFilter]);
+
+  function toggleRow(id: string) {
+    setExpanded((current) => {
+      const next = new Set(current);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  function clearAllFilters() {
+    setTypeFilter("");
+    setLanguageFilter("");
+    setReuseFilter("");
+  }
+
+  const hasActiveFilters = Boolean(
+    typeFilter || languageFilter || reuseFilter,
+  );
+
+  return (
+    <main className="min-h-screen bg-stone-100 text-stone-950">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-5 py-10 sm:px-8 lg:px-10">
+        <header className="border-b border-stone-300 pb-6">
+          <nav
+            aria-label="Atlas sections"
+            className="flex flex-wrap gap-x-5 gap-y-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500"
+          >
+            <Link href="/" className="hover:text-stone-950">
+              Home
+            </Link>
+            <Link href="/explorer" className="hover:text-stone-950">
+              Explorer
+            </Link>
+            <Link href="/methodology" className="hover:text-stone-950">
+              Methodology
+            </Link>
+          </nav>
+          <div className="mt-5 flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
+            <span className="font-mono text-stone-800">Audit layer</span>
+            <span aria-hidden className="text-stone-400">·</span>
+            <span className="text-stone-500">Source ledger</span>
+          </div>
+          <h1 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
+            Source Ledger
+          </h1>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-stone-700 sm:text-base">
+            Every observation in the explorer links back to this ledger. Open
+            the audit panel on a row to see its publication and access dates,
+            analyst notes, and full identifier.
+          </p>
+        </header>
+
+        <section
+          aria-label="Ledger totals"
+          className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
+        >
+          <LedgerStat
+            label="Sources"
+            value={sourcesData.length}
+            note="ledger entries"
+          />
+          <LedgerStat
+            label="Publishers"
+            value={publisherCount}
+            note="distinct publishing bodies"
+          />
+          <LedgerStat
+            label="Source types"
+            value={sourceTypeOptions.length}
+            note="record categories in use"
+          />
+          <LedgerStat
+            label="Languages"
+            value={languageOptions.length}
+            note="of original publication"
+          />
+        </section>
+
+        <section
+          aria-label="Filters"
+          className="border border-stone-300 bg-white p-5"
+        >
+          <div className="flex items-baseline justify-between gap-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
+              Filters
+            </p>
+            {hasActiveFilters ? (
+              <button
+                type="button"
+                onClick={clearAllFilters}
+                className="text-xs font-medium text-stone-700 underline-offset-2 hover:text-stone-950 hover:underline"
+              >
+                Clear all
+              </button>
+            ) : null}
+          </div>
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <FilterSelect
+              label="Source type"
+              value={typeFilter}
+              onChange={setTypeFilter}
+              options={sourceTypeOptions}
+            />
+            <FilterSelect
+              label="Language"
+              value={languageFilter}
+              onChange={setLanguageFilter}
+              options={languageOptions}
+            />
+            <FilterSelect
+              label="Reuse value"
+              value={reuseFilter}
+              onChange={setReuseFilter}
+              options={reuseValueOptions}
+            />
+          </div>
+          <p className="mt-4 text-xs text-stone-600">
+            Showing{" "}
+            <span className="font-semibold text-stone-950">
+              {numberFormatter.format(filtered.length)}
+            </span>{" "}
+            of {numberFormatter.format(sourcesData.length)} ledger entries.
+          </p>
+        </section>
+
+        <section aria-label="Source ledger">
+          {filtered.length === 0 ? (
+            <div className="border border-dashed border-stone-300 bg-white px-5 py-10 text-center text-sm text-stone-600">
+              No sources match the current filters.
+            </div>
+          ) : (
+            <div className="overflow-hidden border border-stone-300 bg-white">
+              <div className="max-h-[720px] overflow-auto">
+                <table className="min-w-full divide-y divide-stone-200 text-left text-sm">
+                  <thead className="sticky top-0 z-10 bg-stone-50 text-xs uppercase tracking-[0.14em] text-stone-500">
+                    <tr>
+                      <th className="min-w-72 px-4 py-3 font-semibold">
+                        Source
+                      </th>
+                      <th className="min-w-44 px-4 py-3 font-semibold">
+                        Publisher
+                      </th>
+                      <th className="min-w-44 px-4 py-3 font-semibold">
+                        Type
+                      </th>
+                      <th className="w-28 px-4 py-3 font-semibold">
+                        Reuse value
+                      </th>
+                      <th className="min-w-72 px-4 py-3 font-semibold">
+                        Caveat
+                      </th>
+                      <th className="w-24 px-4 py-3 font-semibold">Link</th>
+                      <th className="w-16 px-3 py-3 text-right font-semibold">
+                        Audit
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-stone-200">
+                    {filtered.map((source) => {
+                      const isOpen = expanded.has(source.source_id);
+                      return (
+                        <Fragment key={source.source_id}>
+                          <tr
+                            className={
+                              isOpen ? "bg-stone-50" : "hover:bg-stone-50/60"
+                            }
+                          >
+                            <td className="px-4 py-4 align-top">
+                              <p className="font-medium text-stone-950">
+                                {source.title || "—"}
+                              </p>
+                            </td>
+                            <td className="px-4 py-4 align-top text-stone-700">
+                              {source.publisher || "—"}
+                            </td>
+                            <td className="px-4 py-4 align-top text-stone-700">
+                              {source.source_type || "—"}
+                            </td>
+                            <td className="px-4 py-4 align-top">
+                              <ReuseValueBadge value={source.reuse_value} />
+                            </td>
+                            <td className="px-4 py-4 align-top leading-6 text-stone-600">
+                              {source.caveats ? (
+                                source.caveats
+                              ) : (
+                                <span className="text-stone-400">
+                                  None recorded
+                                </span>
+                              )}
+                            </td>
+                            <td className="px-4 py-4 align-top">
+                              {source.url ? (
+                                <a
+                                  href={source.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 text-xs font-medium text-stone-900 underline-offset-2 hover:underline"
+                                >
+                                  Open
+                                  <span aria-hidden>↗</span>
+                                </a>
+                              ) : (
+                                <span className="text-xs text-stone-400">
+                                  —
+                                </span>
+                              )}
+                            </td>
+                            <td className="px-3 py-4 text-right align-top">
+                              <button
+                                type="button"
+                                onClick={() => toggleRow(source.source_id)}
+                                aria-expanded={isOpen}
+                                aria-controls={`audit-${source.source_id}`}
+                                className="inline-flex h-8 items-center justify-center border border-stone-300 bg-white px-2.5 text-xs font-medium text-stone-700 hover:border-stone-500 hover:bg-stone-50"
+                              >
+                                {isOpen ? "Hide" : "Audit"}
+                              </button>
+                            </td>
+                          </tr>
+                          {isOpen ? (
+                            <tr
+                              id={`audit-${source.source_id}`}
+                              className="bg-stone-100/80"
+                            >
+                              <td colSpan={7} className="px-4 py-5">
+                                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-500">
+                                  Audit details
+                                </p>
+                                <dl className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                                  <AuditField
+                                    label="source_id"
+                                    value={source.source_id}
+                                    mono
+                                  />
+                                  <AuditField
+                                    label="publication_date"
+                                    value={source.publication_date}
+                                    mono
+                                  />
+                                  <AuditField
+                                    label="access_date"
+                                    value={source.access_date}
+                                    mono
+                                  />
+                                  <AuditField
+                                    label="language"
+                                    value={source.language}
+                                    mono
+                                  />
+                                </dl>
+                                <div className="mt-4">
+                                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-500">
+                                    notes
+                                  </p>
+                                  {source.notes ? (
+                                    <p className="mt-2 text-xs leading-6 text-stone-700">
+                                      {source.notes}
+                                    </p>
+                                  ) : (
+                                    <p className="mt-2 text-xs italic text-stone-400">
+                                      No analyst notes recorded.
+                                    </p>
+                                  )}
+                                </div>
+                              </td>
+                            </tr>
+                          ) : null}
+                        </Fragment>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </section>
+
+        <footer className="flex flex-col gap-3 border-t border-stone-300 pt-8 text-sm leading-7 text-stone-700 sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            Continue reading:{" "}
+            <Link
+              href="/methodology"
+              className="font-medium text-stone-950 underline-offset-2 hover:underline"
+            >
+              Methodology
+            </Link>{" "}
+            ·{" "}
+            <Link
+              href="/explorer"
+              className="font-medium text-stone-950 underline-offset-2 hover:underline"
+            >
+              Evidence Explorer
+            </Link>
+          </p>
+          <p className="text-xs text-stone-500">
+            Ledger covers public records used by the beta dataset.
+          </p>
+        </footer>
+      </div>
+    </main>
+  );
+}
+
+function LedgerStat({
+  label,
+  value,
+  note,
+}: {
+  label: string;
+  value: number;
+  note: string;
+}) {
+  return (
+    <div className="border border-stone-300 bg-white p-4">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500">
+        {label}
+      </p>
+      <p className="mt-2 font-mono text-2xl font-semibold tracking-tight text-stone-950">
+        {numberFormatter.format(value)}
+      </p>
+      <p className="mt-1 text-xs leading-5 text-stone-600">{note}</p>
+    </div>
+  );
+}
+
+function FilterSelect({
+  label,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  value: string;
+  onChange: (next: string) => void;
+  options: { id: string; label: string }[];
+}) {
+  return (
+    <label className="flex flex-col gap-1.5">
+      <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500">
+        {label}
+      </span>
+      <select
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="h-10 border border-stone-300 bg-white px-2.5 text-sm text-stone-800 focus:border-stone-700 focus:outline-none"
+      >
+        <option value="">All</option>
+        {options.map((option) => (
+          <option key={option.id} value={option.id}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function ReuseValueBadge({ value }: { value: string }) {
+  if (!value) return <span className="text-xs text-stone-400">—</span>;
+  const lower = value.toLowerCase();
+  const tone =
+    lower === "high"
+      ? "border-stone-900 bg-stone-950 text-stone-50"
+      : lower === "medium"
+        ? "border-stone-400 bg-stone-100 text-stone-800"
+        : "border-stone-300 bg-white text-stone-700";
+  return (
+    <span
+      className={`inline-flex items-center border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.16em] ${tone}`}
+    >
+      {value}
+    </span>
+  );
+}
+
+function AuditField({
+  label,
+  value,
+  mono,
+}: {
+  label: string;
+  value: string;
+  mono?: boolean;
+}) {
+  return (
+    <div>
+      <dt className="text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-500">
+        {label}
+      </dt>
+      <dd
+        className={`mt-1 text-xs text-stone-800 ${
+          mono ? "font-mono" : "leading-6"
+        }`}
+      >
+        {value ? value : <span className="text-stone-400">—</span>}
+      </dd>
+    </div>
+  );
+}
+</file>
+
+<file path="components/atlas/capability-role-matrix.tsx">
+import capabilitiesData from "@/data/generated/capabilities.json";
+import roleFamiliesData from "@/data/generated/role_families.json";
+import { segmentProfiles } from "@/data/editorial/segment-profiles";
+
+type SegmentCounts = {
+  capabilities: number;
+  roleFamilies: number;
+};
+
+const countsBySegment: Record<string, SegmentCounts> = (() => {
+  const counts: Record<string, SegmentCounts> = {};
+
+  for (const profile of segmentProfiles) {
+    counts[profile.id] = { capabilities: 0, roleFamilies: 0 };
+  }
+
+  for (const capability of capabilitiesData) {
+    const segment = capability.segment;
+    if (counts[segment]) counts[segment].capabilities += 1;
+  }
+
+  for (const roleFamily of roleFamiliesData) {
+    const segment = roleFamily.segment;
+    if (counts[segment]) counts[segment].roleFamilies += 1;
+  }
+
+  return counts;
+})();
+
+export function CapabilityRoleMatrix() {
+  return (
+    <section
+      aria-labelledby="capability-role-matrix-heading"
+      className="border border-stone-300 bg-white"
+    >
+      <header className="flex flex-col gap-3 border-b border-stone-200 px-6 py-6 sm:px-8">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500">
+          Capability and role matrix
+        </p>
+        <h3
+          id="capability-role-matrix-heading"
+          className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
+        >
+          What &ldquo;tooling talent&rdquo; actually means, by segment.
+        </h3>
+        <p className="max-w-3xl text-sm leading-7 text-stone-600">
+          Why this matters: the equipment race is not generic STEM headcount.
+          Each tool family relies on a specific mix of role families,
+          process-window judgement, and customer-ramp know-how — and public
+          sources reveal these in uneven ways.
+        </p>
+      </header>
+
+      <div className="grid grid-cols-1 gap-px bg-stone-200 md:grid-cols-2 lg:grid-cols-4">
+        {segmentProfiles.map((profile) => {
+          const counts = countsBySegment[profile.id];
+          return (
+            <article
+              key={profile.id}
+              className="flex h-full flex-col gap-6 bg-white p-6"
+            >
+              <header className="flex flex-col gap-2 border-b border-stone-200 pb-4">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500">
+                  Segment
+                </p>
+                <h4 className="text-lg font-semibold tracking-tight text-stone-950">
+                  {profile.label}
+                </h4>
+                <p className="text-sm leading-6 text-stone-700">
+                  {profile.plainEnglishDefinition}
+                </p>
+                {counts ? (
+                  <p className="mt-1 text-[11px] uppercase tracking-[0.18em] text-stone-500">
+                    {counts.capabilities} capabilities ·{" "}
+                    {counts.roleFamilies} role families catalogued
+                  </p>
+                ) : null}
+              </header>
+
+              <MatrixBlock
+                label="Key role families"
+                items={profile.keyRoleFamilies}
+              />
+
+              <MatrixBlock
+                label="Likely bottlenecks"
+                items={profile.likelyBottlenecks}
+              />
+
+              <MatrixBlock
+                label="Public signals"
+                items={profile.publicSignals}
+              />
+
+              <MatrixBlock
+                label="What to watch"
+                items={profile.whatToWatch}
+              />
+
+              <div className="mt-auto border-t border-dashed border-stone-300 pt-4">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-700">
+                  Caveat
+                </p>
+                <p className="mt-2 text-xs leading-6 text-stone-600">
+                  {profile.caveat}
+                </p>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+function MatrixBlock({ label, items }: { label: string; items: string[] }) {
+  return (
+    <div>
+      <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-stone-500">
+        {label}
+      </p>
+      <ul className="mt-2 space-y-2 text-sm leading-6 text-stone-800">
+        {items.map((item) => (
+          <li key={item} className="flex gap-2">
+            <span
+              aria-hidden
+              className="mt-2 inline-block h-px w-3 shrink-0 bg-stone-400"
+            />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+</file>
+
+<file path="app/explorer/page.tsx">
+"use client";
+
+import Link from "next/link";
+import { Fragment, useMemo, useState } from "react";
+import capabilitiesData from "@/data/generated/capabilities.json";
+import institutionsData from "@/data/generated/institutions.json";
+import observationsData from "@/data/generated/observations.json";
+import sourcesData from "@/data/generated/sources.json";
+import {
+  formatConfidence,
+  formatEntityType,
+  formatEvidenceType,
+  formatSegment,
+} from "@/lib/atlas-labels";
+import {
+  evidenceGroupLabels,
+  evidenceTypeGroups,
+  type EvidenceGroup,
+} from "@/lib/atlas-analytics";
+
+type Observation = (typeof observationsData)[number];
+type SourceRecord = (typeof sourcesData)[number];
+
+const numberFormatter = new Intl.NumberFormat("en-US");
+
+const sourceById = new Map<string, SourceRecord>(
+  sourcesData.map((source) => [source.source_id, source]),
+);
+
+const segmentOptions = [
+  { id: "etch_clean", label: formatSegment("etch_clean") },
+  { id: "deposition", label: formatSegment("deposition") },
+  {
+    id: "metrology_inspection",
+    label: formatSegment("metrology_inspection"),
+  },
+  {
+    id: "lithography_sidebar",
+    label: formatSegment("lithography_sidebar"),
+  },
+];
+
+const evidenceGroupOptions: { id: EvidenceGroup; label: string }[] = [
+  { id: "direct_public_record", label: evidenceGroupLabels.direct_public_record },
+  { id: "analytical_proxy", label: evidenceGroupLabels.analytical_proxy },
+  { id: "taxonomy_scaffold", label: evidenceGroupLabels.taxonomy_scaffold },
+];
+
+const evidenceTypeOptions = (() => {
+  const ids = new Set<string>();
+  for (const observation of observationsData) {
+    if (observation.evidence_type) ids.add(observation.evidence_type);
+  }
+  return Array.from(ids)
+    .map((id) => ({ id, label: formatEvidenceType(id) }))
+    .sort((a, b) => a.label.localeCompare(b.label));
+})();
+
+const confidenceOptions = (() => {
+  const ids = new Set<string>();
+  for (const observation of observationsData) {
+    if (observation.confidence) ids.add(observation.confidence);
+  }
+  return Array.from(ids)
+    .map((id) => ({ id, label: formatConfidence(id) }))
+    .sort((a, b) => a.label.localeCompare(b.label));
+})();
+
+const cityOptions = (() => {
+  const cities = new Set<string>();
+  for (const observation of observationsData) {
+    if (observation.city) cities.add(observation.city);
+  }
+  return Array.from(cities)
+    .sort()
+    .map((city) => ({ id: city, label: city }));
+})();
+
+const totals = {
+  sources: sourcesData.length,
+  evidenceRows: observationsData.length,
+  capabilities: capabilitiesData.length,
+  institutions: institutionsData.length,
+};
+
+function evidenceGroupFor(evidenceType: string): EvidenceGroup {
+  return evidenceTypeGroups[evidenceType] ?? "analytical_proxy";
+}
+
+function placeLabel(observation: Observation): string {
+  if (observation.city) {
+    return observation.province
+      ? `${observation.city}, ${observation.province}`
+      : observation.city;
+  }
+  if (observation.province) return observation.province;
+  return formatEntityType(observation.entity_type);
+}
+
+export default function ExplorerPage() {
+  const [segmentFilter, setSegmentFilter] = useState("");
+  const [groupFilter, setGroupFilter] = useState("");
+  const [typeFilter, setTypeFilter] = useState("");
+  const [confidenceFilter, setConfidenceFilter] = useState("");
+  const [cityFilter, setCityFilter] = useState("");
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+
+  const filtered = useMemo(() => {
+    return observationsData.filter((observation) => {
+      if (segmentFilter && observation.segment !== segmentFilter) return false;
+      if (
+        groupFilter &&
+        evidenceGroupFor(observation.evidence_type) !== groupFilter
+      )
+        return false;
+      if (typeFilter && observation.evidence_type !== typeFilter) return false;
+      if (confidenceFilter && observation.confidence !== confidenceFilter)
+        return false;
+      if (cityFilter && observation.city !== cityFilter) return false;
+      return true;
+    });
+  }, [segmentFilter, groupFilter, typeFilter, confidenceFilter, cityFilter]);
+
+  function toggleRow(id: string) {
+    setExpanded((current) => {
+      const next = new Set(current);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  function clearAllFilters() {
+    setSegmentFilter("");
+    setGroupFilter("");
+    setTypeFilter("");
+    setConfidenceFilter("");
+    setCityFilter("");
+  }
+
+  const hasActiveFilters = Boolean(
+    segmentFilter || groupFilter || typeFilter || confidenceFilter || cityFilter,
+  );
+
+  return (
+    <main className="min-h-screen bg-stone-100 text-stone-950">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-5 py-10 sm:px-8 lg:px-10">
+        <header className="border-b border-stone-300 pb-6">
+          <nav
+            aria-label="Atlas sections"
+            className="flex flex-wrap gap-x-5 gap-y-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500"
+          >
+            <Link href="/" className="hover:text-stone-950">
+              Home
+            </Link>
+            <Link href="/methodology" className="hover:text-stone-950">
+              Methodology
+            </Link>
+            <Link href="/sources" className="hover:text-stone-950">
+              Source ledger
+            </Link>
+          </nav>
+          <div className="mt-5 flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
+            <span className="font-mono text-stone-800">Audit layer</span>
+            <span aria-hidden className="text-stone-400">·</span>
+            <span className="text-stone-500">Evidence rows</span>
+          </div>
+          <h1 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
+            Evidence Explorer
+          </h1>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-stone-700 sm:text-base">
+            Filter the public evidence signals behind the visual brief. The
+            homepage interprets the evidence; this page exposes the rows.
+          </p>
+        </header>
+
+        <section
+          aria-label="Dataset totals"
+          className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
+        >
+          <KpiCard
+            label="Sources"
+            value={totals.sources}
+            note="ledger entries"
+          />
+          <KpiCard
+            label="Evidence rows"
+            value={totals.evidenceRows}
+            note="evidence rows in beta dataset"
+          />
+          <KpiCard
+            label="Capabilities"
+            value={totals.capabilities}
+            note="taxonomy rows"
+          />
+          <KpiCard
+            label="Institutions"
+            value={totals.institutions}
+            note="public institution signals"
+          />
+        </section>
+
+        <section
+          aria-label="Filters"
+          className="border border-stone-300 bg-white p-5"
+        >
+          <div className="flex items-baseline justify-between gap-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
+              Filters
+            </p>
+            {hasActiveFilters ? (
+              <button
+                type="button"
+                onClick={clearAllFilters}
+                className="text-xs font-medium text-stone-700 underline-offset-2 hover:text-stone-950 hover:underline"
+              >
+                Clear all
+              </button>
+            ) : null}
+          </div>
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            <FilterSelect
+              label="Segment"
+              value={segmentFilter}
+              onChange={setSegmentFilter}
+              options={segmentOptions}
+            />
+            <FilterSelect
+              label="Evidence group"
+              value={groupFilter}
+              onChange={setGroupFilter}
+              options={evidenceGroupOptions}
+            />
+            <FilterSelect
+              label="Evidence type"
+              value={typeFilter}
+              onChange={setTypeFilter}
+              options={evidenceTypeOptions}
+            />
+            <FilterSelect
+              label="Confidence"
+              value={confidenceFilter}
+              onChange={setConfidenceFilter}
+              options={confidenceOptions}
+            />
+            <FilterSelect
+              label="City"
+              value={cityFilter}
+              onChange={setCityFilter}
+              options={cityOptions}
+            />
+          </div>
+          <p className="mt-4 text-xs text-stone-600">
+            Showing{" "}
+            <span className="font-semibold text-stone-950">
+              {numberFormatter.format(filtered.length)}
+            </span>{" "}
+            of {numberFormatter.format(totals.evidenceRows)} evidence rows in
+            beta dataset.
+          </p>
+        </section>
+
+        <section aria-label="Evidence rows">
+          {filtered.length === 0 ? (
+            <div className="border border-dashed border-stone-300 bg-white px-5 py-10 text-center text-sm text-stone-600">
+              No evidence rows match the current filters.
+            </div>
+          ) : (
+            <div className="overflow-hidden border border-stone-300 bg-white">
+              <div className="max-h-[720px] overflow-auto">
+                <table className="min-w-full divide-y divide-stone-200 text-left text-sm">
+                  <thead className="sticky top-0 z-10 bg-stone-50 text-xs uppercase tracking-[0.14em] text-stone-500">
+                    <tr>
+                      <th className="min-w-72 px-4 py-3 font-semibold">
+                        Claim
+                      </th>
+                      <th className="min-w-40 px-4 py-3 font-semibold">
+                        Segment
+                      </th>
+                      <th className="min-w-44 px-4 py-3 font-semibold">
+                        Place / entity
+                      </th>
+                      <th className="min-w-40 px-4 py-3 font-semibold">
+                        Evidence type
+                      </th>
+                      <th className="w-28 px-4 py-3 font-semibold">
+                        Confidence
+                      </th>
+                      <th className="min-w-52 px-4 py-3 font-semibold">
+                        Source
+                      </th>
+                      <th className="w-16 px-3 py-3 text-right font-semibold">
+                        Audit
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-stone-200">
+                    {filtered.map((observation) => {
+                      const isOpen = expanded.has(observation.observation_id);
+                      const source = sourceById.get(observation.source_id);
+
+                      return (
+                        <Fragment key={observation.observation_id}>
+                          <tr
+                            className={
+                              isOpen ? "bg-stone-50" : "hover:bg-stone-50/60"
+                            }
+                          >
+                            <td className="px-4 py-4 align-top">
+                              <p className="font-medium text-stone-950">
+                                {observation.indicator_name || "—"}
+                              </p>
+                              {observation.indicator_value ? (
+                                <p className="mt-1 leading-6 text-stone-700">
+                                  {observation.indicator_value}
+                                </p>
+                              ) : null}
+                            </td>
+                            <td className="px-4 py-4 align-top text-stone-700">
+                              {observation.segment
+                                ? formatSegment(observation.segment)
+                                : "—"}
+                            </td>
+                            <td className="px-4 py-4 align-top">
+                              <p className="text-stone-800">
+                                {placeLabel(observation)}
+                              </p>
+                              {observation.entity_type ? (
+                                <p className="mt-1 text-xs text-stone-500">
+                                  {formatEntityType(observation.entity_type)}
+                                </p>
+                              ) : null}
+                            </td>
+                            <td className="px-4 py-4 align-top text-stone-700">
+                              {formatEvidenceType(observation.evidence_type)}
+                            </td>
+                            <td className="px-4 py-4 align-top text-stone-700">
+                              {formatConfidence(observation.confidence)}
+                            </td>
+                            <td className="px-4 py-4 align-top">
+                              <p className="font-medium text-stone-900">
+                                {source?.title ?? "Source not in ledger"}
+                              </p>
+                              {source?.publisher ? (
+                                <p className="mt-1 text-xs text-stone-500">
+                                  {source.publisher}
+                                </p>
+                              ) : null}
+                            </td>
+                            <td className="px-3 py-4 text-right align-top">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  toggleRow(observation.observation_id)
+                                }
+                                aria-expanded={isOpen}
+                                aria-controls={`audit-${observation.observation_id}`}
+                                className="inline-flex h-8 items-center justify-center border border-stone-300 bg-white px-2.5 text-xs font-medium text-stone-700 hover:border-stone-500 hover:bg-stone-50"
+                              >
+                                {isOpen ? "Hide" : "Audit"}
+                              </button>
+                            </td>
+                          </tr>
+                          {isOpen ? (
+                            <tr
+                              id={`audit-${observation.observation_id}`}
+                              className="bg-stone-100/80"
+                            >
+                              <td colSpan={7} className="px-4 py-5">
+                                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-500">
+                                  Audit details
+                                </p>
+                                <dl className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                                  <AuditField
+                                    label="observation_id"
+                                    value={observation.observation_id}
+                                  />
+                                  <AuditField
+                                    label="source_id"
+                                    value={observation.source_id}
+                                  />
+                                  <AuditField
+                                    label="capability_id"
+                                    value={observation.capability_id}
+                                  />
+                                  <AuditField
+                                    label="entity_id"
+                                    value={observation.entity_id}
+                                  />
+                                </dl>
+                                <div className="mt-4">
+                                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-500">
+                                    notes
+                                  </p>
+                                  {observation.notes ? (
+                                    <p className="mt-2 text-xs leading-6 text-stone-700">
+                                      {observation.notes}
+                                    </p>
+                                  ) : (
+                                    <p className="mt-2 text-xs italic text-stone-400">
+                                      No analyst notes recorded.
+                                    </p>
+                                  )}
+                                </div>
+                              </td>
+                            </tr>
+                          ) : null}
+                        </Fragment>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </section>
+      </div>
+    </main>
+  );
+}
+
+function KpiCard({
+  label,
+  value,
+  note,
+}: {
+  label: string;
+  value: number;
+  note: string;
+}) {
+  return (
+    <div className="border border-stone-300 bg-white p-4">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500">
+        {label}
+      </p>
+      <p className="mt-2 font-mono text-2xl font-semibold tracking-tight text-stone-950">
+        {numberFormatter.format(value)}
+      </p>
+      <p className="mt-1 text-xs leading-5 text-stone-600">{note}</p>
+    </div>
+  );
+}
+
+function FilterSelect({
+  label,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  value: string;
+  onChange: (next: string) => void;
+  options: { id: string; label: string }[];
+}) {
+  return (
+    <label className="flex flex-col gap-1.5">
+      <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500">
+        {label}
+      </span>
+      <select
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="h-10 border border-stone-300 bg-white px-2.5 text-sm text-stone-800 focus:border-stone-700 focus:outline-none"
+      >
+        <option value="">All</option>
+        {options.map((option) => (
+          <option key={option.id} value={option.id}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function AuditField({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <dt className="text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-500">
+        {label}
+      </dt>
+      <dd className="mt-1 font-mono text-xs text-stone-800">
+        {value ? value : <span className="text-stone-400">—</span>}
+      </dd>
+    </div>
+  );
+}
+</file>
+
+<file path="app/methodology/page.tsx">
+import Link from "next/link";
+import {
+  evidenceTypeGroups,
+  evidenceGroupLabels,
+  observationsByEvidenceType,
+  type EvidenceGroup,
+} from "@/lib/atlas-analytics";
+import { formatEvidenceType } from "@/lib/atlas-labels";
+
+type EvidenceTypeRow = {
+  raw: string;
+  label: string;
+  group: EvidenceGroup;
+  groupLabel: string;
+  definition: string;
+};
+
+const evidenceTypeDefinitions: Record<string, string> = {
+  official_policy: "Policy document or government announcement.",
+  institutional_capacity:
+    "Degree authorization, school, lab, research centre, or key discipline.",
+  industry_presence:
+    "Firm, industrial park, supplier cluster, or manufacturing ecosystem.",
+  shortage_signal:
+    "Shortage list, talent catalogue, recruitment policy, or labour-market signal.",
+  job_posting_proxy: "Role demand inferred from job postings.",
+  research_output_proxy: "Papers, patents, grants, standards, or labs.",
+  expert_secondary:
+    "Think-tank, consulting, industry report, or academic synthesis.",
+  manual_inference:
+    "Analyst-coded inference linking taxonomy to evidence. Scaffolding, not real-world activity.",
+};
+
+const evidenceCountByRaw = new Map<string, number>(
+  observationsByEvidenceType.map((row) => [row.id, row.count]),
+);
+
+const evidenceTypeRows: EvidenceTypeRow[] = Object.keys(evidenceTypeGroups)
+  .map((raw) => ({
+    raw,
+    label: formatEvidenceType(raw),
+    group: evidenceTypeGroups[raw],
+    groupLabel: evidenceGroupLabels[evidenceTypeGroups[raw]],
+    definition: evidenceTypeDefinitions[raw] ?? "—",
+  }))
+  .sort((a, b) => {
+    const groupOrder: EvidenceGroup[] = [
+      "direct_public_record",
+      "analytical_proxy",
+      "taxonomy_scaffold",
+    ];
+    const ai = groupOrder.indexOf(a.group);
+    const bi = groupOrder.indexOf(b.group);
+    if (ai !== bi) return ai - bi;
+    return a.label.localeCompare(b.label);
+  });
+
+const confidenceRows = [
+  {
+    raw: "high",
+    label: "High",
+    definition: "The source directly supports the observation.",
+  },
+  {
+    raw: "medium",
+    label: "Medium",
+    definition:
+      "The source supports the observation through a reasonable proxy.",
+  },
+  {
+    raw: "low",
+    label: "Low",
+    definition:
+      "The source is relevant but indirect, promotional, outdated, or incomplete.",
+  },
+];
+
+const tableOfContents = [
+  { id: "what-it-measures", label: "What the atlas measures" },
+  { id: "what-it-does-not", label: "What it does not measure" },
+  { id: "evidence-types", label: "Evidence types" },
+  { id: "confidence-levels", label: "Confidence levels" },
+  {
+    id: "evidence-vs-capability",
+    label: "Why evidence strength is not capability",
+  },
+  { id: "update-cadence", label: "Update cadence" },
+  { id: "no-individual-data", label: "No individual-level mapping" },
+  {
+    id: "how-to-cite",
+    label: "How to cite or use the atlas responsibly",
+  },
+];
+
+const numberFormatter = new Intl.NumberFormat("en-US");
+
+export default function MethodologyPage() {
+  return (
+    <main className="min-h-screen bg-stone-100 text-stone-950">
+      <div className="mx-auto flex w-full max-w-4xl flex-col gap-10 px-5 py-10 sm:px-8 lg:px-10">
+        <header className="border-b-2 border-stone-900 pb-8">
+          <nav
+            aria-label="Atlas sections"
+            className="flex flex-wrap gap-x-5 gap-y-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500"
+          >
+            <Link href="/" className="hover:text-stone-950">
+              Home
+            </Link>
+            <Link href="/explorer" className="hover:text-stone-950">
+              Explorer
+            </Link>
+            <Link href="/sources" className="hover:text-stone-950">
+              Source ledger
+            </Link>
+          </nav>
+          <div className="mt-6 flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
+            <span className="font-mono text-stone-800">Source contract</span>
+            <span aria-hidden className="text-stone-400">·</span>
+            <span className="text-stone-500">Methodology · Beta dataset v1</span>
+          </div>
+          <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">
+            How to read this atlas.
+          </h1>
+          <p className="mt-5 max-w-3xl text-lg leading-8 text-stone-700">
+            The China Semiconductor Tooling Talent Atlas is an editorial
+            evidence product. This page describes what the atlas measures, what
+            it deliberately does not measure, and the contract this product
+            keeps with the public sources behind every row.
+          </p>
+        </header>
+
+        <nav
+          aria-label="On this page"
+          className="border border-stone-300 bg-white p-5"
+        >
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500">
+            On this page
+          </p>
+          <ol className="mt-3 grid grid-cols-1 gap-x-6 gap-y-2 text-sm leading-6 text-stone-800 sm:grid-cols-2">
+            {tableOfContents.map((entry, index) => (
+              <li key={entry.id}>
+                <a
+                  href={`#${entry.id}`}
+                  className="flex items-baseline gap-3 hover:text-stone-950 hover:underline"
+                >
+                  <span className="font-mono text-xs text-stone-500">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span>{entry.label}</span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+
+        <Section
+          index="01"
+          id="what-it-measures"
+          title="What the atlas measures"
+        >
+          <p>
+            The atlas catalogues <em>public evidence signals</em> for
+            semiconductor-equipment talent in mainland PRC. Each row is anchored
+            to a public source and tagged by tooling segment, evidence type, and
+            confidence. The catalogue is built to answer a specific kind of
+            question: where, and through what kind of record, does the talent
+            layer behind a tooling segment become visible at all?
+          </p>
+          <p>
+            Concretely, the dataset combines four kinds of artefact:
+          </p>
+          <ul className="space-y-2 pl-5">
+            <li className="list-disc">
+              Filings and corporate disclosures (annual reports, prospectuses).
+            </li>
+            <li className="list-disc">
+              Government and institutional records (policy notices, shortage
+              catalogues, university and key-lab pages, industrial-park
+              directories).
+            </li>
+            <li className="list-disc">
+              Analytical proxies derived from public sources (job-posting
+              language, research-output indicators, expert secondary writing).
+            </li>
+            <li className="list-disc">
+              Taxonomy scaffolding that organises the four tool families and
+              their role and capability vocabulary.
+            </li>
+          </ul>
+        </Section>
+
+        <Section
+          index="02"
+          id="what-it-does-not"
+          title="What it does not measure"
+        >
+          <p>
+            The atlas is not a labour-market census, a capability index, or a
+            ranking. It avoids several specific kinds of claim:
+          </p>
+          <ul className="space-y-2 pl-5">
+            <li className="list-disc">
+              Headcount estimates of segment-specific workforces.
+            </li>
+            <li className="list-disc">
+              Yield-learning depth, process-window judgement, or chamber and
+              calibration know-how.
+            </li>
+            <li className="list-disc">
+              Comparative readiness, market share, or competitive position.
+            </li>
+            <li className="list-disc">
+              Forecasts of future capability, hiring, or shortage.
+            </li>
+            <li className="list-disc">
+              Any individual-level personal data. The atlas operates at firm,
+              institution, city, segment, capability, and discipline levels
+              only.
+            </li>
+          </ul>
+          <p>
+            If a row appears to support such a claim, it is being read too far.
+            Use the explorer&rsquo;s audit panel to inspect the underlying
+            source.
+          </p>
+        </Section>
+
+        <Section index="03" id="evidence-types" title="Evidence types">
+          <p>
+            Every observation carries a single <code className="font-mono text-xs">evidence_type</code> value. These values
+            roll up into three analytical groups: direct public record (the
+            strongest), analytical proxy (supporting context), and taxonomy
+            scaffold (navigational only). Counts below reflect the current beta
+            dataset.
+          </p>
+          <div className="overflow-hidden border border-stone-300 bg-white">
+            <table className="min-w-full divide-y divide-stone-200 text-left text-sm">
+              <thead className="bg-stone-50 text-xs uppercase tracking-[0.14em] text-stone-500">
+                <tr>
+                  <th className="px-4 py-3 font-semibold">Label</th>
+                  <th className="px-4 py-3 font-semibold">Raw value</th>
+                  <th className="px-4 py-3 font-semibold">Group</th>
+                  <th className="px-4 py-3 font-semibold">Definition</th>
+                  <th className="w-20 px-4 py-3 text-right font-semibold">
+                    Rows
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-stone-200">
+                {evidenceTypeRows.map((row) => (
+                  <tr key={row.raw}>
+                    <td className="px-4 py-3 align-top font-medium text-stone-950">
+                      {row.label}
+                    </td>
+                    <td className="px-4 py-3 align-top font-mono text-xs text-stone-600">
+                      {row.raw}
+                    </td>
+                    <td className="px-4 py-3 align-top text-stone-700">
+                      {row.groupLabel}
+                    </td>
+                    <td className="px-4 py-3 align-top leading-6 text-stone-700">
+                      {row.definition}
+                    </td>
+                    <td className="px-4 py-3 text-right align-top font-mono text-xs text-stone-600">
+                      {numberFormatter.format(evidenceCountByRaw.get(row.raw) ?? 0)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="text-xs text-stone-600">
+            An observation tagged with an evidence type that is not in this
+            table will default to the analytical-proxy group when read by the
+            explorer.
+          </p>
+        </Section>
+
+        <Section index="04" id="confidence-levels" title="Confidence levels">
+          <p>
+            Confidence describes the link between source and observation, not
+            the importance of the observation. A row can be highly relevant
+            editorially while only carrying medium confidence.
+          </p>
+          <div className="overflow-hidden border border-stone-300 bg-white">
+            <table className="min-w-full divide-y divide-stone-200 text-left text-sm">
+              <thead className="bg-stone-50 text-xs uppercase tracking-[0.14em] text-stone-500">
+                <tr>
+                  <th className="px-4 py-3 font-semibold">Label</th>
+                  <th className="px-4 py-3 font-semibold">Raw value</th>
+                  <th className="px-4 py-3 font-semibold">Definition</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-stone-200">
+                {confidenceRows.map((row) => (
+                  <tr key={row.raw}>
+                    <td className="px-4 py-3 align-top font-medium text-stone-950">
+                      {row.label}
+                    </td>
+                    <td className="px-4 py-3 align-top font-mono text-xs text-stone-600">
+                      {row.raw}
+                    </td>
+                    <td className="px-4 py-3 align-top leading-6 text-stone-700">
+                      {row.definition}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Section>
+
+        <Section
+          index="05"
+          id="evidence-vs-capability"
+          title="Why evidence strength is not capability"
+        >
+          <p>
+            Public records expose what firms, institutions, and government
+            bodies choose to disclose. They do not expose chamber recovery,
+            customer-ramp judgement, calibration habits, or the quiet learning
+            that makes a tool work in a fab. A segment can look strong because
+            its firms file thoroughly, or weak because its firms publish less —
+            neither tells you about real engineering depth.
+          </p>
+          <p>
+            For that reason the atlas avoids composite scores. Each tier of
+            evidence is reported on its own terms. When the homepage talks
+            about &ldquo;visibility&rdquo; or &ldquo;public evidence signal,&rdquo; it is referring to
+            disclosure coverage, not capability.
+          </p>
+        </Section>
+
+        <Section index="06" id="update-cadence" title="Update cadence">
+          <ul className="space-y-2 pl-5">
+            <li className="list-disc">
+              The atlas is on a manual review cadence. There is no automated
+              scraping, and no automated polling of external services.
+            </li>
+            <li className="list-disc">
+              Every source row records a <code className="font-mono text-xs">publication_date</code> and an{" "}
+              <code className="font-mono text-xs">access_date</code>; for the
+              recency of any specific claim, refer to the source row via the
+              explorer&rsquo;s audit panel.
+            </li>
+            <li className="list-disc">
+              Observations remain in the beta dataset until they are manually
+              verified against the primary source. The explorer header marks
+              this status; the underlying CSV is treated as staging.
+            </li>
+            <li className="list-disc">
+              New rows are added in batches, not continuously. Expect the
+              published snapshot to lag the original filings by weeks rather
+              than days.
+            </li>
+          </ul>
+        </Section>
+
+        <Section
+          index="07"
+          id="no-individual-data"
+          title="No individual-level mapping"
+        >
+          <p>
+            The atlas does not, and will not, hold individual-level personal
+            data. Observations are anchored to one of the following entity
+            types: firm, institution, industrial park, city, segment,
+            capability, discipline, or role family. Named individuals only
+            appear when they are unavoidable bibliographic attribution in a
+            source title — never as a subject of analysis.
+          </p>
+          <p>
+            This rule is editorial, not just legal. The atlas exists to make
+            the structure of public evidence legible. Profiling specific
+            engineers would change the product into something it is not meant
+            to be.
+          </p>
+        </Section>
+
+        <Section
+          index="08"
+          id="how-to-cite"
+          title="How to cite or use the atlas responsibly"
+        >
+          <p>
+            When citing or quoting from the atlas, follow these conventions:
+          </p>
+          <ul className="space-y-2 pl-5">
+            <li className="list-disc">
+              Cite the atlas as the editorial source and the underlying public
+              record as the primary source. Do not present atlas counts as
+              workforce totals.
+            </li>
+            <li className="list-disc">
+              For any specific claim, retrieve the source via the explorer&rsquo;s
+              audit panel and quote the source&rsquo;s own title, publisher,
+              publication date, and access date.
+            </li>
+            <li className="list-disc">
+              Preserve evidence-tier language: a row from the analytical-proxy
+              group should not be paraphrased as a direct measurement.
+            </li>
+            <li className="list-disc">
+              When publishing derivative analysis, flag the same caveats this
+              page lists — particularly the absence of tacit production
+              know-how in the visible layer.
+            </li>
+          </ul>
+          <div className="border border-stone-300 bg-white p-5">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500">
+              Suggested citation pattern
+            </p>
+            <p className="mt-2 font-mono text-xs leading-6 text-stone-700">
+              China Semiconductor Tooling Talent Atlas (beta dataset), entry
+              for &lt;city / firm / segment&gt;, evidence type &lt;raw
+              value&gt;, source: &lt;title, publisher, publication date,
+              access date&gt;.
+            </p>
+          </div>
+        </Section>
+
+        <footer className="flex flex-col gap-3 border-t border-stone-300 pt-8 text-sm leading-7 text-stone-700 sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            Continue reading:{" "}
+            <Link
+              href="/"
+              className="font-medium text-stone-950 underline-offset-2 hover:underline"
+            >
+              Home
+            </Link>{" "}
+            ·{" "}
+            <Link
+              href="/explorer"
+              className="font-medium text-stone-950 underline-offset-2 hover:underline"
+            >
+              Evidence Explorer
+            </Link>
+          </p>
+          <p className="text-xs text-stone-500">
+            Mainland PRC only unless explicitly labelled otherwise.
+          </p>
+        </footer>
+      </div>
+    </main>
+  );
+}
+
+function Section({
+  index,
+  id,
+  title,
+  children,
+}: {
+  index: string;
+  id: string;
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section
+      id={id}
+      aria-labelledby={`${id}-heading`}
+      className="scroll-mt-8 flex flex-col gap-4 border-t border-stone-200 pt-8"
+    >
+      <div className="flex items-baseline gap-4">
+        <span className="font-mono text-xs text-stone-500">{index}</span>
+        <h2
+          id={`${id}-heading`}
+          className="text-2xl font-semibold tracking-tight sm:text-3xl"
+        >
+          {title}
+        </h2>
+      </div>
+      <div className="flex flex-col gap-4 text-base leading-7 text-stone-700">
+        {children}
+      </div>
+    </section>
+  );
+}
+</file>
+
+<file path="app/page.tsx">
+import Link from "next/link";
+import {
+  nonTaxonomyEvidenceRows,
+  taxonomyScaffoldRows,
+  totalSources,
+} from "@/lib/atlas-analytics";
+import { formatSegment } from "@/lib/atlas-labels";
+import { insights } from "@/data/editorial/insights";
+import { segmentProfiles } from "@/data/editorial/segment-profiles";
+import { audienceImplications } from "@/data/editorial/audience-implications";
+import { CitySignalMap } from "@/components/atlas/city-signal-map";
+import { CapabilityRoleMatrix } from "@/components/atlas/capability-role-matrix";
+import { EvidenceLadder } from "@/components/atlas/evidence-ladder";
+import { FirmWorkforceSnapshots } from "@/components/atlas/firm-workforce-snapshots";
+
+const numberFormatter = new Intl.NumberFormat("en-US");
+
+const keyNumbers = [
+  {
+    label: "Sources",
+    value: totalSources,
+    note: "Distinct public records currently catalogued.",
+  },
+  {
+    label: "Non-taxonomy evidence rows",
+    value: nonTaxonomyEvidenceRows.length,
+    note: "Observations tied to filings, directories, policy, or proxies.",
+  },
+  {
+    label: "Taxonomy scaffold rows",
+    value: taxonomyScaffoldRows.length,
+    note: "Structural placeholders that organise the atlas, not measurements.",
+  },
+  {
+    label: "Core tooling segments",
+    value: segmentProfiles.length,
+    note: "Etch and clean, deposition, metrology and inspection, lithography sidebar.",
+  },
+];
+
+export default function HomePage() {
+  return (
+    <main className="flex min-h-screen flex-col bg-stone-100 text-stone-950">
+      <section className="relative overflow-hidden bg-stone-950 text-stone-100">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.08]"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)",
+            backgroundSize: "72px 72px",
+          }}
+        />
+        <div className="relative mx-auto flex w-full max-w-6xl flex-col px-6 pb-20 pt-16 sm:px-10 sm:pt-20 lg:px-12">
+          <div className="flex items-center justify-between gap-4 text-[11px] uppercase tracking-[0.22em] text-stone-400">
+            <span className="flex items-baseline gap-2">
+              <span aria-hidden className="font-mono text-stone-500">CN · TOOL</span>
+              <span aria-hidden className="text-stone-700">/</span>
+              <span>China Semiconductor Tooling Talent Atlas</span>
+            </span>
+            <span className="hidden font-mono text-stone-500 sm:inline">
+              Edition 01 · Beta dataset
+            </span>
+          </div>
+
+          <div className="mt-16 max-w-4xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-amber-200/80">
+              Editorial evidence brief
+            </p>
+            <h1 className="mt-6 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-6xl lg:text-[68px]">
+              The Talent Layer of
+              <br />
+              China&apos;s Chip Tooling Push
+            </h1>
+            <p className="mt-8 max-w-2xl text-lg leading-8 text-stone-300 sm:text-xl">
+              China&apos;s semiconductor equipment race is also a race for
+              role-specific know-how.
+            </p>
+          </div>
+
+          <nav className="mt-12 flex flex-wrap items-center gap-3">
+            <Link
+              href="/explorer"
+              className="inline-flex h-12 items-center bg-stone-100 px-6 text-sm font-semibold tracking-wide text-stone-950 transition-colors hover:bg-white"
+            >
+              Explore evidence
+            </Link>
+            <Link
+              href="/methodology"
+              className="inline-flex h-12 items-center border border-stone-500 px-6 text-sm font-semibold tracking-wide text-stone-100 transition-colors hover:border-stone-200 hover:bg-stone-900"
+            >
+              Read methodology
+            </Link>
+            <span className="ml-1 text-xs uppercase tracking-[0.18em] text-stone-500">
+              Beta · evidence under review
+            </span>
+          </nav>
+        </div>
+      </section>
+
+      <section className="border-b border-stone-200 bg-stone-50">
+        <div className="mx-auto w-full max-w-6xl px-6 py-14 sm:px-10 lg:px-12">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <h2 className="text-sm font-semibold uppercase tracking-[0.22em] text-stone-500">
+              The brief in numbers
+            </h2>
+            <p className="max-w-md text-sm text-stone-600">
+              What the atlas catalogues today. Counts describe public-evidence
+              coverage, not workforce size.
+            </p>
+          </div>
+          <dl className="mt-8 grid grid-cols-1 gap-px overflow-hidden border border-stone-200 bg-stone-200 sm:grid-cols-2 lg:grid-cols-4">
+            {keyNumbers.map((stat) => (
+              <div
+                key={stat.label}
+                className="flex flex-col gap-3 bg-stone-50 p-6"
+              >
+                <dt className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
+                  {stat.label}
+                </dt>
+                <dd className="text-4xl font-semibold tracking-tight text-stone-950 sm:text-5xl">
+                  {numberFormatter.format(stat.value)}
+                </dd>
+                <p className="text-sm leading-6 text-stone-600">{stat.note}</p>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
+      <section className="border-b border-stone-200 bg-stone-100">
+        <div className="mx-auto w-full max-w-6xl px-6 py-20 sm:px-10 lg:px-12">
+          <div className="max-w-3xl">
+            <div className="flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
+              <span className="font-mono text-stone-800">Findings</span>
+              <span aria-hidden className="text-stone-400">·</span>
+              <span className="text-stone-500">01–04</span>
+            </div>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+              What the visible layer does, and does not, show.
+            </h2>
+            <p className="mt-4 text-base leading-7 text-stone-700">
+              Each card states a finding, the evidence pattern behind it, and
+              the bottom line for reading the rest of the atlas.
+            </p>
+          </div>
+
+          <ol className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-2">
+            {insights.map((insight, index) => (
+              <li
+                key={insight.id}
+                className="flex flex-col border border-stone-300 bg-white p-7 shadow-[0_1px_0_rgba(0,0,0,0.04)]"
+              >
+                <div className="flex items-baseline justify-between gap-4 border-b border-stone-200 pb-4">
+                  <span className="flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
+                    <span className="font-mono text-stone-800">
+                      Finding {String(index + 1).padStart(2, "0")}
+                    </span>
+                  </span>
+                  <span className="text-[11px] uppercase tracking-[0.18em] text-stone-400">
+                    {insight.source_ids.length} sources cited
+                  </span>
+                </div>
+                <h3 className="mt-5 text-xl font-semibold leading-snug tracking-tight text-stone-950">
+                  {insight.title}
+                </h3>
+                <dl className="mt-6 flex flex-1 flex-col gap-5 text-sm leading-7 text-stone-700">
+                  <div>
+                    <dt className="text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-500">
+                      Evidence pattern
+                    </dt>
+                    <dd className="mt-2">{insight.summary}</dd>
+                  </div>
+                  <div className="border-t border-dashed border-stone-200 pt-4">
+                    <dt className="text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-500">
+                      Bottom line
+                    </dt>
+                    <dd className="mt-2 text-stone-800">
+                      {insight.implication}
+                    </dd>
+                  </div>
+                </dl>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="border-b border-stone-200 bg-stone-100">
+        <div className="mx-auto w-full max-w-6xl px-6 pb-14 pt-4 sm:px-10 sm:pb-20 lg:px-12">
+          <div className="mb-8 max-w-3xl">
+            <div className="flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
+              <span className="font-mono text-stone-800">Exhibit A</span>
+              <span aria-hidden className="text-stone-400">·</span>
+              <span className="text-stone-500">Geography of visibility</span>
+            </div>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+              A schematic read of where evidence shows up.
+            </h2>
+            <p className="mt-4 text-base leading-7 text-stone-700">
+              <span className="mr-2 font-semibold uppercase tracking-[0.18em] text-stone-500">
+                Bottom line —
+              </span>
+              Public evidence concentrates in a handful of cities. The atlas
+              reads this as visibility coverage, not capability depth.
+            </p>
+          </div>
+          <CitySignalMap />
+        </div>
+      </section>
+
+      <section className="border-b border-stone-200 bg-stone-100">
+        <div className="mx-auto w-full max-w-6xl px-6 pb-14 pt-4 sm:px-10 sm:pb-20 lg:px-12">
+          <div className="mb-8 max-w-3xl">
+            <div className="flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
+              <span className="font-mono text-stone-800">Exhibit B</span>
+              <span aria-hidden className="text-stone-400">·</span>
+              <span className="text-stone-500">What the work looks like</span>
+            </div>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+              What &ldquo;tooling talent&rdquo; actually means.
+            </h2>
+            <p className="mt-4 text-base leading-7 text-stone-700">
+              <span className="mr-2 font-semibold uppercase tracking-[0.18em] text-stone-500">
+                Bottom line —
+              </span>
+              Each tool family relies on a distinct mix of roles,
+              bottlenecks, and public signals — not generic STEM headcount.
+            </p>
+          </div>
+          <CapabilityRoleMatrix />
+        </div>
+      </section>
+
+      <section className="border-b border-stone-200 bg-stone-50">
+        <div className="mx-auto w-full max-w-6xl px-6 py-14 sm:px-10 sm:py-20 lg:px-12">
+          <div className="mb-8 max-w-3xl">
+            <div className="flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
+              <span className="font-mono text-stone-800">Exhibit C</span>
+              <span aria-hidden className="text-stone-400">·</span>
+              <span className="text-stone-500">Employer-side evidence</span>
+            </div>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+              What three listed equipment firms actually disclose.
+            </h2>
+            <p className="mt-4 text-base leading-7 text-stone-700">
+              <span className="mr-2 font-semibold uppercase tracking-[0.18em] text-stone-500">
+                Bottom line —
+              </span>
+              Three listed firms publish enough workforce structure to anchor
+              the picture. Categories are firm-level, not segment-level.
+            </p>
+          </div>
+          <FirmWorkforceSnapshots />
+        </div>
+      </section>
+
+      <section className="border-b border-stone-200 bg-stone-50">
+        <div className="mx-auto w-full max-w-6xl px-6 py-14 sm:px-10 sm:py-20 lg:px-12">
+          <div className="max-w-3xl">
+            <div className="flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
+              <span className="font-mono text-stone-800">Implications</span>
+              <span aria-hidden className="text-stone-400">·</span>
+              <span className="text-stone-500">Who this is for</span>
+            </div>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+              How different readers should use the atlas.
+            </h2>
+          </div>
+
+          <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
+            {audienceImplications.map((entry) => (
+              <article
+                key={entry.audience}
+                className="flex h-full flex-col border-t-2 border-stone-950 bg-white p-7"
+              >
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-stone-500">
+                  {entry.audience}
+                </p>
+                <h3 className="mt-3 text-lg font-semibold leading-snug tracking-tight text-stone-950">
+                  {entry.headline}
+                </h3>
+                <p className="mt-4 text-sm leading-7 text-stone-700">
+                  {entry.takeaway}
+                </p>
+                <div className="mt-5">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-500">
+                    Use the explorer for
+                  </p>
+                  <ul className="mt-2 space-y-2 text-sm leading-6 text-stone-700">
+                    {entry.useTheExplorerFor.map((item) => (
+                      <li key={item} className="flex gap-2">
+                        <span
+                          aria-hidden
+                          className="mt-2 inline-block h-px w-3 shrink-0 bg-stone-400"
+                        />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <p className="mt-6 border-t border-stone-200 pt-4 text-xs leading-6 text-stone-600">
+                  <span className="font-semibold uppercase tracking-[0.18em] text-stone-500">
+                    Caution ·{" "}
+                  </span>
+                  {entry.caution}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-stone-200 bg-stone-100">
+        <div className="mx-auto w-full max-w-6xl px-6 py-14 sm:px-10 sm:py-20 lg:px-12">
+          <div className="mb-8 max-w-3xl">
+            <div className="flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
+              <span className="font-mono text-stone-800">Exhibit D</span>
+              <span aria-hidden className="text-stone-400">·</span>
+              <span className="text-stone-500">Evidence ladder</span>
+            </div>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+              An evidence ladder, not a leaderboard.
+            </h2>
+            <p className="mt-4 text-base leading-7 text-stone-700">
+              <span className="mr-2 font-semibold uppercase tracking-[0.18em] text-stone-500">
+                Bottom line —
+              </span>
+              Three tiers sit under the headline counts. Reading them as
+              equal would overstate what the public record shows.
+            </p>
+          </div>
+          <EvidenceLadder />
+        </div>
+      </section>
+
+      <section className="relative overflow-hidden bg-stone-950 text-stone-100">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.06]"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
+            backgroundSize: "28px 28px",
+          }}
+        />
+        <div className="relative mx-auto w-full max-w-6xl px-6 py-14 sm:px-10 sm:py-20 lg:px-12">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <div className="flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
+                <span className="font-mono text-amber-200/80">What to watch</span>
+                <span aria-hidden className="text-stone-600">·</span>
+                <span className="text-stone-400">Continue reading</span>
+              </div>
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+                Pick how you want to dig in.
+              </h2>
+            </div>
+            <p className="max-w-sm text-sm leading-7 text-stone-400">
+              Segments covered:{" "}
+              {segmentProfiles.map((s) => formatSegment(s.id)).join(", ")}.
+            </p>
+          </div>
+
+          <div className="mt-12 grid grid-cols-1 gap-px overflow-hidden border border-stone-800 bg-stone-800 md:grid-cols-3">
+            <Link
+              href="/explorer"
+              className="group flex h-full flex-col justify-between gap-6 bg-stone-950 p-7 transition-colors hover:bg-stone-900"
+            >
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-200/80">
+                  Interactive
+                </p>
+                <h3 className="mt-3 text-xl font-semibold tracking-tight text-stone-50">
+                  Explore evidence
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-stone-400">
+                  Filter the observation set by segment, evidence type, and
+                  city. Each row links back to its source.
+                </p>
+              </div>
+              <span className="text-sm font-semibold uppercase tracking-[0.2em] text-stone-200 group-hover:text-white">
+                Open explorer →
+              </span>
+            </Link>
+
+            <Link
+              href="/methodology"
+              className="group flex h-full flex-col justify-between gap-6 bg-stone-950 p-7 transition-colors hover:bg-stone-900"
+            >
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-200/80">
+                  Reference
+                </p>
+                <h3 className="mt-3 text-xl font-semibold tracking-tight text-stone-50">
+                  Methodology
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-stone-400">
+                  How observations are collected, classified, and what the
+                  evidence categories actually mean.
+                </p>
+              </div>
+              <span className="text-sm font-semibold uppercase tracking-[0.2em] text-stone-200 group-hover:text-white">
+                Read methodology →
+              </span>
+            </Link>
+
+            <Link
+              href="/sources"
+              className="group flex h-full flex-col justify-between gap-6 bg-stone-950 p-7 transition-colors hover:bg-stone-900"
+            >
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-200/80">
+                  Audit
+                </p>
+                <h3 className="mt-3 text-xl font-semibold tracking-tight text-stone-50">
+                  Source ledger
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-stone-400">
+                  Every public record behind the atlas, with publisher, type,
+                  reuse value, and retrieval dates.
+                </p>
+              </div>
+              <span className="text-sm font-semibold uppercase tracking-[0.2em] text-stone-200 group-hover:text-white">
+                Open ledger →
+              </span>
+            </Link>
+          </div>
+
+          <p className="mt-12 max-w-3xl text-xs leading-6 text-stone-500">
+            This is an editorial evidence product, not a capability index.
+            Counts describe public-evidence coverage; observations are evidence
+            rows in the beta dataset until manually verified. Mainland PRC only.
+          </p>
+        </div>
+      </section>
+    </main>
+  );
 }
 </file>
 
