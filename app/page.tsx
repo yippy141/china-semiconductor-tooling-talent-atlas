@@ -12,6 +12,7 @@ import { CitySignalMap } from "@/components/atlas/city-signal-map";
 import { CapabilityRoleMatrix } from "@/components/atlas/capability-role-matrix";
 import { EvidenceLadder } from "@/components/atlas/evidence-ladder";
 import { FirmWorkforceSnapshots } from "@/components/atlas/firm-workforce-snapshots";
+import { MonitoringQuestions } from "@/components/atlas/monitoring-questions";
 
 const numberFormatter = new Intl.NumberFormat("en-US");
 
@@ -328,6 +329,27 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="border-b border-stone-200 bg-stone-50">
+        <div className="mx-auto w-full max-w-6xl px-6 py-14 sm:px-10 sm:py-20 lg:px-12">
+          <div className="mb-8 max-w-3xl">
+            <div className="flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
+              <span className="font-mono text-stone-800">Exhibit E</span>
+              <span aria-hidden className="text-stone-400">·</span>
+              <span className="text-stone-500">Monitoring brief</span>
+            </div>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+              Four questions worth monitoring.
+            </h2>
+            <p className="mt-4 text-base leading-7 text-stone-700">
+              Watch signals, stronger versions of those signals, and what
+              not to infer — for corporate and policy readers tracking
+              whether tools are becoming production capacity.
+            </p>
+          </div>
+          <MonitoringQuestions />
+        </div>
+      </section>
+
       <section className="relative overflow-hidden bg-stone-950 text-stone-100">
         <div
           aria-hidden
@@ -342,9 +364,9 @@ export default function HomePage() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <div className="flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
-                <span className="font-mono text-amber-200/80">What to watch</span>
+                <span className="font-mono text-amber-200/80">Continue reading</span>
                 <span aria-hidden className="text-stone-600">·</span>
-                <span className="text-stone-400">Continue reading</span>
+                <span className="text-stone-400">Pick a thread</span>
               </div>
               <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
                 Pick how you want to dig in.
