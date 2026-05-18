@@ -144,8 +144,8 @@ Implement these specific changes:
 3. Hero body: "The monitor tracks firms, city clusters, role families, and source records tied to etch/clean, deposition, metrology/inspection, and lithography-adjacent tooling. It is built for analysts watching how Chinese toolmakers convert R&D into production support.".
 4. Small beta note: "Beta dataset: 43 sources, 172 evidence rows. Counts track public records, not workforce size.".
 5. Replace the four insights in data/editorial/insights.ts with the copy from the implementation pack.
-6. Change city map heading to "Where evidence concentrates across mainland China".
-7. Change firm snapshot heading to "What AMEC, ACM Research, and NAURA publish about their workforce".
+6. Change city map heading to "Evidence distribution across Mainland China".
+7. Change firm snapshot heading to "Public workforce information regarding AMEC, ACM Research, and NAURA".
 8. Change evidence ladder heading to "Three tiers of evidence".
 9. Replace evidence ladder description with: "The monitor combines direct public records, analytical proxies, and taxonomy scaffolding. Each tier is reported separately."
 

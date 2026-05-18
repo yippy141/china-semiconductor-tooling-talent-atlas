@@ -1,3 +1,4 @@
+import Link from "next/link";
 import capabilitiesData from "@/data/generated/capabilities.json";
 import roleFamiliesData from "@/data/generated/role_families.json";
 import { segmentProfiles } from "@/data/editorial/segment-profiles";
@@ -97,13 +98,21 @@ export function CapabilityRoleMatrix() {
                 items={profile.whatToWatch}
               />
 
-              <div className="mt-auto border-t border-dashed border-stone-300 pt-4">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-700">
-                  Caveat
-                </p>
-                <p className="mt-2 text-xs leading-6 text-stone-600">
-                  {profile.caveat}
-                </p>
+              <div className="mt-auto flex flex-col gap-4 border-t border-dashed border-stone-300 pt-4">
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-700">
+                    Caveat
+                  </p>
+                  <p className="mt-2 text-xs leading-6 text-stone-600">
+                    {profile.caveat}
+                  </p>
+                </div>
+                <Link
+                  href={`/segments/${profile.id}`}
+                  className="inline-flex items-center text-sm font-semibold text-stone-900 hover:text-stone-700"
+                >
+                  Open segment brief -&gt;
+                </Link>
               </div>
             </article>
           );
