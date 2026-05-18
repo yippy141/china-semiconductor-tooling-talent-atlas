@@ -5,6 +5,7 @@
 <defs>
   <style type="text/css">
     * { fill: rgba(168,162,158,0.30) !important; stroke: none !important; }
+    #pTW, #pTW * { fill: rgba(168,162,158,0.15) !important; }
   </style>
 </defs>
 <g id="layer3">

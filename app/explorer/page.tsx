@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Fragment, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Fragment, Suspense, useMemo, useState } from "react";
 import capabilitiesData from "@/data/generated/capabilities.json";
 import institutionsData from "@/data/generated/institutions.json";
 import observationsData from "@/data/generated/observations.json";
@@ -83,8 +84,31 @@ const totals = {
   institutions: institutionsData.length,
 };
 
+const evidenceGroupRank: Record<EvidenceGroup, number> = {
+  direct_public_record: 0,
+  analytical_proxy: 1,
+  taxonomy_scaffold: 2,
+};
+
+const confidenceRank: Record<string, number> = {
+  high: 0,
+  medium: 1,
+  low: 2,
+};
+
 function evidenceGroupFor(evidenceType: string): EvidenceGroup {
   return evidenceTypeGroups[evidenceType] ?? "analytical_proxy";
+}
+
+function isTaxonomyScaffoldRow(observation: Observation) {
+  return observation.evidence_type === "manual_inference";
+}
+
+function isSourceInfrastructureRow(observation: Observation) {
+  return (
+    observation.entity_type === "proxy_source" ||
+    observation.entity_type === "source"
+  );
 }
 
 function placeLabel(observation: Observation): string {
@@ -97,16 +121,48 @@ function placeLabel(observation: Observation): string {
   return formatEntityType(observation.entity_type);
 }
 
-export default function ExplorerPage() {
-  const [segmentFilter, setSegmentFilter] = useState("");
-  const [groupFilter, setGroupFilter] = useState("");
-  const [typeFilter, setTypeFilter] = useState("");
-  const [confidenceFilter, setConfidenceFilter] = useState("");
-  const [cityFilter, setCityFilter] = useState("");
+function ExplorerInner() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const initial = useMemo(
+    () => ({
+      segment: searchParams.get("segment") ?? "",
+      city: searchParams.get("city") ?? "",
+      evidenceGroup: searchParams.get("evidence_group") ?? "",
+      evidenceType: searchParams.get("evidence_type") ?? "",
+      confidence: searchParams.get("confidence") ?? "",
+      entityId: searchParams.get("entity_id") ?? "",
+    }),
+    // Read from URL only on mount; UI interactions drive state directly afterwards.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
+  const [segmentFilter, setSegmentFilter] = useState(initial.segment);
+  const [groupFilter, setGroupFilter] = useState(initial.evidenceGroup);
+  const [typeFilter, setTypeFilter] = useState(initial.evidenceType);
+  const [confidenceFilter, setConfidenceFilter] = useState(initial.confidence);
+  const [cityFilter, setCityFilter] = useState(initial.city);
+  const [entityIdFilter, setEntityIdFilter] = useState(initial.entityId);
+  const [showTaxonomyScaffold, setShowTaxonomyScaffold] = useState(false);
+  const [showSourceInfrastructure, setShowSourceInfrastructure] = useState(
+    false,
+  );
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
   const filtered = useMemo(() => {
-    return observationsData.filter((observation) => {
+    const rows = observationsData.filter((observation) => {
+      if (
+        !showTaxonomyScaffold &&
+        isTaxonomyScaffoldRow(observation)
+      )
+        return false;
+      if (
+        !showSourceInfrastructure &&
+        isSourceInfrastructureRow(observation)
+      )
+        return false;
       if (segmentFilter && observation.segment !== segmentFilter) return false;
       if (
         groupFilter &&
@@ -117,9 +173,31 @@ export default function ExplorerPage() {
       if (confidenceFilter && observation.confidence !== confidenceFilter)
         return false;
       if (cityFilter && observation.city !== cityFilter) return false;
+      if (entityIdFilter && observation.entity_id !== entityIdFilter)
+        return false;
       return true;
     });
-  }, [segmentFilter, groupFilter, typeFilter, confidenceFilter, cityFilter]);
+
+    return rows.slice().sort((a, b) => {
+      const groupA =
+        evidenceGroupRank[evidenceGroupFor(a.evidence_type)] ?? 99;
+      const groupB =
+        evidenceGroupRank[evidenceGroupFor(b.evidence_type)] ?? 99;
+      if (groupA !== groupB) return groupA - groupB;
+      const confA = confidenceRank[a.confidence?.toLowerCase()] ?? 99;
+      const confB = confidenceRank[b.confidence?.toLowerCase()] ?? 99;
+      return confA - confB;
+    });
+  }, [
+    segmentFilter,
+    groupFilter,
+    typeFilter,
+    confidenceFilter,
+    cityFilter,
+    entityIdFilter,
+    showTaxonomyScaffold,
+    showSourceInfrastructure,
+  ]);
 
   function toggleRow(id: string) {
     setExpanded((current) => {
@@ -136,10 +214,21 @@ export default function ExplorerPage() {
     setTypeFilter("");
     setConfidenceFilter("");
     setCityFilter("");
+    setEntityIdFilter("");
+    setShowTaxonomyScaffold(false);
+    setShowSourceInfrastructure(false);
+    router.push("/explorer");
   }
 
   const hasActiveFilters = Boolean(
-    segmentFilter || groupFilter || typeFilter || confidenceFilter || cityFilter,
+    segmentFilter ||
+      groupFilter ||
+      typeFilter ||
+      confidenceFilter ||
+      cityFilter ||
+      entityIdFilter ||
+      showTaxonomyScaffold ||
+      showSourceInfrastructure,
   );
 
   return (
@@ -250,13 +339,44 @@ export default function ExplorerPage() {
               options={cityOptions}
             />
           </div>
+          <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-stone-200 pt-4">
+            <ToggleCheckbox
+              label="Show taxonomy scaffold"
+              checked={showTaxonomyScaffold}
+              onChange={setShowTaxonomyScaffold}
+              hint="Includes manual_inference rows that map disciplines, roles, and segments."
+            />
+            <ToggleCheckbox
+              label="Show source infrastructure rows"
+              checked={showSourceInfrastructure}
+              onChange={setShowSourceInfrastructure}
+              hint="Includes ledger and proxy-source bookkeeping rows."
+            />
+          </div>
+          {entityIdFilter ? (
+            <p className="mt-4 flex items-center gap-3 text-xs text-stone-700">
+              <span>
+                Entity ID filter:{" "}
+                <span className="rounded-sm bg-stone-100 px-1.5 py-0.5 font-mono text-stone-900">
+                  {entityIdFilter}
+                </span>
+              </span>
+              <button
+                type="button"
+                onClick={() => setEntityIdFilter("")}
+                className="text-xs font-medium text-stone-600 underline-offset-2 hover:text-stone-950 hover:underline"
+              >
+                Clear
+              </button>
+            </p>
+          ) : null}
           <p className="mt-4 text-xs text-stone-600">
             Showing{" "}
             <span className="font-semibold text-stone-950">
               {numberFormatter.format(filtered.length)}
             </span>{" "}
-            of {numberFormatter.format(totals.evidenceRows)} evidence rows in
-            beta dataset.
+            substantive rows of{" "}
+            {numberFormatter.format(totals.evidenceRows)} total beta rows.
           </p>
         </section>
 
@@ -419,6 +539,14 @@ export default function ExplorerPage() {
   );
 }
 
+export default function ExplorerPage() {
+  return (
+    <Suspense fallback={null}>
+      <ExplorerInner />
+    </Suspense>
+  );
+}
+
 function KpiCard({
   label,
   value,
@@ -469,6 +597,37 @@ function FilterSelect({
           </option>
         ))}
       </select>
+    </label>
+  );
+}
+
+function ToggleCheckbox({
+  label,
+  checked,
+  onChange,
+  hint,
+}: {
+  label: string;
+  checked: boolean;
+  onChange: (next: boolean) => void;
+  hint?: string;
+}) {
+  return (
+    <label className="flex max-w-md items-start gap-2 text-xs text-stone-700">
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={(event) => onChange(event.target.checked)}
+        className="mt-0.5 h-4 w-4 border-stone-300 text-stone-900 focus:ring-stone-700"
+      />
+      <span className="flex flex-col">
+        <span className="font-medium text-stone-800">{label}</span>
+        {hint ? (
+          <span className="mt-0.5 text-[11px] leading-5 text-stone-500">
+            {hint}
+          </span>
+        ) : null}
+      </span>
     </label>
   );
 }
