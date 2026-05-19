@@ -42,13 +42,13 @@ export function CapabilityRoleMatrix() {
           id="capability-role-matrix-heading"
           className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
         >
-          What &ldquo;tooling talent&rdquo; actually means, by segment.
+          Tooling talent, by segment.
         </h3>
         <p className="max-w-3xl text-sm leading-7 text-stone-600">
-          Why this matters: the equipment race is not generic STEM headcount.
-          Each tool family relies on a specific mix of role families,
-          process-window judgement, and customer-ramp know-how — and public
-          sources reveal these in uneven ways.
+          The equipment race is not generic STEM headcount. Each tool family
+          relies on a specific mix of role families, process-window
+          judgement, and customer-ramp know-how; public records expose each
+          piece unevenly.
         </p>
       </header>
 

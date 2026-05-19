@@ -66,7 +66,7 @@ export default function HomePage() {
 
           <div className="mt-16 max-w-4xl">
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-amber-200/80">
-              Editorial evidence brief
+              China &middot; Semiconductor equipment
             </p>
             <h1 className="mt-6 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-6xl lg:text-[68px]">
               China Chip Tooling Talent Monitor
@@ -79,8 +79,8 @@ export default function HomePage() {
               The monitor tracks firms, city clusters, role families, and
               source records tied to etch/clean, deposition,
               metrology/inspection, and lithography-adjacent tooling. It is
-              built for analysts watching how Chinese toolmakers convert
-              R&amp;D into production support.
+              built for analysts tracking how Chinese toolmakers move from
+              R&amp;D headcount to customer-site capability.
             </p>
           </div>
 
@@ -98,8 +98,8 @@ export default function HomePage() {
               Read methodology
             </Link>
             <span className="ml-1 max-w-xl text-xs leading-5 text-stone-500">
-              Beta dataset: 43 sources, 172 evidence rows. Counts track public
-              records, not workforce size.
+              Beta dataset. 43 sources, 172 evidence rows. Counts describe
+              public-record coverage.
             </span>
           </nav>
         </div>
@@ -109,11 +109,10 @@ export default function HomePage() {
         <div className="mx-auto w-full max-w-6xl px-6 py-14 sm:px-10 lg:px-12">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <h2 className="text-sm font-semibold uppercase tracking-[0.22em] text-stone-500">
-              The brief in numbers
+              The dataset
             </h2>
             <p className="max-w-md text-sm text-stone-600">
-              What the monitor catalogues today. Counts describe public-evidence
-              coverage, not workforce size.
+              What the dataset catalogues today. Counts measure record coverage.
             </p>
           </div>
           <dl className="mt-8 grid grid-cols-1 gap-px overflow-hidden border border-stone-200 bg-stone-200 sm:grid-cols-2 lg:grid-cols-4">
@@ -144,11 +143,12 @@ export default function HomePage() {
               <span className="text-stone-500">01–04</span>
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              What the visible layer does, and does not, show.
+              What is visible in the public record &mdash; and what stays out
+              of it.
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
-              Each card states a finding, the evidence pattern behind it, and
-              the analyst read for using the rest of the monitor.
+              Four findings from the current dataset, with the source pattern
+              behind each and how it should change a reader&rsquo;s priors.
             </p>
           </div>
 
@@ -174,7 +174,7 @@ export default function HomePage() {
                 <dl className="mt-6 flex flex-1 flex-col gap-5 text-sm leading-7 text-stone-700">
                   <div>
                     <dt className="text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-500">
-                      Evidence pattern
+                      Source pattern
                     </dt>
                     <dd className="mt-2">{insight.summary}</dd>
                   </div>
@@ -202,11 +202,11 @@ export default function HomePage() {
               <span className="text-stone-500">Geography of visibility</span>
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              City evidence is concentrated, not comprehensive.
+              Visible evidence concentrates in a handful of cities.
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
-              Public evidence concentrates in a handful of cities. The monitor
-              reads this as visibility coverage, not capability depth.
+              Public records cluster around Shanghai, Beijing, and a small
+              set of coastal hubs. That is coverage, not capability depth.
             </p>
           </div>
           <CitySignalMap />
@@ -222,11 +222,11 @@ export default function HomePage() {
               <span className="text-stone-500">What the work looks like</span>
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              What &ldquo;tooling talent&rdquo; actually means.
+              Tooling talent, by segment.
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
-              Each tool family relies on a distinct mix of roles,
-              bottlenecks, and public signals — not generic STEM headcount.
+              Each tool family pulls on a different mix of roles, bottlenecks,
+              and public signals. Generic STEM counts don&rsquo;t separate them.
             </p>
           </div>
           <CapabilityRoleMatrix />
@@ -262,7 +262,7 @@ export default function HomePage() {
               <span className="text-stone-500">Who this is for</span>
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              How different readers should use the monitor.
+              Who this is for, and what it can and cannot answer.
             </h2>
           </div>
 
@@ -318,11 +318,11 @@ export default function HomePage() {
               <span className="text-stone-500">Evidence ladder</span>
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              Read evidence tiers separately.
+              The 172 rows are not one number.
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
-              Three tiers sit under the headline counts. Reading them as
-              equal would overstate what the public record shows.
+              Three tiers sit under the headline count. Mixing them inflates
+              what the public record actually shows.
             </p>
           </div>
           <EvidenceLadder />
@@ -338,12 +338,12 @@ export default function HomePage() {
               <span className="text-stone-500">Monitoring brief</span>
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              Four questions worth monitoring.
+              Four signals worth monitoring.
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
-              Watch signals, stronger versions of those signals, and what
-              not to infer — for corporate and policy readers tracking
-              whether tools are becoming production capacity.
+              For corporate and policy readers: what to watch, what the
+              stronger version of each signal looks like, and where the
+              public record runs out.
             </p>
           </div>
           <MonitoringQuestions />
@@ -413,7 +413,7 @@ export default function HomePage() {
                 </h3>
                 <p className="mt-3 text-sm leading-7 text-stone-400">
                   How observations are collected, classified, and what the
-                  evidence categories actually mean.
+                  evidence categories mean.
                 </p>
               </div>
               <span className="text-sm font-semibold uppercase tracking-[0.2em] text-stone-200 group-hover:text-white">
@@ -444,9 +444,10 @@ export default function HomePage() {
           </div>
 
           <p className="mt-12 max-w-3xl text-xs leading-6 text-stone-500">
-            This is an editorial evidence product, not a capability index.
-            Counts describe public-evidence coverage; observations are evidence
-            rows in the beta dataset until manually verified. Mainland PRC only.
+            Editorial evidence product. Counts describe public-record
+            coverage; observation rows remain in the beta dataset until
+            manually verified against the underlying source. Mainland PRC
+            only.
           </p>
         </div>
       </section>

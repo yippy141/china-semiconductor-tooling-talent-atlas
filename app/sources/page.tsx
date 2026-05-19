@@ -103,9 +103,9 @@ export default function SourcesPage() {
             Source Ledger
           </h1>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-stone-700 sm:text-base">
-            Every observation in the explorer links back to this ledger. Open
-            the audit panel on a row to see its publication and access dates,
-            analyst notes, and full identifier.
+            Every observation in the explorer resolves to one entry in this
+            ledger. The audit panel on each row carries publication and
+            access dates, analyst notes, and the source identifier.
           </p>
         </header>
 
@@ -352,7 +352,7 @@ export default function SourcesPage() {
             </Link>
           </p>
           <p className="text-xs text-stone-500">
-            Ledger covers public records used by the beta dataset.
+            Ledger covers every public record cited by the beta dataset.
           </p>
         </footer>
       </div>

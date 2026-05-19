@@ -78,7 +78,7 @@ export const firmProfiles: FirmProfile[] = [
       },
     ],
     analystRead:
-      "AMEC is the most useful first dossier for etch because the public record links company product coverage with listed-company R&D staffing. The open question is how much of that R&D layer converts into field application, service, and customer-ramp support.",
+      "For etch, AMEC is the cleanest public record: product coverage and listed-company R&D staffing read together. The open question is how much of that R&D layer is converting into field application, service, and customer-ramp staffing.",
     watchSignals: [
       "Customer validation language",
       "Field application roles",
@@ -145,7 +145,7 @@ export const firmProfiles: FirmProfile[] = [
       },
     ],
     analystRead:
-      "NAURA is useful for reading scale and breadth, but that breadth is also the trap: whole-firm R&D and employee totals should frame public evidence signal, not segment-specific workforce depth.",
+      "NAURA gives the clearest scale and breadth signal among listed peers. The same breadth is the trap: whole-firm R&D and employee totals describe an equipment group, not a tooling segment.",
     watchSignals: [
       "Service-team growth",
       "Customer-service spending language",
@@ -212,7 +212,7 @@ export const firmProfiles: FirmProfile[] = [
       },
     ],
     analystRead:
-      "ACM Research Shanghai is the dossier to open when the question is wet clean, strip, and the service layer. The public record is helpful on firm-level workforce structure, but it still does not split the staff behind individual tool families.",
+      "On wet clean, strip, and the service layer, ACM Research Shanghai is the most disclosing of the three listed firms. The public record carries firm-level workforce structure but still does not split staff by tool family.",
     watchSignals: [
       "After-sales/service headcount",
       "Wet-clean tool validation",

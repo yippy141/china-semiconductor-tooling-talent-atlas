@@ -14,7 +14,7 @@ export default function EssayPage() {
             Essay
           </p>
           <h1 className="mt-3 text-4xl font-semibold tracking-tight">
-            Why public evidence needs caveats
+            What public evidence can and cannot show
           </h1>
         </header>
 
@@ -26,15 +26,15 @@ export default function EssayPage() {
             are not a census.
           </p>
           <p>
-            The atlas therefore treats every row as an evidence signal. It keeps
-            the source ID visible, avoids invented precision, and reserves
-            stronger claims for rows that have been manually verified.
+            Every row in the dataset is treated as an evidence signal, not a
+            measurement. The source ID stays visible. Stronger claims are
+            reserved for rows checked against the original filing.
           </p>
           <p>
-            The hardest forms of know-how are often the least visible:
-            integration work, yield learning, chamber recovery, field service
-            judgment, and process transfer. The dashboard should be read with
-            that silence in mind.
+            The hardest forms of know-how are the least visible. Integration
+            work, yield learning, chamber recovery, field service judgment,
+            and process transfer rarely appear in public records. Read the
+            dataset with that silence in mind.
           </p>
         </article>
       </div>

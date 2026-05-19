@@ -42,7 +42,7 @@ const tiers: Tier[] = [
     index: "03",
     framing: "Navigational",
     description:
-      "Manual inferences that link MOE disciplines and structural categories to tooling segments. They help readers navigate the monitor, but they are not evidence of real-world activity.",
+      "Manual inferences that link MOE disciplines and structural categories to tooling segments. They make the dataset navigable; they are not evidence of real-world activity.",
     weightLabel: "Scaffolding only — not real-world signal",
     accent:
       "bg-[repeating-linear-gradient(135deg,#a8a29e_0,#a8a29e_4px,transparent_4px,transparent_8px)]",
@@ -154,8 +154,8 @@ export function EvidenceLadder() {
                 </p>
                 {tier.group === "taxonomy_scaffold" ? (
                   <p className="mt-3 text-[11px] leading-5 text-stone-500">
-                    Helps navigation. Does not, on its own, show real-world
-                    activity.
+                    Navigational scaffolding. Not evidence of real-world
+                    activity on its own.
                   </p>
                 ) : null}
               </div>
@@ -165,8 +165,8 @@ export function EvidenceLadder() {
       </ol>
 
       <p className="border-t border-stone-200 px-6 py-4 text-[11px] leading-6 text-stone-500 sm:px-8">
-        Counts reflect the current observation set. No tier is rolled up into a
-        single capability or visibility score.
+        Counts reflect the current observation set. The tiers are not rolled
+        up into a composite score.
       </p>
     </section>
   );

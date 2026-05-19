@@ -95,10 +95,10 @@ export function FirmWorkforceSnapshots() {
           What AMEC, ACM Research, and NAURA publish about their workforce
         </h3>
         <p className="max-w-3xl text-sm leading-7 text-stone-600">
-          Three firms disclose enough workforce structure for segment signals
-          to become visible. Categories below are taken from each filing as
-          published — they are not directly comparable across firms and they
-          do not describe a tooling-specific workforce.
+          Three listed firms publish enough workforce structure to be worth
+          comparing. The categories below come from each filing as
+          published; they are not standardized across firms, and they
+          describe whole-firm staffing, not tooling-segment headcount.
         </p>
       </header>
 

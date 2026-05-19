@@ -258,8 +258,8 @@ function ExplorerInner() {
             Evidence Explorer
           </h1>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-stone-700 sm:text-base">
-            Filter the public evidence signals behind the visual brief. The
-            homepage interprets the evidence; this page exposes the rows.
+            Filter the rows behind the briefing. Every row links back to a
+            public source.
           </p>
         </header>
 

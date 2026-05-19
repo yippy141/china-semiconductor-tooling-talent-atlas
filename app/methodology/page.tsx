@@ -77,12 +77,12 @@ const confidenceRows = [
 
 const tableOfContents = [
   { id: "what-it-measures", label: "What the atlas measures" },
-  { id: "what-it-does-not", label: "What it does not measure" },
+  { id: "what-it-does-not", label: "Out of scope" },
   { id: "evidence-types", label: "Evidence types" },
   { id: "confidence-levels", label: "Confidence levels" },
   {
     id: "evidence-vs-capability",
-    label: "Why evidence strength is not capability",
+    label: "Evidence strength versus capability",
   },
   { id: "update-cadence", label: "Update cadence" },
   { id: "no-individual-data", label: "No individual-level mapping" },
@@ -119,7 +119,7 @@ export default function MethodologyPage() {
             <span className="text-stone-500">Methodology · Beta dataset v1</span>
           </div>
           <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">
-            How to read this atlas.
+            How the dataset is built and what it does not claim.
           </h1>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-stone-700">
             The China Semiconductor Tooling Talent Atlas is an editorial
@@ -192,7 +192,7 @@ export default function MethodologyPage() {
         <Section
           index="02"
           id="what-it-does-not"
-          title="What it does not measure"
+          title="Out of scope"
         >
           <p>
             The atlas is not a labour-market census, a capability index, or a
@@ -219,9 +219,9 @@ export default function MethodologyPage() {
             </li>
           </ul>
           <p>
-            If a row appears to support such a claim, it is being read too far.
-            Use the explorer&rsquo;s audit panel to inspect the underlying
-            source.
+            A row that appears to support one of those claims is being read
+            past its evidence. The explorer&rsquo;s audit panel exposes the
+            underlying source for each row.
           </p>
         </Section>
 
@@ -313,7 +313,7 @@ export default function MethodologyPage() {
         <Section
           index="05"
           id="evidence-vs-capability"
-          title="Why evidence strength is not capability"
+          title="Evidence strength versus capability"
         >
           <p>
             Public records expose what firms, institutions, and government
