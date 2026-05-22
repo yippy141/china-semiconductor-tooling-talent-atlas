@@ -1,5 +1,6 @@
 export type FirmProfile = {
   slug: string;
+  profileType: "full" | "light";
   firmId: string;
   name: string;
   nameCn: string;
@@ -27,6 +28,7 @@ export type FirmProfile = {
 export const firmProfiles: FirmProfile[] = [
   {
     slug: "amec",
+    profileType: "full",
     firmId: "ent_amec",
     name: "AMEC",
     nameCn: "中微公司",
@@ -67,7 +69,7 @@ export const firmProfiles: FirmProfile[] = [
       {
         label: "R&D personnel share of total staff",
         value: "52.24%",
-        note: "Firm-level filing figure used as an R&D intensity signal, not a capability score.",
+        note: "Firm-level filing figure used as an R&D intensity signal, not a performance measure.",
         source_id: "CN_FILING_AMEC_2025",
       },
       {
@@ -94,6 +96,7 @@ export const firmProfiles: FirmProfile[] = [
   },
   {
     slug: "naura",
+    profileType: "full",
     firmId: "ent_naura",
     name: "NAURA Technology Group",
     nameCn: "北方华创",
@@ -161,6 +164,7 @@ export const firmProfiles: FirmProfile[] = [
   },
   {
     slug: "acm-research-shanghai",
+    profileType: "full",
     firmId: "ent_acm_sh",
     name: "ACM Research Shanghai",
     nameCn: "盛美上海",
@@ -226,8 +230,174 @@ export const firmProfiles: FirmProfile[] = [
     ],
     source_ids: ["CN_FIRM_ACM_SH", "CN_FILING_ACM_SH_2025"],
   },
+  {
+    slug: "piotech",
+    profileType: "full",
+    firmId: "ent_piotech",
+    name: "Piotech",
+    nameCn: "拓荆科技",
+    headquarters: "Shenyang",
+    oneLine:
+      "Piotech gives the monitor a dedicated deposition firm, with public records pointing to multiple CVD and ALD-related product families.",
+    segments: ["Deposition"],
+    productFamilies: [
+      {
+        segment: "Deposition",
+        label: "PECVD, ALD, SACVD, HDPCVD, and Flowable CVD trail",
+        publicRecord:
+          "The official company source is logged for deposition category coverage including PECVD, ALD, SACVD, HDPCVD, Flowable CVD, hybrid bonding, and related metrology.",
+        source_id: "CN_FIRM_PIOTECH",
+      },
+      {
+        segment: "Deposition",
+        label: "Product-family and demand framing",
+        publicRecord:
+          "The 2025 financing report is logged for deposition demand mechanics and product families; its product and demand framing should be treated as corporate filing evidence.",
+        source_id: "CN_FILING_PIOTECH_2025",
+      },
+    ],
+    workforceSignals: [],
+    analystRead:
+      "Piotech is the cleanest addition to the deposition story because its public source trail is specific to deposition product families. The current dossier supports product-breadth monitoring, not claims about production performance, customer yield, or parity with foreign suppliers.",
+    watchSignals: [
+      "Customer validation language by deposition tool family",
+      "Field application and service-team hiring",
+      "Repeat-order or installed-base language",
+      "Training or support routines for customer ramps",
+    ],
+    doNotInfer: [
+      "Parity with Lam, Applied Materials, or Tokyo Electron",
+      "Deposition yield performance",
+      "Customer-site support depth from product breadth alone",
+      "Segment-specific workforce totals",
+    ],
+    source_ids: ["CN_FIRM_PIOTECH", "CN_FILING_PIOTECH_2025"],
+  },
+  {
+    slug: "jingce-electronics",
+    profileType: "light",
+    firmId: "ent_jingce",
+    name: "Jingce Electronics",
+    nameCn: "精测电子",
+    headquarters: "Wuhan",
+    oneLine:
+      "Jingce gives the monitor a metrology and inspection watch card through a public filing source.",
+    segments: ["Metrology and inspection"],
+    productFamilies: [
+      {
+        segment: "Metrology and inspection",
+        label: "Metrology and inspection product taxonomy",
+        publicRecord:
+          "The annual-report summary source is logged for metrology and inspection product taxonomy, with a note to use the full filing before making stronger product or workforce claims.",
+        source_id: "CN_FILING_JINGCE_2025",
+      },
+    ],
+    workforceSignals: [],
+    analystRead:
+      "Jingce belongs in the watch set as a metrology and inspection anchor, but the current record should be treated as a starting point. The full filing needs review before the site makes detailed product or workforce claims.",
+    watchSignals: [
+      "Full annual-report language on front-end metrology and inspection",
+      "Application engineer or calibration-support roles",
+      "Customer-support or service-network disclosures",
+      "Product taxonomy that separates inspection from generic equipment activity",
+    ],
+    doNotInfer: [
+      "Front-end metrology depth from an annual-report summary alone",
+      "Customer calibration routines",
+      "Tool performance or yield impact",
+      "Workforce scale by product family",
+    ],
+    source_ids: ["CN_FILING_JINGCE_2025"],
+  },
+  {
+    slug: "smee",
+    profileType: "light",
+    firmId: "ent_smee",
+    name: "Shanghai Micro Electronics Equipment",
+    nameCn: "上海微电子装备",
+    headquarters: "Shanghai",
+    oneLine:
+      "SMEE belongs in the lithography-adjacent sidebar because its public homepage anchors the optics, alignment, stage, focus, and calibration talent mix.",
+    segments: ["Lithography sidebar", "Metrology and inspection"],
+    productFamilies: [
+      {
+        segment: "Lithography sidebar",
+        label: "Lithography-adjacent company anchor",
+        publicRecord:
+          "The official company homepage is logged as the lithography-sidebar source for IC, packaging, display, MEMS, LED, and power-device application footprint.",
+        source_id: "CN_FIRM_SMEE",
+      },
+      {
+        segment: "Metrology and inspection",
+        label: "Adjacent inspection and metrology exposure",
+        publicRecord:
+          "The same homepage is also logged as a metrology and inspection presence signal, but detailed product pages need separate verification.",
+        source_id: "CN_FIRM_SMEE",
+      },
+    ],
+    workforceSignals: [],
+    analystRead:
+      "SMEE is useful as a sidebar dossier because lithography-adjacent work draws on optics, alignment, stages, focus, contamination control, and calibration. The homepage is broad, so this profile should guide monitoring rather than make detailed readiness claims.",
+    watchSignals: [
+      "Detailed product pages for lithography-adjacent systems",
+      "Optical design, alignment, stage, and calibration hiring",
+      "Service and training pages tied to customer support",
+      "Public records separating IC equipment from display or packaging equipment",
+    ],
+    doNotInfer: [
+      "Lithography readiness from homepage breadth",
+      "Advanced-node capability",
+      "Customer-site uptime or calibration quality",
+      "Workforce depth by subsystem",
+    ],
+    source_ids: ["CN_FIRM_SMEE"],
+  },
+  {
+    slug: "beim",
+    profileType: "light",
+    firmId: "ent_beim",
+    name: "Beijing Electronics Inspection and Metrology Equipment",
+    nameCn: "北京电子量检测装备有限责任公司",
+    headquarters: "Beijing",
+    oneLine:
+      "BEIM is a metrology and inspection reference point because its public company profile names inspection and measurement categories.",
+    segments: ["Metrology and inspection"],
+    productFamilies: [
+      {
+        segment: "Metrology and inspection",
+        label: "Inspection and measurement category anchor",
+        publicRecord:
+          "The public company profile is logged for pattern defect inspection, micro/nano morphology metrology, and mask or inspection-adjacent categories.",
+        source_id: "CN_FIRM_BEIM",
+      },
+    ],
+    workforceSignals: [],
+    analystRead:
+      "BEIM can support a light metrology and inspection dossier because the company profile names categories connected to optics, precision measurement, and defect review. The profile should not be read as a full account of front-end semiconductor tool performance.",
+    watchSignals: [
+      "Product pages that separate semiconductor inspection from broader measurement equipment",
+      "Calibration, defect review, and application-support language",
+      "Customer support or training disclosures",
+      "Hiring for optics, precision measurement, algorithms, and field support",
+    ],
+    doNotInfer: [
+      "Front-end semiconductor share of the broader product portfolio",
+      "Inspection sensitivity or false-alarm performance",
+      "Customer-site calibration quality",
+      "Dedicated semiconductor workforce totals",
+    ],
+    source_ids: ["CN_FIRM_BEIM"],
+  },
 ];
 
 export const firmProfileBySlug = new Map(
   firmProfiles.map((profile) => [profile.slug, profile]),
+);
+
+export const fullFirmProfiles = firmProfiles.filter(
+  (profile) => profile.profileType === "full",
+);
+
+export const lightFirmProfiles = firmProfiles.filter(
+  (profile) => profile.profileType === "light",
 );

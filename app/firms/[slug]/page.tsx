@@ -45,13 +45,18 @@ export default async function FirmPage({ params }: FirmPageProps) {
             <Link href="/" className="hover:text-stone-950">
               Home
             </Link>
+            <Link href="/firms" className="hover:text-stone-950">
+              Firms
+            </Link>
             <Link href="/explorer" className="hover:text-stone-950">
               Explorer
             </Link>
           </nav>
 
           <div className="mt-6 flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]">
-            <span className="font-mono text-stone-800">Firm dossier</span>
+            <span className="font-mono text-stone-800">
+              {profile.profileType === "full" ? "Firm dossier" : "Watch card"}
+            </span>
             <span aria-hidden className="text-stone-400">
               /
             </span>
@@ -112,8 +117,9 @@ export default async function FirmPage({ params }: FirmPageProps) {
           <aside className="border border-stone-300 bg-stone-50 p-6 sm:p-8">
             <SectionEyebrow>Boundary condition</SectionEyebrow>
             <p className="mt-3 text-sm leading-7 text-stone-700">
-              Workforce figures on this page are published firm-level signals.
-              They should not be read as segment-specific headcount.
+              This page summarizes public source records already in the local
+              ledger. It should not be read as a ranking, benchmark, or measure
+              of tool performance.
             </p>
           </aside>
         </section>
@@ -157,27 +163,34 @@ export default async function FirmPage({ params }: FirmPageProps) {
             id="workforce-signals"
             eyebrow="Listed-company disclosure"
             title="Workforce signals"
-            description="Values are copied from the current firm workforce snapshots. They describe firm-level public evidence signal, not product-line staffing."
+            description="Where available, values come from current firm workforce snapshots. They describe firm-level public records, not product-line staffing."
           />
-          <div className="grid gap-px bg-stone-200 md:grid-cols-3">
-            {profile.workforceSignals.map((signal) => (
-              <article
-                key={`${signal.source_id}-${signal.label}`}
-                className="bg-white p-6"
-              >
-                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-500">
-                  {signal.label}
-                </p>
-                <p className="mt-3 font-mono text-3xl font-semibold tracking-tight">
-                  {signal.value}
-                </p>
-                <p className="mt-3 text-sm leading-7 text-stone-700">
-                  {signal.note}
-                </p>
-                <SourcePill sourceId={signal.source_id} />
-              </article>
-            ))}
-          </div>
+          {profile.workforceSignals.length > 0 ? (
+            <div className="grid gap-px bg-stone-200 md:grid-cols-3">
+              {profile.workforceSignals.map((signal) => (
+                <article
+                  key={`${signal.source_id}-${signal.label}`}
+                  className="bg-white p-6"
+                >
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-500">
+                    {signal.label}
+                  </p>
+                  <p className="mt-3 font-mono text-3xl font-semibold tracking-tight">
+                    {signal.value}
+                  </p>
+                  <p className="mt-3 text-sm leading-7 text-stone-700">
+                    {signal.note}
+                  </p>
+                  <SourcePill sourceId={signal.source_id} />
+                </article>
+              ))}
+            </div>
+          ) : (
+            <p className="px-6 py-6 text-sm leading-7 text-stone-600 sm:px-8">
+              No source-checked workforce figures are included in this dossier
+              yet. Use the watch signals below to guide the next source pass.
+            </p>
+          )}
         </section>
 
         <section className="grid gap-6 lg:grid-cols-2">
