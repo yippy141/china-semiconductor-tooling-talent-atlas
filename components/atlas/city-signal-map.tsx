@@ -154,7 +154,7 @@ export function CitySignalMap() {
               aria-hidden
               className="absolute inset-0 bg-no-repeat"
               style={{
-                backgroundImage: "url(/china-schematic.svg)",
+                backgroundImage: "url(/china-mainland-schematic.svg)",
                 backgroundSize: "100% 100%",
                 backgroundPosition: "center",
               }}
@@ -252,7 +252,7 @@ export function CitySignalMap() {
               />
               <span className="ml-1">Node size = public evidence signal</span>
             </span>
-            <span>Schematic mainland outline, not an official boundary map.</span>
+            <span>Schematic mainland outline. City placement is approximate.</span>
           </div>
         </div>
 

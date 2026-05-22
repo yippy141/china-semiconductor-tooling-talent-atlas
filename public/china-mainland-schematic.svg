@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 100 100"
+  preserveAspectRatio="none"
+  role="presentation"
+>
+  <title>Schematic mainland China outline</title>
+  <desc>Simplified silhouette for editorial visual context. City placement is approximate. Not an official boundary map.</desc>
+  <path
+    fill="#d6d3d1"
+    fill-opacity="0.08"
+    stroke="#d6d3d1"
+    stroke-opacity="0.4"
+    stroke-width="0.5"
+    stroke-linejoin="round"
+    stroke-linecap="round"
+    d="M 4 42
+       Q 8 30 16 22
+       Q 28 14 42 12
+       Q 58 10 72 13
+       Q 84 15 91 18
+       Q 94 25 90 32
+       Q 84 38 81 44
+       Q 80 48 86 50
+       Q 90 54 88 60
+       Q 92 68 88 76
+       Q 86 82 82 86
+       Q 76 92 68 92
+       Q 56 94 48 91
+       Q 36 86 28 80
+       Q 20 74 12 65
+       Q 5 55 4 42 Z"
+  />
+</svg>
