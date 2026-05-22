@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { articleBrief } from "@/data/editorial/article-brief";
 import { ArticleStatStrip } from "@/components/atlas/article-stat-strip";
+import { DisciplineSegmentMatrix } from "@/components/atlas/discipline-segment-matrix";
+import { FirmWorkforceChart } from "@/components/atlas/firm-workforce-chart";
 import { LabToFabChain } from "@/components/atlas/lab-to-fab-chain";
+import { ToolmakerFootprintGrid } from "@/components/atlas/toolmaker-footprint-grid";
 
 export default function HomePage() {
   return (
@@ -94,38 +97,23 @@ export default function HomePage() {
       <section className="mx-auto w-full max-w-6xl px-6 py-14 sm:px-10 sm:py-20 lg:px-12">
         <div className="max-w-3xl">
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500">
-            Exhibit slots
+            Three exhibits
           </p>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-            Three visuals will make the argument scannable.
+            Three visuals carry the scannable argument.
           </h2>
           <p className="mt-4 text-base leading-7 text-stone-700">
-            These slots hold the article structure for the next visual pass.
-            They describe what each exhibit should prove without inventing
-            values.
+            The matrix shows why broad STEM counts are too blunt. The
+            workforce chart shows what listed firms actually disclose. The
+            footprint grid shows which firms anchor which parts of the tool
+            stack.
           </p>
         </div>
 
-        <div className="mt-10 grid grid-cols-1 gap-5 lg:grid-cols-3">
-          {articleBrief.exhibitSlots.map((slot) => (
-            <article
-              key={slot.title}
-              className="border border-stone-300 bg-white p-6"
-            >
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500">
-                {slot.eyebrow}
-              </p>
-              <h3 className="mt-3 text-xl font-semibold tracking-tight">
-                {slot.title}
-              </h3>
-              <p className="mt-4 text-sm leading-7 text-stone-700">
-                {slot.body}
-              </p>
-              <p className="mt-5 border-t border-stone-200 pt-4 text-xs font-medium leading-6 text-stone-500">
-                {slot.status}
-              </p>
-            </article>
-          ))}
+        <div className="mt-10 flex flex-col gap-10">
+          <DisciplineSegmentMatrix />
+          <FirmWorkforceChart />
+          <ToolmakerFootprintGrid />
         </div>
       </section>
 
