@@ -104,7 +104,8 @@ export default function HomePage() {
           </h2>
           <p className="mt-4 text-base leading-7 text-stone-700">
             The matrix shows why broad STEM counts are too blunt. The
-            workforce chart shows what listed firms actually disclose. The
+            workforce chart shows what listed firms disclose in current
+            filings. The
             footprint grid shows which firms anchor which parts of the tool
             stack.
           </p>
@@ -125,10 +126,10 @@ export default function HomePage() {
         <div className="mx-auto w-full max-w-6xl px-6 py-14 sm:px-10 sm:py-20 lg:px-12">
           <div className="max-w-3xl">
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-400">
-              Open the source trail
+              Source ledger
             </p>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              Use the monitor when you want the receipts.
+              Open the source trail.
             </h2>
             <p className="mt-4 text-sm leading-7 text-stone-400">
               The homepage is the brief. The supporting pages let you inspect

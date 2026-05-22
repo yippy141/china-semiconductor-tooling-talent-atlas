@@ -124,7 +124,7 @@ export function FirmWorkforceChart() {
           id="firm-workforce-chart-heading"
           className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
         >
-          Firm-level workforce disclosures, latest source-checked filing.
+          What listed firms disclose.
         </h3>
         <p className="max-w-3xl text-sm leading-7 text-stone-600">
           AMEC, ACM Research Shanghai, and NAURA each publish enough

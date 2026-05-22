@@ -137,7 +137,7 @@ export function ToolmakerFootprintGrid() {
           id="toolmaker-footprint-heading"
           className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
         >
-          Which Chinese firms appear in which parts of the tool stack.
+          Chinese toolmakers to watch.
         </h3>
         <p className="max-w-3xl text-sm leading-7 text-stone-600">
           Each cell describes how the public record places a firm in a

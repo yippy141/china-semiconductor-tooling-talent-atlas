@@ -4,11 +4,11 @@ const linkClass =
   "font-medium text-stone-900 underline decoration-stone-400 decoration-1 underline-offset-4 transition-colors hover:decoration-stone-900";
 
 const sections = [
-  { number: "01", title: "China's tool race has a workforce test." },
-  { number: "02", title: "Broad STEM numbers are too blunt." },
-  { number: "03", title: "Each tool family needs a different workforce." },
+  { number: "01", title: "The workforce test behind China's tool push." },
+  { number: "02", title: "Why broad STEM numbers are too blunt." },
+  { number: "03", title: "What each tool family needs." },
   { number: "04", title: "What listed firms disclose." },
-  { number: "05", title: "Why Piotech belongs in the deposition story." },
+  { number: "05", title: "Chinese toolmakers to watch." },
   { number: "06", title: "Where public records go quiet." },
   { number: "07", title: "What to monitor next." },
 ];
@@ -78,7 +78,7 @@ export default function EssayPage() {
               id={`${slugFor("01")}-heading`}
               className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
             >
-              China&apos;s tool race has a workforce test.
+              The workforce test behind China&apos;s tool push.
             </h2>
             <p>
               The standard scoreboard for China&apos;s semiconductor-equipment
@@ -130,7 +130,7 @@ export default function EssayPage() {
               id={`${slugFor("02")}-heading`}
               className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
             >
-              Broad STEM numbers are too blunt.
+              Why broad STEM numbers are too blunt.
             </h2>
             <p>
               A top-line STEM enrollment number cannot tell you whether a
@@ -205,7 +205,7 @@ export default function EssayPage() {
               id={`${slugFor("03")}-heading`}
               className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
             >
-              Each tool family needs a different workforce.
+              What each tool family needs.
             </h2>
             <p>
               The segment briefs catalog 16 role families and 8 likely
@@ -356,10 +356,10 @@ export default function EssayPage() {
               id={`${slugFor("05")}-heading`}
               className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
             >
-              Why Piotech belongs in the deposition story.
+              Chinese toolmakers to watch.
             </h2>
             <p>
-              A dedicated deposition firm matters here because it sharpens
+              A dedicated deposition firm matters here because it narrows
               what the bigger three blur.{" "}
               <Link href="/firms/piotech" className={linkClass}>
                 Piotech

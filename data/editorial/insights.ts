@@ -22,7 +22,7 @@ export const insights: EditorialInsight[] = [
     summary:
       "AMEC, ACM Research Shanghai, and NAURA publish workforce categories that expose R&D, technical, and service structure better than most education data.",
     implication:
-      "The conversion layer between R&D and customer support deserves more attention than raw graduate output.",
+      "The customer-site support work between R&D and the customer fab deserves more attention than raw graduate output.",
     source_ids: [
       "CN_FILING_AMEC_2025",
       "CN_FILING_ACM_SH_2025",

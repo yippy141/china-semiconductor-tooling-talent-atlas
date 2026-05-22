@@ -226,7 +226,7 @@ export default function MonitorPage() {
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
               Each tool family pulls on a different mix of roles, bottlenecks,
-              and public signals. Generic STEM counts don&rsquo;t separate them.
+              and public signals. STEM totals don&rsquo;t separate them.
             </p>
           </div>
           <CapabilityRoleMatrix />
@@ -322,7 +322,7 @@ export default function MonitorPage() {
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
               Three tiers sit under the headline count. Mixing them inflates
-              what the public record actually shows.
+              what the public record shows.
             </p>
           </div>
           <EvidenceLadder />

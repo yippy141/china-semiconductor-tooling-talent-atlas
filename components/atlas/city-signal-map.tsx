@@ -250,7 +250,7 @@ export function CitySignalMap() {
                 className="inline-block rounded-full bg-stone-100/40"
                 style={{ width: 20, height: 20 }}
               />
-              <span className="ml-1">Node size = public evidence signal</span>
+              <span className="ml-1">Node size = public records per city</span>
             </span>
             <span>Schematic mainland outline. City placement is approximate.</span>
           </div>

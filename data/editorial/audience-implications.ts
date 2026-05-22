@@ -10,11 +10,11 @@ export type AudienceImplication = {
 export const audienceImplications: AudienceImplication[] = [
   {
     audience: "Equipment firms",
-    headline: "Look for scarce combinations, not generic STEM supply.",
+    headline: "Track specific role combinations in public records.",
     takeaway:
       "Read where role families, segment bottlenecks, and firm or city evidence overlap. Single-axis counts will mislead.",
     useTheExplorerFor: [
-      "Comparing public evidence signals by segment",
+      "Comparing public records by segment",
       "Finding where service, application, and production roles become visible",
       "Separating R&D visibility from customer-ramp know-how",
     ],
@@ -24,7 +24,7 @@ export const audienceImplications: AudienceImplication[] = [
   },
   {
     audience: "Policymakers",
-    headline: "Shortage lists show pressure, not headcount.",
+    headline: "Shortage lists track pressure across local directories.",
     takeaway:
       "Local directories and park plans help identify where public institutions see pressure, but they rarely measure tacit production learning.",
     useTheExplorerFor: [

@@ -159,12 +159,12 @@ export default function MethodologyPage() {
           title="What the atlas measures"
         >
           <p>
-            The atlas catalogues <em>public evidence signals</em> for
-            semiconductor-equipment talent in mainland PRC. Each row is anchored
-            to a public source and tagged by tooling segment, evidence type, and
-            confidence. The catalogue is built to answer a specific kind of
-            question: where, and through what kind of record, does the talent
-            layer behind a tooling segment become visible at all?
+            The atlas catalogues public records for semiconductor-equipment
+            talent in mainland PRC. Each row is anchored to a public source
+            and tagged by tooling segment, evidence type, and confidence.
+            The catalogue is built to answer a specific kind of question:
+            where, and through what kind of record, does the talent layer
+            behind a tooling segment become visible at all?
           </p>
           <p>
             Concretely, the dataset combines four kinds of artefact:
@@ -325,9 +325,9 @@ export default function MethodologyPage() {
           </p>
           <p>
             For that reason the atlas avoids composite scores. Each tier of
-            evidence is reported on its own terms. When the homepage talks
-            about &ldquo;visibility&rdquo; or &ldquo;public evidence signal,&rdquo; it is referring to
-            disclosure coverage, not capability.
+            evidence is reported on its own terms. When the homepage refers
+            to &ldquo;visibility,&rdquo; it means disclosure coverage in
+            current public records, not engineering capability.
           </p>
         </Section>
 
@@ -403,7 +403,7 @@ export default function MethodologyPage() {
             <li className="list-disc">
               When publishing derivative analysis, flag the same caveats this
               page lists — particularly the absence of tacit production
-              know-how in the visible layer.
+              know-how from the public record.
             </li>
           </ul>
           <div className="border border-stone-300 bg-white p-5">

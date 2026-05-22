@@ -10,7 +10,7 @@ export type MonitoringQuestion = {
 export const monitoringQuestions: MonitoringQuestion[] = [
   {
     id: "firm-absorption",
-    title: "Firm absorption",
+    title: "Firms hiring for fab support",
     watchSignal:
       "Listed toolmakers disclosing growth in R&D, technical, after-sales, service, or customer-support categories in annual filings.",
     strongerSignal:
@@ -30,7 +30,7 @@ export const monitoringQuestions: MonitoringQuestion[] = [
     strongerSignal:
       "Language about field application engineers, customer validation, calibration, repeat orders, or service training tied to a specific tool family. These are the routines that move a tool from lab result to fab operation.",
     doNotInfer:
-      "An announcement does not show ramp success, installed-base quality, or yield. Service language shows visibility of the function, not its depth.",
+      "An announcement does not show ramp success, installed-base quality, or yield. Service language confirms the function shows up in public records; it does not measure customer-site depth.",
     link: {
       href: "/firms/acm-research-shanghai",
       label: "Open ACM Research Shanghai dossier",
@@ -42,7 +42,7 @@ export const monitoringQuestions: MonitoringQuestion[] = [
     watchSignal:
       "Hiring or training in single disciplines — plasma, optics, motion control, ALD chemistry, algorithms.",
     strongerSignal:
-      "The combinations are harder than the parts: plasma plus chamber hardware, ALD chemistry plus vacuum behavior, optics plus algorithms, precision motion plus calibration. Generic STEM counts miss them.",
+      "The combinations are harder than the parts: plasma plus chamber hardware, ALD chemistry plus vacuum behavior, optics plus algorithms, precision motion plus calibration. STEM totals do not separate these combinations.",
     doNotInfer:
       "Aggregate graduate output cannot tell you whether a firm has assembled the right cross-discipline teams.",
     link: {
