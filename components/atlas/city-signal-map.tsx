@@ -321,7 +321,7 @@ export function CitySignalMap() {
                 prefetch={false}
                 className="inline-flex w-fit items-center text-sm font-semibold text-amber-200 hover:text-amber-100"
               >
-                View city rows in explorer &rarr;
+                View source rows in explorer &rarr;
               </Link>
             </>
           ) : (

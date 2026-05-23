@@ -10,6 +10,12 @@ const firmHrefById: Record<string, string> = {
   naura: "/firms/naura",
 };
 
+const explorerHrefById: Record<string, string> = {
+  amec: "/explorer?entity_id=ent_amec",
+  "acm-research-shanghai": "/explorer?entity_id=ent_acm_sh",
+  naura: "/explorer?entity_id=ent_naura",
+};
+
 const statusMeta: Record<
   SourceStatus,
   { label: string; className: string; description: string }
@@ -113,12 +119,23 @@ export function FirmWorkforceChart() {
               ))}
             </dl>
 
-            <Link
-              href={firmHrefById[snapshot.id] ?? "/firms"}
-              className="mt-6 text-sm font-semibold text-stone-900 underline-offset-4 hover:underline"
+            <nav
+              aria-label={`${snapshot.firm} next clicks`}
+              className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-sm font-semibold text-stone-900"
             >
-              Open firm dossier -&gt;
-            </Link>
+              <Link
+                href={firmHrefById[snapshot.id] ?? "/firms"}
+                className="underline-offset-4 hover:underline"
+              >
+                Open dossier -&gt;
+              </Link>
+              <Link
+                href={explorerHrefById[snapshot.id] ?? "/explorer"}
+                className="underline-offset-4 hover:underline"
+              >
+                View source rows -&gt;
+              </Link>
+            </nav>
           </article>
         ))}
       </div>

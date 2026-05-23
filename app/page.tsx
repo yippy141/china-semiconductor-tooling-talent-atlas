@@ -14,6 +14,12 @@ const heroPrimaryLinks = [
   { label: "Inspect source rows", href: "/explorer" },
 ];
 
+const findingNextLinks = [
+  { label: "Open segment brief", href: "/segments/deposition" },
+  { label: "Open firm dossiers", href: "/firms" },
+  { label: "View source rows", href: "/explorer?entity_id=ent_acm_sh" },
+];
+
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-stone-100 text-stone-950">
@@ -90,7 +96,7 @@ export default function HomePage() {
           </div>
 
           <div className="mt-10 grid grid-cols-1 gap-px border border-stone-300 bg-stone-300 lg:grid-cols-3">
-            {articleBrief.findings.map((finding) => (
+            {articleBrief.findings.map((finding, index) => (
               <article key={finding.title} className="bg-white p-6 sm:p-7">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500">
                   {finding.eyebrow}
@@ -104,6 +110,12 @@ export default function HomePage() {
                 <p className="mt-5 border-t border-dashed border-stone-300 pt-4 text-xs leading-6 text-stone-600">
                   {finding.evidenceRead}
                 </p>
+                <Link
+                  href={findingNextLinks[index]?.href ?? "/explorer"}
+                  className="mt-5 inline-flex text-sm font-semibold text-stone-900 underline-offset-4 hover:underline"
+                >
+                  {findingNextLinks[index]?.label ?? "View source rows"} -&gt;
+                </Link>
               </article>
             ))}
           </div>

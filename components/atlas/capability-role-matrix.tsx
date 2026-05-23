@@ -65,7 +65,12 @@ export function CapabilityRoleMatrix() {
                   Segment
                 </p>
                 <h4 className="text-lg font-semibold tracking-tight text-stone-950">
-                  {profile.label}
+                  <Link
+                    href={`/segments/${profile.id}`}
+                    className="underline-offset-4 hover:underline"
+                  >
+                    {profile.label}
+                  </Link>
                 </h4>
                 <p className="text-sm leading-6 text-stone-700">
                   {profile.plainEnglishDefinition}
@@ -107,12 +112,23 @@ export function CapabilityRoleMatrix() {
                     {profile.caveat}
                   </p>
                 </div>
-                <Link
-                  href={`/segments/${profile.id}`}
-                  className="inline-flex items-center text-sm font-semibold text-stone-900 hover:text-stone-700"
+                <nav
+                  aria-label={`${profile.label} next clicks`}
+                  className="flex flex-wrap gap-x-4 gap-y-2 text-sm font-semibold text-stone-900"
                 >
-                  Open segment brief -&gt;
-                </Link>
+                  <Link
+                    href={`/segments/${profile.id}`}
+                    className="underline-offset-4 hover:underline"
+                  >
+                    Open segment brief -&gt;
+                  </Link>
+                  <Link
+                    href={`/explorer?segment=${profile.id}`}
+                    className="underline-offset-4 hover:underline"
+                  >
+                    View source rows -&gt;
+                  </Link>
+                </nav>
               </div>
             </article>
           );
