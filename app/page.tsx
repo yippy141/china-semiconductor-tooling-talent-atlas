@@ -7,6 +7,12 @@ import { FirmWorkforceChart } from "@/components/atlas/firm-workforce-chart";
 import { LabToFabChain } from "@/components/atlas/lab-to-fab-chain";
 import { ToolmakerFootprintGrid } from "@/components/atlas/toolmaker-footprint-grid";
 
+const heroPrimaryLinks = [
+  { label: "Read the brief", href: "/essay" },
+  { label: "Open firm dossiers", href: "/firms" },
+  { label: "Inspect source rows", href: "/explorer" },
+];
+
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-stone-100 text-stone-950">
@@ -17,20 +23,24 @@ export default function HomePage() {
               China Semiconductor Tooling Talent Atlas
             </p>
             <h1 className="mt-5 max-w-4xl text-4xl font-semibold leading-tight tracking-tight sm:text-6xl">
-              {articleBrief.hero.title}
+              Can China Staff Its Chip-Tooling Push?
             </h1>
             <p className="mt-7 max-w-3xl text-lg leading-8 text-stone-700 sm:text-xl sm:leading-9">
-              {articleBrief.hero.deck}
+              Chinese toolmakers are adding products and R&amp;D staff. The
+              harder test is whether they can build field engineers, service
+              teams, calibration routines, and customer-support systems that
+              make equipment work in fabs.
             </p>
-            <p className="mt-6 max-w-3xl text-base leading-8 text-stone-700">
-              {articleBrief.hero.intro}
+            <p className="mt-5 max-w-3xl text-sm leading-7 text-stone-600">
+              Beta public-source monitor. Counts show source coverage, not
+              workforce size.
             </p>
 
             <nav
               aria-label="Primary article links"
               className="mt-10 flex flex-wrap gap-3"
             >
-              {articleBrief.primaryLinks.map((link, index) => (
+              {heroPrimaryLinks.map((link, index) => (
                 <Link
                   key={link.href}
                   href={link.href}
