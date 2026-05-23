@@ -67,7 +67,7 @@ export const firmProfiles: FirmProfile[] = [
         source_id: "CN_FILING_AMEC_2025",
       },
       {
-        label: "R&D personnel share of total staff",
+        label: "R&D personnel, share of total employees",
         value: "52.24%",
         note: "Firm-level filing figure used as an R&D intensity signal, not a performance measure.",
         source_id: "CN_FILING_AMEC_2025",
@@ -141,7 +141,7 @@ export const firmProfiles: FirmProfile[] = [
         source_id: "CN_FILING_NAURA_2025",
       },
       {
-        label: "R&D personnel share of total staff",
+        label: "R&D personnel, share of total employees",
         value: "30.86%",
         note: "Aggregated R&D intensity signal; role labels are not directly comparable to job postings.",
         source_id: "CN_FILING_NAURA_2025",
@@ -203,15 +203,15 @@ export const firmProfiles: FirmProfile[] = [
         source_id: "CN_FILING_ACM_SH_2025",
       },
       {
-        label: "R&D personnel",
+        label: "Technical personnel",
         value: "1,228",
-        note: "Firm-level R&D figure; role categories are aggregated.",
+        note: "Firm-level technical personnel figure; use as a technical staff signal unless the underlying filing confirms an R&D category.",
         source_id: "CN_FILING_ACM_SH_2025",
       },
       {
-        label: "R&D personnel share of total staff",
+        label: "Technical personnel, share of total employees",
         value: "49.42%",
-        note: "R&D intensity signal, not a product-line staffing measurement.",
+        note: "Technical personnel share signal, not a product-line staffing measurement.",
         source_id: "CN_FILING_ACM_SH_2025",
       },
     ],

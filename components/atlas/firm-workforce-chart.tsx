@@ -1,122 +1,35 @@
-"use client";
-
 import Link from "next/link";
 import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  LabelList,
-  XAxis,
-  YAxis,
-} from "recharts";
-import {
   firmWorkforceSnapshots,
-  type FirmWorkforceSnapshot,
-  type WorkforceFigure,
+  type SourceStatus,
 } from "@/data/editorial/firm-workforce-snapshots";
 
-const NOT_DISCLOSED = "Not disclosed in current filing";
-
-const firmHrefByName: Record<string, string> = {
-  AMEC: "/firms/amec",
-  "ACM Research Shanghai": "/firms/acm-research-shanghai",
-  "NAURA Technology Group": "/firms/naura",
+const firmHrefById: Record<string, string> = {
+  amec: "/firms/amec",
+  "acm-research-shanghai": "/firms/acm-research-shanghai",
+  naura: "/firms/naura",
 };
 
-function parseNumeric(value: string): number | null {
-  const cleaned = value.replace(/,/g, "").replace(/%/g, "").trim();
-  const parsed = Number(cleaned);
-  return Number.isFinite(parsed) ? parsed : null;
-}
-
-function pickFigure(
-  snapshot: FirmWorkforceSnapshot,
-  match: (label: string) => boolean,
-): WorkforceFigure | null {
-  return snapshot.figures.find((figure) => match(figure.label)) ?? null;
-}
-
-function pickRnDCount(snapshot: FirmWorkforceSnapshot) {
-  return pickFigure(snapshot, (label) => {
-    const lower = label.toLowerCase();
-    return (
-      lower.includes("r&d personnel") &&
-      !lower.includes("share") &&
-      !lower.includes("degree")
-    );
-  });
-}
-
-function pickRnDShare(snapshot: FirmWorkforceSnapshot) {
-  return pickFigure(snapshot, (label) => {
-    const lower = label.toLowerCase();
-    return lower.includes("r&d personnel") && lower.includes("share");
-  });
-}
-
-function pickTotal(snapshot: FirmWorkforceSnapshot) {
-  return pickFigure(snapshot, (label) =>
-    label.toLowerCase().includes("total employees"),
-  );
-}
-
-function pickAdvancedDegree(snapshot: FirmWorkforceSnapshot) {
-  return pickFigure(snapshot, (label) => {
-    const lower = label.toLowerCase();
-    return (
-      lower.includes("master") ||
-      lower.includes("doctor") ||
-      lower.includes("phd")
-    );
-  });
-}
-
-const chartCategories = [
-  {
-    key: "rndCount" as const,
-    title: "R&D personnel (headcount)",
-    pick: pickRnDCount,
-    formatTick: (value: number) => value.toLocaleString("en-US"),
+const statusMeta: Record<
+  SourceStatus,
+  { label: string; className: string; description: string }
+> = {
+  source_checked: {
+    label: "Source checked",
+    className: "border-emerald-300 bg-emerald-50 text-emerald-900",
+    description: "Reviewed against the cited source.",
   },
-  {
-    key: "rndShare" as const,
-    title: "R&D share of total staff",
-    pick: pickRnDShare,
-    formatTick: (value: number) => `${value}%`,
+  needs_check: {
+    label: "Needs check",
+    className: "border-amber-300 bg-amber-50 text-amber-900",
+    description: "Staged from a filing and still needs manual source review.",
   },
-];
-
-type ChartDatum = {
-  firm: string;
-  href: string;
-  value: number;
-  displayValue: string;
+  staging: {
+    label: "Staging",
+    className: "border-stone-300 bg-stone-50 text-stone-600",
+    description: "Draft observation pending verification.",
+  },
 };
-
-function buildChartData(
-  pick: (snapshot: FirmWorkforceSnapshot) => WorkforceFigure | null,
-): ChartDatum[] {
-  return firmWorkforceSnapshots
-    .map((snapshot) => {
-      const figure = pick(snapshot);
-      if (!figure) return null;
-      const numeric = parseNumeric(figure.value);
-      if (numeric === null) return null;
-      return {
-        firm: snapshot.firm,
-        href: firmHrefByName[snapshot.firm] ?? `/firms/${snapshot.id}`,
-        value: numeric,
-        displayValue: figure.value,
-      } satisfies ChartDatum;
-    })
-    .filter((datum): datum is ChartDatum => datum !== null);
-}
-
-const additionalRows = firmWorkforceSnapshots.map((snapshot) => ({
-  firm: snapshot.firm,
-  total: pickTotal(snapshot),
-  advancedDegree: pickAdvancedDegree(snapshot),
-}));
 
 export function FirmWorkforceChart() {
   return (
@@ -135,161 +48,108 @@ export function FirmWorkforceChart() {
           What listed firms disclose.
         </h3>
         <p className="max-w-3xl text-sm leading-7 text-stone-600">
-          AMEC, ACM Research Shanghai, and NAURA each publish enough
-          workforce structure to be compared. The chart shows only the
-          categories every firm discloses; categories disclosed by some but
-          not others are listed below as a small table.
+          Each firm is shown in the categories it discloses. The point is to
+          read denominators and source status before comparing figures across
+          firms.
         </p>
       </header>
 
-      <div className="grid grid-cols-1 gap-px bg-stone-200 lg:grid-cols-2">
-        {chartCategories.map((category) => {
-          const data = buildChartData(category.pick);
-          const missing = firmWorkforceSnapshots.filter(
-            (snapshot) => category.pick(snapshot) === null,
-          );
-          return (
-            <figure
-              key={category.key}
-              className="flex flex-col gap-4 bg-white p-6 sm:p-7"
-            >
-              <figcaption className="flex flex-col gap-1">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500">
-                  Category
-                </p>
-                <p className="text-base font-semibold tracking-tight text-stone-950">
-                  {category.title}
-                </p>
-              </figcaption>
-
-              <div
-                className="w-full overflow-x-auto"
-                role="img"
-                aria-label={`${category.title} for ${data
-                  .map((datum) => `${datum.firm} ${datum.displayValue}`)
-                  .join(", ")}`}
-              >
-                <BarChart
-                  width={520}
-                  height={220}
-                  data={data}
-                  layout="vertical"
-                  margin={{ top: 8, right: 32, bottom: 8, left: 12 }}
-                  className="max-w-full"
+      <div className="grid grid-cols-1 gap-px bg-stone-200 lg:grid-cols-3">
+        {firmWorkforceSnapshots.map((snapshot) => (
+          <article
+            key={snapshot.id}
+            className="flex h-full flex-col bg-white p-6 sm:p-7"
+          >
+            <header className="border-b border-stone-200 pb-5">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500">
+                {snapshot.homeBase}
+              </p>
+              <h4 className="mt-2 text-xl font-semibold tracking-tight text-stone-950">
+                <Link
+                  href={firmHrefById[snapshot.id] ?? "/firms"}
+                  className="underline-offset-4 hover:underline"
                 >
-                  <CartesianGrid
-                    stroke="#e7e5e4"
-                    horizontal={false}
-                    strokeDasharray="2 4"
-                  />
-                  <XAxis
-                    type="number"
-                    stroke="#78716c"
-                    tick={{ fill: "#57534e", fontSize: 11 }}
-                    tickFormatter={category.formatTick}
-                  />
-                  <YAxis
-                    type="category"
-                    dataKey="firm"
-                    stroke="#78716c"
-                    tick={{ fill: "#1c1917", fontSize: 12 }}
-                    width={150}
-                  />
-                  <Bar dataKey="value" fill="#1c1917" radius={[0, 0, 0, 0]}>
-                    <LabelList
-                      dataKey="displayValue"
-                      position="right"
-                      style={{ fill: "#1c1917", fontSize: 11 }}
-                    />
-                  </Bar>
-                </BarChart>
-              </div>
-
-              {missing.length > 0 ? (
-                <p className="text-[11px] leading-6 text-stone-500">
-                  {missing.map((snapshot) => snapshot.firm).join(", ")}:{" "}
-                  {NOT_DISCLOSED.toLowerCase()}.
-                </p>
-              ) : null}
-
-              <nav
-                aria-label={`Firm dossiers for ${category.title}`}
-                className="mt-auto flex flex-wrap gap-x-4 gap-y-2 border-t border-dashed border-stone-300 pt-4"
-              >
-                {data.map((datum) => (
-                  <Link
-                    key={datum.firm}
-                    href={datum.href}
-                    className="text-xs font-semibold text-stone-900 underline-offset-4 hover:underline"
+                  {snapshot.firm}
+                </Link>
+              </h4>
+              <ul className="mt-3 flex flex-wrap gap-2">
+                {snapshot.segmentSignals.map((segment) => (
+                  <li
+                    key={segment}
+                    className="border border-stone-300 bg-stone-50 px-2.5 py-1 text-[11px] text-stone-700"
                   >
-                    {datum.firm}
-                  </Link>
+                    {segment}
+                  </li>
                 ))}
-              </nav>
-            </figure>
-          );
-        })}
+              </ul>
+            </header>
+
+            <p className="mt-5 text-sm leading-7 text-stone-700">
+              {snapshot.editorialRead}
+            </p>
+
+            <dl className="mt-5 flex flex-col gap-4">
+              {snapshot.figures.map((figure) => (
+                <div
+                  key={figure.label}
+                  className="border-t border-stone-200 pt-4"
+                >
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <dt className="max-w-[12rem] text-xs font-medium leading-5 text-stone-700">
+                      {figure.label}
+                    </dt>
+                    <dd className="font-mono text-2xl font-semibold tracking-tight text-stone-950">
+                      {figure.value}
+                    </dd>
+                  </div>
+                  <p className="mt-2 text-[11px] leading-5 text-stone-500">
+                    Denominator: {figure.denominator}
+                  </p>
+                  <p className="mt-2 text-xs leading-6 text-stone-600">
+                    {figure.note}
+                  </p>
+                  <SourceStatusBadge status={figure.sourceStatus} />
+                </div>
+              ))}
+            </dl>
+
+            <Link
+              href={firmHrefById[snapshot.id] ?? "/firms"}
+              className="mt-6 text-sm font-semibold text-stone-900 underline-offset-4 hover:underline"
+            >
+              Open firm dossier -&gt;
+            </Link>
+          </article>
+        ))}
       </div>
 
-      <div className="border-t border-stone-200 px-6 py-5 sm:px-8">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500">
-          Other disclosed categories
+      <div className="border-t border-stone-200 px-6 py-4 sm:px-8">
+        <p className="text-[11px] leading-6 text-stone-500">
+          Firms use different workforce categories. R&amp;D share, technical
+          staff, service staff, and advanced-degree counts are not
+          interchangeable.
         </p>
-        <table className="mt-3 w-full border-collapse text-left text-sm">
-          <thead>
-            <tr className="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500">
-              <th scope="col" className="py-2 pr-4">
-                Firm
-              </th>
-              <th scope="col" className="py-2 pr-4">
-                Total employees
-              </th>
-              <th scope="col" className="py-2 pr-4">
-                Master&apos;s or doctoral share within R&amp;D
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {additionalRows.map((row) => (
-              <tr key={row.firm} className="border-t border-stone-200">
-                <th scope="row" className="py-2 pr-4 font-medium text-stone-900">
-                  <Link
-                    href={firmHrefByName[row.firm] ?? "/firms"}
-                    className="underline-offset-4 hover:underline"
-                  >
-                    {row.firm}
-                  </Link>
-                </th>
-                <td className="py-2 pr-4 text-stone-700">
-                  {row.total ? (
-                    <span className="font-mono">{row.total.value}</span>
-                  ) : (
-                    <span className="text-xs italic text-stone-400">
-                      {NOT_DISCLOSED}
-                    </span>
-                  )}
-                </td>
-                <td className="py-2 pr-4 text-stone-700">
-                  {row.advancedDegree ? (
-                    <span className="font-mono">
-                      {row.advancedDegree.value}
-                    </span>
-                  ) : (
-                    <span className="text-xs italic text-stone-400">
-                      {NOT_DISCLOSED}
-                    </span>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <ul className="mt-3 flex flex-wrap gap-2">
+          {(Object.keys(statusMeta) as SourceStatus[]).map((status) => (
+            <li key={status}>
+              <SourceStatusBadge status={status} />
+            </li>
+          ))}
+        </ul>
       </div>
-
-      <p className="border-t border-stone-200 px-6 py-4 text-[11px] leading-6 text-stone-500 sm:px-8">
-        Categories follow each firm&apos;s filing and are not segment-specific
-        headcounts.
-      </p>
     </section>
+  );
+}
+
+function SourceStatusBadge({ status }: { status: SourceStatus }) {
+  const meta = statusMeta[status];
+
+  return (
+    <span
+      className={`mt-3 inline-flex w-fit border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.16em] ${meta.className}`}
+      title={meta.description}
+    >
+      {meta.label}
+    </span>
   );
 }

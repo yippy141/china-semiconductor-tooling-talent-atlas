@@ -2,41 +2,32 @@ import Link from "next/link";
 import sourcesData from "@/data/generated/sources.json";
 import {
   firmWorkforceSnapshots,
-  type WorkforceFigure,
+  type SourceStatus,
 } from "@/data/editorial/firm-workforce-snapshots";
 
-type Slot = "total" | "rnd" | "advanced_degree" | "service";
+const NOT_DISCLOSED =
+  "No source-checked workforce figures are included in this snapshot yet.";
 
-const slotOrder: { key: Slot; label: string }[] = [
-  { key: "total", label: "Total employees" },
-  { key: "rnd", label: "R&D or technical staff" },
-  { key: "advanced_degree", label: "PhDs or master's degree holders" },
-  { key: "service", label: "After-sales or service staff" },
-];
-
-const NOT_DISCLOSED = "Not disclosed in current snapshot";
-
-function classifyFigure(label: string): Slot | "rnd_share" | null {
-  const lower = label.toLowerCase();
-  if (lower.includes("total employees")) return "total";
-  if (
-    lower.includes("master") ||
-    lower.includes("doctor") ||
-    lower.includes("phd")
-  )
-    return "advanced_degree";
-  if (
-    lower.includes("after-sales") ||
-    lower.includes("service") ||
-    lower.includes("support")
-  )
-    return "service";
-  if (lower.includes("r&d") || lower.includes("technical")) {
-    if (lower.includes("share")) return "rnd_share";
-    return "rnd";
-  }
-  return null;
-}
+const statusMeta: Record<
+  SourceStatus,
+  { label: string; className: string; description: string }
+> = {
+  source_checked: {
+    label: "Source checked",
+    className: "border-emerald-300 bg-emerald-50 text-emerald-900",
+    description: "Reviewed against the cited source.",
+  },
+  needs_check: {
+    label: "Needs check",
+    className: "border-amber-300 bg-amber-50 text-amber-900",
+    description: "Staged from a filing and still needs manual source review.",
+  },
+  staging: {
+    label: "Staging",
+    className: "border-stone-300 bg-stone-50 text-stone-600",
+    description: "Draft observation pending verification.",
+  },
+};
 
 type SourceRecord = {
   source_id: string;
@@ -47,36 +38,6 @@ type SourceRecord = {
 const sourceById = new Map<string, SourceRecord>(
   (sourcesData as SourceRecord[]).map((source) => [source.source_id, source]),
 );
-
-type FigureSlots = {
-  total: WorkforceFigure | null;
-  rnd: WorkforceFigure | null;
-  rndShare: WorkforceFigure | null;
-  advanced_degree: WorkforceFigure | null;
-  service: WorkforceFigure | null;
-};
-
-function bucketFigures(figures: WorkforceFigure[]): FigureSlots {
-  const slots: FigureSlots = {
-    total: null,
-    rnd: null,
-    rndShare: null,
-    advanced_degree: null,
-    service: null,
-  };
-
-  for (const figure of figures) {
-    const classification = classifyFigure(figure.label);
-    if (classification === "total") slots.total = figure;
-    else if (classification === "rnd") slots.rnd = figure;
-    else if (classification === "rnd_share") slots.rndShare = figure;
-    else if (classification === "advanced_degree")
-      slots.advanced_degree = figure;
-    else if (classification === "service") slots.service = figure;
-  }
-
-  return slots;
-}
 
 export function FirmWorkforceSnapshots() {
   return (
@@ -92,22 +53,18 @@ export function FirmWorkforceSnapshots() {
           id="firm-workforce-heading"
           className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
         >
-          What AMEC, ACM Research, and NAURA publish about their workforce
+          What AMEC, ACM Research Shanghai, and NAURA publish about their
+          workforce
         </h3>
         <p className="max-w-3xl text-sm leading-7 text-stone-600">
-          Three listed firms publish enough workforce structure to be worth
-          comparing. The categories below come from each filing as
-          published; they are not standardized across firms, and they
-          describe whole-firm staffing, not tooling-segment headcount.
+          These categories come from each firm&apos;s filing as published. They
+          are not standardized across firms and describe whole-firm staffing,
+          not tooling-segment headcount.
         </p>
       </header>
 
       <div className="grid grid-cols-1 gap-px bg-stone-200 lg:grid-cols-3">
         {firmWorkforceSnapshots.map((snapshot) => {
-          const slots = bucketFigures(snapshot.figures);
-          const needsVerification = snapshot.figures.some(
-            (figure) => figure.verificationStatus === "needs_verification",
-          );
           const sources = snapshot.source_ids
             .map((id) => sourceById.get(id))
             .filter((source): source is SourceRecord => Boolean(source));
@@ -118,20 +75,9 @@ export function FirmWorkforceSnapshots() {
               className="flex h-full flex-col gap-6 bg-white p-7"
             >
               <header className="flex flex-col gap-3 border-b border-stone-200 pb-5">
-                <div className="flex items-baseline justify-between gap-3">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500">
-                    {snapshot.homeBase}
-                  </p>
-                  {needsVerification ? (
-                    <span className="inline-flex items-center gap-1.5 border border-amber-300 bg-amber-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-amber-800">
-                      <span
-                        aria-hidden
-                        className="inline-block h-1.5 w-1.5 rounded-full bg-amber-500"
-                      />
-                      Needs manual filing check
-                    </span>
-                  ) : null}
-                </div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500">
+                  {snapshot.homeBase}
+                </p>
                 <h4 className="text-xl font-semibold tracking-tight text-stone-950">
                   <Link
                     href={`/firms/${snapshot.id}`}
@@ -156,48 +102,40 @@ export function FirmWorkforceSnapshots() {
                 {snapshot.editorialRead}
               </p>
 
-              <dl className="flex flex-col">
-                {slotOrder.map((slot, index) => {
-                  const figure = slots[slot.key];
-                  const showShare =
-                    slot.key === "rnd" && Boolean(slots.rndShare);
-
-                  return (
+              {snapshot.figures.length > 0 ? (
+                <dl className="flex flex-col gap-4">
+                  {snapshot.figures.map((figure) => (
                     <div
-                      key={slot.key}
-                      className={`flex items-baseline justify-between gap-4 py-3 ${
-                        index === 0 ? "" : "border-t border-stone-200"
-                      }`}
+                      key={figure.label}
+                      className="border-t border-stone-200 pt-4"
                     >
-                      <dt className="text-xs leading-5 text-stone-600">
-                        {slot.label}
-                      </dt>
-                      <dd className="text-right">
-                        {figure ? (
-                          <>
-                            <span className="font-mono text-lg font-semibold tracking-tight text-stone-950">
-                              {figure.value}
-                            </span>
-                            {showShare && slots.rndShare ? (
-                              <span className="ml-2 text-[11px] text-stone-500">
-                                ({slots.rndShare.value} of total staff)
-                              </span>
-                            ) : null}
-                          </>
-                        ) : (
-                          <span className="text-xs italic text-stone-400">
-                            {NOT_DISCLOSED}
-                          </span>
-                        )}
-                      </dd>
+                      <div className="flex items-baseline justify-between gap-4">
+                        <dt className="text-xs leading-5 text-stone-600">
+                          {figure.label}
+                        </dt>
+                        <dd className="font-mono text-lg font-semibold tracking-tight text-stone-950">
+                          {figure.value}
+                        </dd>
+                      </div>
+                      <p className="mt-2 text-[11px] leading-5 text-stone-500">
+                        Denominator: {figure.denominator}
+                      </p>
+                      <p className="mt-2 text-xs leading-6 text-stone-600">
+                        {figure.note}
+                      </p>
+                      <SourceStatusBadge status={figure.sourceStatus} />
                     </div>
-                  );
-                })}
-              </dl>
+                  ))}
+                </dl>
+              ) : (
+                <p className="text-sm leading-7 text-stone-600">
+                  {NOT_DISCLOSED}
+                </p>
+              )}
 
               <p className="border-t border-dashed border-stone-300 pt-4 text-xs leading-6 text-stone-600">
                 <span className="font-semibold uppercase tracking-[0.18em] text-stone-500">
-                  Caveat ·{" "}
+                  Limit ·{" "}
                 </span>
                 {snapshot.caveat}
               </p>
@@ -234,11 +172,33 @@ export function FirmWorkforceSnapshots() {
         })}
       </div>
 
-      <p className="border-t border-stone-200 px-6 py-4 text-[11px] leading-6 text-stone-500 sm:px-8">
-        Workforce categories are aggregated by each firm and not directly
-        comparable. These figures describe whole-firm scale and R&D intensity —
-        they should not be read as full semiconductor-tooling workforce totals.
-      </p>
+      <div className="border-t border-stone-200 px-6 py-4 sm:px-8">
+        <p className="text-[11px] leading-6 text-stone-500">
+          Firms use different workforce categories. R&amp;D share, technical
+          staff, service staff, and advanced-degree counts are not
+          interchangeable.
+        </p>
+        <ul className="mt-3 flex flex-wrap gap-2">
+          {(Object.keys(statusMeta) as SourceStatus[]).map((status) => (
+            <li key={status}>
+              <SourceStatusBadge status={status} />
+            </li>
+          ))}
+        </ul>
+      </div>
     </section>
+  );
+}
+
+function SourceStatusBadge({ status }: { status: SourceStatus }) {
+  const meta = statusMeta[status];
+
+  return (
+    <span
+      className={`mt-3 inline-flex w-fit border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.16em] ${meta.className}`}
+      title={meta.description}
+    >
+      {meta.label}
+    </span>
   );
 }
