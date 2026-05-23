@@ -61,8 +61,8 @@ export function ComparatorFrame() {
       </div>
 
       <p className="border-t border-stone-200 px-6 py-4 text-[11px] leading-6 text-stone-500 sm:px-8">
-        These references frame what public workforce disclosures can mean. They
-        are not rankings, parity claims, or performance measures.
+        References frame what disclosures can mean. Not rankings, parity
+        claims, or performance measures.
       </p>
     </section>
   );

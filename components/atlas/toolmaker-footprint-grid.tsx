@@ -142,8 +142,8 @@ export function ToolmakerFootprintGrid() {
         </h3>
         <p className="max-w-3xl text-sm leading-7 text-stone-600">
           Each cell describes how the public record places a firm in a
-          segment. Labels are deliberate: a checkmark on its own would hide
-          uncertainty, so the grid spells out the strength of the source.
+          segment. Cell labels carry the strength of the source rather than a
+          checkmark.
         </p>
       </header>
 
@@ -235,9 +235,8 @@ export function ToolmakerFootprintGrid() {
       </div>
 
       <p className="border-t border-stone-200 px-6 py-4 text-[11px] leading-6 text-stone-500 sm:px-8">
-        Source: firm dossiers in this site. The grid summarises the public
-        record only; it does not measure tool performance, yield, or
-        customer-site depth.
+        Source: firm dossiers. Cells summarise public-record coverage, not
+        tool performance.
       </p>
     </section>
   );

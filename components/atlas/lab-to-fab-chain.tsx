@@ -8,7 +8,7 @@ export function LabToFabChain() {
     >
       <header className="border-b border-stone-200 px-6 py-6 sm:px-8">
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500">
-          Where public records go quiet
+          Lab-to-fab chain
         </p>
         <h2
           id="lab-to-fab-chain-heading"
@@ -17,9 +17,8 @@ export function LabToFabChain() {
           The staffing test runs from lab tool to fab routine.
         </h2>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-stone-700">
-          Product breadth and R&D headcount are visible first. The deeper test
-          is whether a supplier can support tools after they enter customer
-          fabs.
+          Visibility falls off step by step. Product breadth and R&D headcount
+          are disclosed first; customer-site routines rarely are.
         </p>
       </header>
 

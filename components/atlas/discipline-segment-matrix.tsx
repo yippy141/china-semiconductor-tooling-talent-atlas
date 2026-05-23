@@ -45,10 +45,9 @@ export function DisciplineSegmentMatrix() {
           Why broad STEM numbers are too blunt.
         </h3>
         <p className="max-w-3xl text-sm leading-7 text-stone-600">
-          Each row is an MOE-coded discipline. A cell is marked when the
-          discipline catalogue lists that segment among its most relevant
-          tooling segments. The note next to each name explains why the
-          discipline matters, not just that it maps.
+          Each row is an MOE-coded discipline. A marked cell means the
+          catalogue lists that segment among the discipline&apos;s most
+          relevant tooling segments.
         </p>
       </header>
 
@@ -139,10 +138,8 @@ export function DisciplineSegmentMatrix() {
       </div>
 
       <p className="border-t border-stone-200 px-6 py-4 text-[11px] leading-6 text-stone-500 sm:px-8">
-        Source: MOE 2022 graduate catalogue, mapped to the four tooling
-        segments used across this site. A marked cell means the discipline
-        feeds that segment — it does not measure how many graduates work in
-        equipment firms.
+        Source: MOE 2022 graduate catalogue. Cells map disciplines to segments;
+        they do not count graduates working in equipment firms.
       </p>
     </section>
   );

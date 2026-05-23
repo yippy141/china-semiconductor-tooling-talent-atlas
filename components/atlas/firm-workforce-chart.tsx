@@ -61,9 +61,8 @@ export function FirmWorkforceChart() {
           What listed firms disclose.
         </h3>
         <p className="max-w-3xl text-sm leading-7 text-stone-600">
-          Each firm is shown in the categories it discloses. The point is to
-          read denominators and source status before comparing figures across
-          firms.
+          Each firm shows only the categories it discloses. Read denominators
+          and source status before comparing across firms.
         </p>
       </header>
 
@@ -149,9 +148,8 @@ export function FirmWorkforceChart() {
 
       <div className="border-t border-stone-200 px-6 py-4 sm:px-8">
         <p className="text-[11px] leading-6 text-stone-500">
-          Firms use different workforce categories. R&amp;D share, technical
-          staff, service staff, and advanced-degree counts are not
-          interchangeable.
+          Categories vary across firms. R&amp;D share, technical staff,
+          service staff, and advanced-degree counts are not interchangeable.
         </p>
         <ul className="mt-3 flex flex-wrap gap-2">
           {(Object.keys(statusMeta) as SourceStatus[]).map((status) => (
