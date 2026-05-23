@@ -2,6 +2,7 @@ import Link from "next/link";
 import { articleBrief } from "@/data/editorial/article-brief";
 import { ArticleStatStrip } from "@/components/atlas/article-stat-strip";
 import { AnalystBriefRail } from "@/components/atlas/analyst-brief-rail";
+import { ComparatorFrame } from "@/components/atlas/comparator-frame";
 import { DisciplineSegmentMatrix } from "@/components/atlas/discipline-segment-matrix";
 import { FirmWorkforceChart } from "@/components/atlas/firm-workforce-chart";
 import { LabToFabChain } from "@/components/atlas/lab-to-fab-chain";
@@ -129,6 +130,7 @@ export default function HomePage() {
         <div className="mt-10 flex flex-col gap-10">
           <DisciplineSegmentMatrix />
           <FirmWorkforceChart />
+          <ComparatorFrame />
           <ToolmakerFootprintGrid />
         </div>
       </section>
