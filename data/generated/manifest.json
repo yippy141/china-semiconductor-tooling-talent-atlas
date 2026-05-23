@@ -33,7 +33,7 @@
     "table": "observations",
     "source": "data/raw/observations.csv",
     "output": "data/generated/observations.json",
-    "rows": 172
+    "rows": 208
   },
   {
     "table": "role_families",

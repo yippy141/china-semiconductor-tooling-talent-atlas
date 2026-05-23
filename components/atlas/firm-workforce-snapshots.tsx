@@ -27,6 +27,11 @@ const statusMeta: Record<
     className: "border-stone-300 bg-stone-50 text-stone-600",
     description: "Draft observation pending verification.",
   },
+  not_disclosed: {
+    label: "Not disclosed",
+    className: "border-stone-400 bg-stone-100 text-stone-500",
+    description: "The filing does not disclose this field.",
+  },
 };
 
 type SourceRecord = {
@@ -43,6 +48,7 @@ const explorerHrefById: Record<string, string> = {
   amec: "/explorer?entity_id=ent_amec",
   "acm-research-shanghai": "/explorer?entity_id=ent_acm_sh",
   naura: "/explorer?entity_id=ent_naura",
+  piotech: "/explorer?entity_id=ent_piotech",
 };
 
 export function FirmWorkforceSnapshots() {
@@ -59,8 +65,8 @@ export function FirmWorkforceSnapshots() {
           id="firm-workforce-heading"
           className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
         >
-          What AMEC, ACM Research Shanghai, and NAURA publish about their
-          workforce
+          What AMEC, ACM Research Shanghai, NAURA, and Piotech publish about
+          their workforce
         </h3>
         <p className="max-w-3xl text-sm leading-7 text-stone-600">
           These categories come from each firm&apos;s filing as published. They

@@ -1,3 +1,5 @@
+import type { SourceStatus } from "@/data/editorial/firm-workforce-snapshots";
+
 export type FirmProfile = {
   slug: string;
   profileType: "full" | "light";
@@ -11,17 +13,21 @@ export type FirmProfile = {
     segment: string;
     label: string;
     publicRecord: string;
+    verificationStatus: SourceStatus;
     source_id: string;
   }[];
   workforceSignals: {
     label: string;
     value: string;
     note: string;
+    verificationStatus: SourceStatus;
     source_id: string;
   }[];
   analystRead: string;
   watchSignals: string[];
+  changesTheRead: string[];
   doNotInfer: string[];
+  notDisclosed: { label: string; note: string; source_id: string }[];
   source_ids: string[];
 };
 
@@ -39,58 +45,111 @@ export const firmProfiles: FirmProfile[] = [
     productFamilies: [
       {
         segment: "Etch, clean, and strip",
-        label: "Etch product-line anchor",
+        label: "ICP etch: Primo Twin-Star, Primo nanova, Primo Menova",
         publicRecord:
-          "The source ledger treats AMEC's official company page as a core source for etch product-line mapping.",
-        source_id: "CN_FIRM_AMEC",
-      },
-      {
-        segment: "Deposition",
-        label: "Deposition exposure",
-        publicRecord:
-          "The same company source is used in the monitor for etch and deposition product-line mapping.",
-        source_id: "CN_FIRM_AMEC",
+          "The 2025 annual report describes ICP etch products including Primo Twin-Star, Primo nanova, and Primo Menova as in mass production across more than 50 customer production lines.",
+        verificationStatus: "source_checked",
+        source_id: "CN_FILING_AMEC_2025",
       },
       {
         segment: "Etch, clean, and strip",
-        label: "Etch product maturity and R&D composition",
+        label: "Cumulative ICP reaction-chamber installation",
         publicRecord:
-          "The 2025 annual-report source is logged for etch product maturity and R&D composition.",
+          "The 2025 annual report reports cumulative customer-side ICP installation reached 1,800 reaction chambers.",
+        verificationStatus: "source_checked",
         source_id: "CN_FILING_AMEC_2025",
+      },
+      {
+        segment: "Deposition",
+        label: "Tungsten CVD, high-aspect-ratio tungsten, and ALD tungsten",
+        publicRecord:
+          "The 2025 annual report reports that tungsten CVD, high-aspect-ratio tungsten, and ALD tungsten products passed on-site validation with key memory and logic customers and received repeat mass-production orders.",
+        verificationStatus: "source_checked",
+        source_id: "CN_FILING_AMEC_2025",
+      },
+      {
+        segment: "Etch, clean, and strip",
+        label: "Company product-line anchor",
+        publicRecord:
+          "Official company materials anchor AMEC's etch and deposition product breadth.",
+        verificationStatus: "needs_check",
+        source_id: "CN_FIRM_AMEC",
       },
     ],
     workforceSignals: [
       {
         label: "R&D personnel",
         value: "1,548",
-        note: "Firm-level filing figure; not split by etch, deposition, service, or customer-ramp work.",
+        note: "Filing-disclosed firm-level R&D headcount; not split by etch, deposition, service, or customer-ramp work.",
+        verificationStatus: "source_checked",
         source_id: "CN_FILING_AMEC_2025",
       },
       {
-        label: "R&D personnel, share of total employees",
+        label: "R&D personnel, share of total staff",
         value: "52.24%",
-        note: "Firm-level filing figure used as an R&D intensity signal, not a performance measure.",
+        note: "R&D intensity signal as filed; not a segment-specific staffing measure.",
+        verificationStatus: "source_checked",
         source_id: "CN_FILING_AMEC_2025",
       },
       {
-        label: "Master's or doctoral degree share within R&D personnel",
-        value: "57.88%",
-        note: "Aggregated R&D composition figure; it does not identify segment-specific expertise.",
+        label: "Doctoral researchers in R&D",
+        value: "280",
+        note: "Filing-disclosed PhD count inside the R&D personnel layer.",
+        verificationStatus: "source_checked",
+        source_id: "CN_FILING_AMEC_2025",
+      },
+      {
+        label: "Master's researchers in R&D",
+        value: "616",
+        note: "Filing-disclosed master's count inside the R&D personnel layer; with the 280 PhDs this gives the 57.88% master's-or-doctoral share within R&D.",
+        verificationStatus: "source_checked",
+        source_id: "CN_FILING_AMEC_2025",
+      },
+      {
+        label: "Doctoral degree holders, company-wide",
+        value: "291",
+        note: "Filing-disclosed absolute count; a company-wide total-employee figure is not disclosed in the checked filing sections.",
+        verificationStatus: "source_checked",
+        source_id: "CN_FILING_AMEC_2025",
+      },
+      {
+        label: "Master's degree holders, company-wide",
+        value: "989",
+        note: "Filing-disclosed absolute count; total-employee denominator is not disclosed in the checked filing sections.",
+        verificationStatus: "source_checked",
         source_id: "CN_FILING_AMEC_2025",
       },
     ],
     analystRead:
       "For etch, AMEC is the cleanest public record: product coverage and listed-company R&D staffing read together. The open question is how much of that R&D layer is converting into field application, service, and customer-ramp staffing.",
     watchSignals: [
-      "Customer validation language",
-      "Field application roles",
-      "Service training",
-      "Advanced memory or high-aspect-ratio references",
+      "Platform-specific customer-validation language in filings and product news",
+      "Field-application and service-engineer postings in Shanghai and at customer fab cities",
+      "Training and chief-technician disclosures tied to specific etch platforms",
+      "References to advanced-memory or high-aspect-ratio etch wins",
+    ],
+    changesTheRead: [
+      "Disclosure of total-employee headcount (would let the R&D share be benchmarked against non-R&D functions)",
+      "After-sales, service, or field-application headcount broken out from R&D",
+      "Repeat-order language for the same etch platform at the same domestic customer",
+      "Master's or doctoral share broken out by R&D function instead of as a single R&D total",
     ],
     doNotInfer: [
       "Yield",
       "Installed-base quality",
       "Segment-specific headcount",
+    ],
+    notDisclosed: [
+      {
+        label: "Total-employee headcount",
+        note: "The checked filing sections do not state a company-wide employee total; absolute PhD and master's counts are reported without a denominator.",
+        source_id: "CN_FILING_AMEC_2025",
+      },
+      {
+        label: "After-sales / field-service headcount",
+        note: "The checked filing sections do not break out an after-sales or field-service category.",
+        source_id: "CN_FILING_AMEC_2025",
+      },
     ],
     source_ids: ["CN_FIRM_AMEC", "CN_FILING_AMEC_2025"],
   },
@@ -109,21 +168,24 @@ export const firmProfiles: FirmProfile[] = [
         segment: "Deposition",
         label: "PVD, CVD, furnace, RTP, and epi coverage",
         publicRecord:
-          "The official product-page source explicitly supports broad semiconductor-equipment category mapping, including PVD, CVD, furnace, RTP, and epi.",
+          "Official product pages list NAURA's deposition portfolio across PVD, CVD, furnaces, RTP, and epi tools, alongside the firm's manufacturing bases.",
+        verificationStatus: "needs_check",
         source_id: "CN_FIRM_NAURA",
       },
       {
         segment: "Etch, clean, and strip",
         label: "Etch and wet-tool coverage",
         publicRecord:
-          "The same product-page source is logged for etch and WET product coverage.",
+          "The same product pages cover NAURA's etch and wet-clean tool families inside the same broad equipment portfolio.",
+        verificationStatus: "needs_check",
         source_id: "CN_FIRM_NAURA",
       },
       {
         segment: "Deposition",
-        label: "Scale, R&D intensity, and customer-service expansion",
+        label: "Sales and customer-service team expansion",
         publicRecord:
-          "The 2025 annual-report source is logged for scale, R&D intensity, and customer-service expansion.",
+          "The 2025 annual report attributes part of the sales-expense increase to growth in the market-expansion and customer-service team.",
+        verificationStatus: "source_checked",
         source_id: "CN_FILING_NAURA_2025",
       },
     ],
@@ -131,34 +193,92 @@ export const firmProfiles: FirmProfile[] = [
       {
         label: "Total employees",
         value: "21,101",
-        note: "Whole-firm scale signal; it does not identify tooling-segment capacity.",
+        note: "Whole-firm scale signal; broad equipment group, not a deposition-only workforce.",
+        verificationStatus: "source_checked",
+        source_id: "CN_FILING_NAURA_2025",
+      },
+      {
+        label: "Production personnel",
+        value: "8,065",
+        note: "Filing-disclosed production category across the equipment group.",
+        verificationStatus: "source_checked",
+        source_id: "CN_FILING_NAURA_2025",
+      },
+      {
+        label: "Sales and customer-service personnel",
+        value: "3,950",
+        note: "Filing-disclosed sales-and-customer-service category; the sales-expense increase was partly attributed to growth in this team.",
+        verificationStatus: "source_checked",
+        source_id: "CN_FILING_NAURA_2025",
+      },
+      {
+        label: "Technical personnel",
+        value: "6,511",
+        note: "Filing-disclosed technical-staff category; equals the R&D-personnel figure in this filing.",
+        verificationStatus: "source_checked",
         source_id: "CN_FILING_NAURA_2025",
       },
       {
         label: "R&D personnel",
         value: "6,511",
-        note: "Firm-level R&D signal for a broad equipment group, not a deposition-only count.",
+        note: "Firm-level R&D scale signal for the broad equipment group.",
+        verificationStatus: "source_checked",
         source_id: "CN_FILING_NAURA_2025",
       },
       {
         label: "R&D personnel, share of total employees",
         value: "30.86%",
-        note: "Aggregated R&D intensity signal; role labels are not directly comparable to job postings.",
+        note: "R&D intensity signal; role labels are not directly comparable to job postings.",
+        verificationStatus: "source_checked",
+        source_id: "CN_FILING_NAURA_2025",
+      },
+      {
+        label: "Doctoral researchers in R&D",
+        value: "268",
+        note: "Filing-disclosed PhD count inside the R&D personnel layer.",
+        verificationStatus: "source_checked",
+        source_id: "CN_FILING_NAURA_2025",
+      },
+      {
+        label: "Master's researchers in R&D",
+        value: "4,137",
+        note: "Filing-disclosed master's count inside the R&D personnel layer.",
+        verificationStatus: "source_checked",
+        source_id: "CN_FILING_NAURA_2025",
+      },
+      {
+        label: "Master's degree or above, company-wide",
+        value: "6,271",
+        note: "Filing-disclosed company-wide count of master's-and-above degree holders.",
+        verificationStatus: "source_checked",
         source_id: "CN_FILING_NAURA_2025",
       },
     ],
     analystRead:
       "NAURA gives the clearest scale and breadth signal among listed peers. The same breadth is the trap: whole-firm R&D and employee totals describe an equipment group, not a tooling segment.",
     watchSignals: [
-      "Service-team growth",
-      "Customer-service spending language",
-      "Deposition product validation",
-      "Application support",
+      "Service-team and customer-service spending language in successive annual reports",
+      "Deposition product-platform validation tied to specific domestic fabs",
+      "Field-application and service-engineer hiring across the equipment group",
+      "Revenue or backlog mix disclosed by tool family rather than as a single equipment total",
+    ],
+    changesTheRead: [
+      "Headcount split by tool family within the equipment group (deposition vs etch vs RTP vs implant)",
+      "After-sales or service-team headcount disclosed separately from R&D personnel",
+      "Customer-validation language tied to a specific deposition or etch platform at a named fab",
+      "Revenue mix disclosed by tool family rather than as a single equipment total",
     ],
     doNotInfer: [
       "Segment-specific workforce depth from whole-firm R&D counts",
       "Deposition yield performance",
       "Customer-site ramp quality",
+    ],
+    notDisclosed: [
+      {
+        label: "Headcount by tool family",
+        note: "The filing does not split production, R&D, technical, or sales-and-customer-service headcount by tool family within the equipment group.",
+        source_id: "CN_FILING_NAURA_2025",
+      },
     ],
     source_ids: ["CN_FIRM_NAURA", "CN_FILING_NAURA_2025"],
   },
@@ -175,24 +295,27 @@ export const firmProfiles: FirmProfile[] = [
     productFamilies: [
       {
         segment: "Etch, clean, and strip",
-        label: "Wet cleaning and strip visibility",
+        label: "TEBO cleaning equipment",
         publicRecord:
-          "The official company-page source is logged as a high-value clean-tool source with wet cleaning and adjacent front-end equipment coverage.",
-        source_id: "CN_FIRM_ACM_SH",
+          "The 2025 annual report describes TEBO cleaning equipment for 28nm-and-below patterned wafer cleaning and 3D structures including FinFET, DRAM, and 3D NAND.",
+        verificationStatus: "source_checked",
+        source_id: "CN_FILING_ACM_SH_2025",
+      },
+      {
+        segment: "Etch, clean, and strip",
+        label: "Tahoe cleaning equipment",
+        publicRecord:
+          "The 2025 annual report describes Tahoe cleaning equipment for photoresist removal, post-etch cleaning, ion-implant cleaning, and post-CMP cleaning.",
+        verificationStatus: "source_checked",
+        source_id: "CN_FILING_ACM_SH_2025",
       },
       {
         segment: "Deposition",
         label: "Adjacent front-end tools",
         publicRecord:
-          "The source ledger notes electroplating, furnace, track, and PECVD coverage alongside clean/strip evidence.",
+          "Company materials cover ACM's electroplating, furnace, track, and PECVD lines alongside the clean/strip portfolio.",
+        verificationStatus: "needs_check",
         source_id: "CN_FIRM_ACM_SH",
-      },
-      {
-        segment: "Etch, clean, and strip",
-        label: "Clean/strip product and service-heavy workforce evidence",
-        publicRecord:
-          "The 2025 annual-report source is logged for clean/strip product and service-heavy workforce evidence.",
-        source_id: "CN_FILING_ACM_SH_2025",
       },
     ],
     workforceSignals: [
@@ -200,33 +323,63 @@ export const firmProfiles: FirmProfile[] = [
         label: "Total employees",
         value: "2,485",
         note: "Whole-firm figure; it cannot be read as clean/strip-specific headcount.",
+        verificationStatus: "source_checked",
         source_id: "CN_FILING_ACM_SH_2025",
       },
       {
         label: "Technical personnel",
         value: "1,228",
-        note: "Firm-level technical personnel figure; use as a technical staff signal unless the underlying filing confirms an R&D category.",
+        note: "Filing-disclosed technical-staff category; do not relabel as R&D.",
+        verificationStatus: "source_checked",
         source_id: "CN_FILING_ACM_SH_2025",
       },
       {
         label: "Technical personnel, share of total employees",
         value: "49.42%",
-        note: "Technical personnel share signal, not a product-line staffing measurement.",
+        note: "Technical-personnel share signal; do not add to R&D or service categories.",
+        verificationStatus: "source_checked",
+        source_id: "CN_FILING_ACM_SH_2025",
+      },
+      {
+        label: "After-sales service personnel",
+        value: "672",
+        note: "Filing-disclosed after-sales / service category; the only clean post-sale headcount among the four firms in this dossier set.",
+        verificationStatus: "source_checked",
+        source_id: "CN_FILING_ACM_SH_2025",
+      },
+      {
+        label: "Master's degree or above, company-wide",
+        value: "708",
+        note: "Filing-disclosed absolute count of master's-and-above across the firm.",
+        verificationStatus: "source_checked",
         source_id: "CN_FILING_ACM_SH_2025",
       },
     ],
     analystRead:
       "On wet clean, strip, and the service layer, ACM Research Shanghai is the most disclosing of the three listed firms. The public record carries firm-level workforce structure but still does not split staff by tool family.",
     watchSignals: [
-      "After-sales/service headcount",
-      "Wet-clean tool validation",
-      "Customer-site support",
-      "Cleaning or strip role language",
+      "After-sales or service headcount disclosure in successive annual reports",
+      "Validation language for specific wet-clean or strip tools at named domestic fabs",
+      "Field-application and customer-site support hiring volume",
+      "Role language that distinguishes cleaning and strip work from generic technical staff",
+    ],
+    changesTheRead: [
+      "Master's or doctoral share disclosed within the technical-personnel category",
+      "Field-service or after-sales headcount disclosed separately from technical personnel",
+      "Wet-clean or strip tool validation tied to a named domestic fab and node",
+      "Disclosure separating applications and service staff from generic technical staff",
     ],
     doNotInfer: [
       "Clean/strip-specific headcount from technical staff totals",
       "Customer yield impact",
       "Installed-base quality",
+    ],
+    notDisclosed: [
+      {
+        label: "Master's or doctoral share within technical personnel",
+        note: "The filing reports master's-and-above company-wide but does not break that group down inside the technical-personnel category.",
+        source_id: "CN_FILING_ACM_SH_2025",
+      },
     ],
     source_ids: ["CN_FIRM_ACM_SH", "CN_FILING_ACM_SH_2025"],
   },
@@ -243,33 +396,77 @@ export const firmProfiles: FirmProfile[] = [
     productFamilies: [
       {
         segment: "Deposition",
-        label: "PECVD, ALD, SACVD, HDPCVD, and Flowable CVD trail",
+        label: "PECVD, ALD, SACVD, HDPCVD, and Flowable CVD in mass production",
         publicRecord:
-          "The official company source is logged for deposition category coverage including PECVD, ALD, SACVD, HDPCVD, Flowable CVD, hybrid bonding, and related metrology.",
-        source_id: "CN_FIRM_PIOTECH",
+          "The 2025 financing report states that Piotech's PECVD, ALD, SACVD, HDPCVD, and Flowable CVD series have reached client-side mass production.",
+        verificationStatus: "source_checked",
+        source_id: "CN_FILING_PIOTECH_2025",
       },
       {
         segment: "Deposition",
-        label: "Product-family and demand framing",
+        label: "Company product portfolio",
         publicRecord:
-          "The 2025 financing report is logged for deposition demand mechanics and product families; its product and demand framing should be treated as corporate filing evidence.",
+          "Company materials list PECVD, ALD, SACVD, HDPCVD, Flowable CVD, hybrid-bonding tools, and deposition-adjacent metrology.",
+        verificationStatus: "needs_check",
+        source_id: "CN_FIRM_PIOTECH",
+      },
+    ],
+    workforceSignals: [
+      {
+        label: "R&D personnel (as of 2025-06-30)",
+        value: "638",
+        note: "Filing-disclosed R&D personnel; the financing report is dated September 2025 and reports the position as of 30 June 2025.",
+        verificationStatus: "source_checked",
+        source_id: "CN_FILING_PIOTECH_2025",
+      },
+      {
+        label: "R&D personnel, share of total staff",
+        value: "40.66%",
+        note: "R&D intensity signal for a deposition-focused vendor.",
+        verificationStatus: "source_checked",
+        source_id: "CN_FILING_PIOTECH_2025",
+      },
+      {
+        label: "Doctoral researchers in R&D",
+        value: "53",
+        note: "Filing-disclosed PhD count inside the R&D personnel layer.",
+        verificationStatus: "source_checked",
+        source_id: "CN_FILING_PIOTECH_2025",
+      },
+      {
+        label: "Master's researchers in R&D",
+        value: "384",
+        note: "Filing-disclosed master's count inside the R&D personnel layer.",
+        verificationStatus: "source_checked",
         source_id: "CN_FILING_PIOTECH_2025",
       },
     ],
-    workforceSignals: [],
     analystRead:
       "Piotech is the cleanest addition to the deposition story because its public source trail is specific to deposition product families. The current dossier supports product-breadth monitoring, not claims about production performance, customer yield, or parity with foreign suppliers.",
     watchSignals: [
-      "Customer validation language by deposition tool family",
-      "Field application and service-team hiring",
-      "Repeat-order or installed-base language",
-      "Training or support routines for customer ramps",
+      "Customer-validation language by specific deposition tool family",
+      "Field-application and service-team hiring in Shenyang and at customer fab cities",
+      "Repeat-order or installed-base language for the same platform at the same customer",
+      "Training or support disclosures tied to customer ramps for individual tool families",
+    ],
+    changesTheRead: [
+      "Any firm-level workforce table (Piotech is the one priority firm without one)",
+      "Customer-validation language tied to a named deposition platform and a named domestic fab",
+      "Repeat-order disclosure for the same product family from the same customer",
+      "Disclosure of field-application or installed-base support headcount",
     ],
     doNotInfer: [
       "Parity with Lam, Applied Materials, or Tokyo Electron",
       "Deposition yield performance",
       "Customer-site support depth from product breadth alone",
       "Segment-specific workforce totals",
+    ],
+    notDisclosed: [
+      {
+        label: "Full after-sales / installed-base support headcount",
+        note: "The financing report does not break out a full after-sales or installed-base support category.",
+        source_id: "CN_FILING_PIOTECH_2025",
+      },
     ],
     source_ids: ["CN_FIRM_PIOTECH", "CN_FILING_PIOTECH_2025"],
   },
@@ -281,31 +478,85 @@ export const firmProfiles: FirmProfile[] = [
     nameCn: "精测电子",
     headquarters: "Wuhan",
     oneLine:
-      "Jingce gives the monitor a metrology and inspection watch card through a public filing source.",
+      "Jingce is the Wuhan-based metrology and inspection candidate for full-dossier promotion once the full annual filing has been read against the current summary source.",
     segments: ["Metrology and inspection"],
     productFamilies: [
       {
         segment: "Metrology and inspection",
-        label: "Metrology and inspection product taxonomy",
+        label: "MetaPAM — metal film-thickness metrology",
         publicRecord:
-          "The annual-report summary source is logged for metrology and inspection product taxonomy, with a note to use the full filing before making stronger product or workforce claims.",
+          "The 2025 annual-report summary names MetaPAM as Jingce's metal film-thickness metrology platform.",
+        verificationStatus: "source_checked",
+        source_id: "CN_FILING_JINGCE_2025",
+      },
+      {
+        segment: "Metrology and inspection",
+        label: "SCALE EPI — epitaxial-layer thickness metrology",
+        publicRecord:
+          "The 2025 annual-report summary names SCALE EPI as Jingce's epitaxial-layer thickness metrology platform.",
+        verificationStatus: "source_checked",
+        source_id: "CN_FILING_JINGCE_2025",
+      },
+      {
+        segment: "Metrology and inspection",
+        label: "eMetric — e-beam CD metrology",
+        publicRecord:
+          "The 2025 annual-report summary names eMetric as Jingce's e-beam critical-dimension metrology platform.",
+        verificationStatus: "source_checked",
+        source_id: "CN_FILING_JINGCE_2025",
+      },
+      {
+        segment: "Metrology and inspection",
+        label: "eView / eVC / eSpec — e-beam defect review",
+        publicRecord:
+          "The 2025 annual-report summary names eView, eVC, and eSpec as Jingce's e-beam defect-review platforms.",
+        verificationStatus: "source_checked",
+        source_id: "CN_FILING_JINGCE_2025",
+      },
+      {
+        segment: "Metrology and inspection",
+        label: "BFI — bright-field inspection",
+        publicRecord:
+          "The 2025 annual-report summary names BFI as Jingce's bright-field inspection platform.",
+        verificationStatus: "source_checked",
+        source_id: "CN_FILING_JINGCE_2025",
+      },
+      {
+        segment: "Metrology and inspection",
+        label: "VEGA — dark-field defect inspection",
+        publicRecord:
+          "The 2025 annual-report summary names VEGA as Jingce's dark-field defect inspection platform.",
+        verificationStatus: "source_checked",
         source_id: "CN_FILING_JINGCE_2025",
       },
     ],
     workforceSignals: [],
     analystRead:
-      "Jingce belongs in the watch set as a metrology and inspection anchor, but the current record should be treated as a starting point. The full filing needs review before the site makes detailed product or workforce claims.",
+      "Jingce is the Wuhan-based metrology and inspection anchor candidate in this dossier set. The current record rests on a single annual-report summary that names the product taxonomy at a general level. The dossier is held at watchcard depth until the full filing is read against it.",
     watchSignals: [
-      "Full annual-report language on front-end metrology and inspection",
-      "Application engineer or calibration-support roles",
-      "Customer-support or service-network disclosures",
-      "Product taxonomy that separates inspection from generic equipment activity",
+      "Front-end metrology and inspection language in the full annual filing (not just the summary)",
+      "Application-engineer or calibration-support role disclosures",
+      "Customer-support or service-network language tied to specific inspection platforms",
+      "Product taxonomy that separates front-end semiconductor inspection from display and broader measurement work",
+    ],
+    changesTheRead: [
+      "Reading the full annual filing against the current summary source",
+      "Front-end metrology revenue or staff split separated from display and broader inspection lines",
+      "Calibration-team or application-engineer headcount disclosure",
+      "Named customer validation for specific Jingce inspection platforms",
     ],
     doNotInfer: [
       "Front-end metrology depth from an annual-report summary alone",
       "Customer calibration routines",
       "Tool performance or yield impact",
       "Workforce scale by product family",
+    ],
+    notDisclosed: [
+      {
+        label: "Workforce figures",
+        note: "The current summary source does not disclose Jingce workforce totals or category breakdowns.",
+        source_id: "CN_FILING_JINGCE_2025",
+      },
     ],
     source_ids: ["CN_FILING_JINGCE_2025"],
   },
@@ -317,32 +568,40 @@ export const firmProfiles: FirmProfile[] = [
     nameCn: "上海微电子装备",
     headquarters: "Shanghai",
     oneLine:
-      "SMEE belongs in the lithography-adjacent sidebar because its public homepage anchors the optics, alignment, stage, focus, and calibration talent mix.",
+      "SMEE anchors the lithography-adjacent sidebar in this brief — the domestic source of optical, alignment, stage, and calibration talent that adjacent tools draw on.",
     segments: ["Lithography sidebar", "Metrology and inspection"],
     productFamilies: [
       {
         segment: "Lithography sidebar",
         label: "Lithography-adjacent company anchor",
         publicRecord:
-          "The official company homepage is logged as the lithography-sidebar source for IC, packaging, display, MEMS, LED, and power-device application footprint.",
+          "The official company homepage names SMEE's application footprint across IC, packaging, display, MEMS, LED, and power-device lithography — but does not separate IC platforms from the rest.",
+        verificationStatus: "needs_check",
         source_id: "CN_FIRM_SMEE",
       },
       {
         segment: "Metrology and inspection",
         label: "Adjacent inspection and metrology exposure",
         publicRecord:
-          "The same homepage is also logged as a metrology and inspection presence signal, but detailed product pages need separate verification.",
+          "The same homepage carries a metrology and inspection presence signal; detailed product pages have not yet been pulled against this dossier.",
+        verificationStatus: "needs_check",
         source_id: "CN_FIRM_SMEE",
       },
     ],
     workforceSignals: [],
     analystRead:
-      "SMEE is useful as a sidebar dossier because lithography-adjacent work draws on optics, alignment, stages, focus, contamination control, and calibration. The homepage is broad, so this profile should guide monitoring rather than make detailed readiness claims.",
+      "SMEE is the lithography-adjacent anchor in this brief — not a frontline contest with ASML, but the domestic source of optical, alignment, stage, and calibration talent that adjacent tools draw on. The current homepage source names the application footprint (IC, packaging, display, MEMS, LED, power devices) without separating IC lithography platforms from the rest. The dossier stays at watchcard depth until product pages confirm that split.",
     watchSignals: [
-      "Detailed product pages for lithography-adjacent systems",
-      "Optical design, alignment, stage, and calibration hiring",
+      "Detailed product pages that separate IC lithography platforms from display, MEMS, LED, and power-device platforms",
+      "Hiring for optical design, alignment, stage, mechatronics, and calibration work",
       "Service and training pages tied to customer support",
-      "Public records separating IC equipment from display or packaging equipment",
+      "Public records that distinguish IC equipment revenue from display or packaging equipment revenue",
+    ],
+    changesTheRead: [
+      "Product pages separating IC lithography from display, MEMS, LED, and power-device platforms",
+      "Service or field-application hiring tied to specific lithography tool families",
+      "Validation language for IC-segment lithography at a named domestic fab",
+      "Disclosure of optics, alignment, or stage subsystem teams as separate functions",
     ],
     doNotInfer: [
       "Lithography readiness from homepage breadth",
@@ -350,6 +609,7 @@ export const firmProfiles: FirmProfile[] = [
       "Customer-site uptime or calibration quality",
       "Workforce depth by subsystem",
     ],
+    notDisclosed: [],
     source_ids: ["CN_FIRM_SMEE"],
   },
   {
@@ -360,25 +620,32 @@ export const firmProfiles: FirmProfile[] = [
     nameCn: "北京电子量检测装备有限责任公司",
     headquarters: "Beijing",
     oneLine:
-      "BEIM is a metrology and inspection reference point because its public company profile names inspection and measurement categories.",
+      "BEIM anchors the Beijing metrology and inspection presence in this dossier set, with a public profile that names front-end inspection categories without separating them from broader measurement work.",
     segments: ["Metrology and inspection"],
     productFamilies: [
       {
         segment: "Metrology and inspection",
         label: "Inspection and measurement category anchor",
         publicRecord:
-          "The public company profile is logged for pattern defect inspection, micro/nano morphology metrology, and mask or inspection-adjacent categories.",
+          "The public company profile names pattern defect inspection, micro/nano morphology metrology, and mask or inspection-adjacent measurement — but the front-end semiconductor share of that portfolio is not separated from broader measurement work.",
+        verificationStatus: "needs_check",
         source_id: "CN_FIRM_BEIM",
       },
     ],
     workforceSignals: [],
     analystRead:
-      "BEIM can support a light metrology and inspection dossier because the company profile names categories connected to optics, precision measurement, and defect review. The profile should not be read as a full account of front-end semiconductor tool performance.",
+      "BEIM anchors the Beijing metrology and inspection presence in the dossier set. The public company profile names pattern defect inspection, micro/nano morphology metrology, and mask-adjacent categories, but the front-end semiconductor share of that portfolio is not separated from broader measurement work. The dossier stays at watchcard depth until product-level disclosures confirm the split.",
     watchSignals: [
-      "Product pages that separate semiconductor inspection from broader measurement equipment",
-      "Calibration, defect review, and application-support language",
-      "Customer support or training disclosures",
-      "Hiring for optics, precision measurement, algorithms, and field support",
+      "Product pages that separate front-end semiconductor inspection from general electronics measurement",
+      "Calibration, defect review, and application-support language tied to specific platforms",
+      "Customer support or training disclosures for named inspection tools",
+      "Hiring for optics, precision measurement, algorithms, and field-support functions",
+    ],
+    changesTheRead: [
+      "Revenue or staff split between semiconductor inspection and the broader measurement portfolio",
+      "Calibration or defect-review headcount disclosed separately",
+      "Customer-validation language tied to specific BEIM inspection product families",
+      "Product pages distinguishing front-end inspection from general electronics measurement",
     ],
     doNotInfer: [
       "Front-end semiconductor share of the broader product portfolio",
@@ -386,6 +653,7 @@ export const firmProfiles: FirmProfile[] = [
       "Customer-site calibration quality",
       "Dedicated semiconductor workforce totals",
     ],
+    notDisclosed: [],
     source_ids: ["CN_FIRM_BEIM"],
   },
 ];

@@ -8,12 +8,14 @@ const firmHrefById: Record<string, string> = {
   amec: "/firms/amec",
   "acm-research-shanghai": "/firms/acm-research-shanghai",
   naura: "/firms/naura",
+  piotech: "/firms/piotech",
 };
 
 const explorerHrefById: Record<string, string> = {
   amec: "/explorer?entity_id=ent_amec",
   "acm-research-shanghai": "/explorer?entity_id=ent_acm_sh",
   naura: "/explorer?entity_id=ent_naura",
+  piotech: "/explorer?entity_id=ent_piotech",
 };
 
 const statusMeta: Record<
@@ -34,6 +36,11 @@ const statusMeta: Record<
     label: "Staging",
     className: "border-stone-300 bg-stone-50 text-stone-600",
     description: "Draft observation pending verification.",
+  },
+  not_disclosed: {
+    label: "Not disclosed",
+    className: "border-stone-400 bg-stone-100 text-stone-500",
+    description: "The filing does not disclose this field.",
   },
 };
 
