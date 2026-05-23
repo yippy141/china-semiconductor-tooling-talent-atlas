@@ -95,7 +95,13 @@ function classifyFootprint(
     return "exposure";
   }
 
-  if (firm.profileType === "light") return "check";
+  const anySourceChecked = matches.some(
+    (family) => family.verificationStatus === "source_checked",
+  );
+
+  if (firm.profileType === "light") {
+    return anySourceChecked ? "exposure" : "check";
+  }
 
   return "core";
 }

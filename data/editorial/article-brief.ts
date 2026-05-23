@@ -1,3 +1,5 @@
+import type { SourceStatus } from "@/data/editorial/firm-workforce-snapshots";
+
 export type ArticleLink = {
   label: string;
   href: string;
@@ -10,6 +12,17 @@ export type ArticleFinding = {
   body: string;
   evidenceRead: string;
   source_ids: string[];
+  verificationStatus: SourceStatus;
+  sourceAnchor: string[];
+  reviewNotes: string;
+};
+
+export type HeroClaim = {
+  rendered: string;
+  beta: string;
+  verificationStatus: SourceStatus;
+  sourceAnchor: string[];
+  reviewNotes: string;
 };
 
 export type ExhibitSlot = {
@@ -33,6 +46,21 @@ export const articleBrief = {
     intro:
       "China's semiconductor-equipment push is usually tracked through product announcements, export controls, and market share. Those indicators matter, but they do not show whether a firm can install a tool, tune it at a customer site, keep chambers matched, recover after maintenance, and support repeat deployment.",
   },
+  heroClaim: {
+    rendered:
+      "Chinese toolmakers are adding products and R&D staff. The harder test is whether they can build field engineers, service teams, calibration routines, and customer-support systems that make equipment work in fabs.",
+    beta:
+      "Beta public-source monitor. Counts show source coverage, not workforce size.",
+    verificationStatus: "source_checked",
+    sourceAnchor: [
+      "CN_FILING_AMEC_2025",
+      "CN_FILING_NAURA_2025",
+      "CN_FILING_ACM_SH_2025",
+      "CN_FILING_PIOTECH_2025",
+    ],
+    reviewNotes:
+      "First clause (products + R&D scale) is supported by source-checked product entries and R&D workforce figures for AMEC, NAURA, ACM, and Piotech. Second clause (field engineers / service / calibration / customer-support visibility) is supported by the notDisclosed fields in firm-profiles.ts: only ACM discloses an after-sales category. Hero claim does not assert numbers; the beta note explicitly tells the reader that the homepage counts show source coverage, not workforce size.",
+  } satisfies HeroClaim,
   primaryLinks: [
     { label: "Open firm index", href: "/firms" },
     { label: "Read methodology", href: "/methodology" },
@@ -47,6 +75,10 @@ export const articleBrief = {
       evidenceRead:
         "The segment briefs separate etch and clean, deposition, metrology and inspection, and lithography-adjacent work because each tool family pulls on a different mix of disciplines and role families.",
       source_ids: ["CN_EDU_MOE_GRAD_DIR_2022"],
+      verificationStatus: "source_checked",
+      sourceAnchor: ["CN_EDU_MOE_GRAD_DIR_2022"],
+      reviewNotes:
+        "Backed by the MOE 2022 catalogue and the discipline-segment matrix on the homepage. Card claims a structural mismatch, not a number.",
     },
     {
       eyebrow: "Finding 02",
@@ -60,6 +92,14 @@ export const articleBrief = {
         "CN_FILING_ACM_SH_2025",
         "CN_FILING_NAURA_2025",
       ],
+      verificationStatus: "source_checked",
+      sourceAnchor: [
+        "CN_FILING_AMEC_2025",
+        "CN_FILING_ACM_SH_2025",
+        "CN_FILING_NAURA_2025",
+      ],
+      reviewNotes:
+        "All three filings have source_checked workforce categories in firm-workforce-snapshots.ts (AMEC 1,548 R&D / NAURA 21,101 total / ACM 2,485 total + 672 after-sales). Piotech is intentionally omitted from the card text because Piotech's disclosure comes from a financing report rather than a standard annual filing.",
     },
     {
       eyebrow: "Finding 03",
@@ -73,6 +113,14 @@ export const articleBrief = {
         "CN_FIRM_ACM_SH",
         "CN_FIRM_NAURA",
       ],
+      verificationStatus: "source_checked",
+      sourceAnchor: [
+        "CN_FILING_AMEC_2025",
+        "CN_FILING_NAURA_2025",
+        "CN_FILING_PIOTECH_2025",
+      ],
+      reviewNotes:
+        "Supported empirically by the notDisclosed entries in firm-profiles.ts: AMEC and Piotech both carry not_disclosed for after-sales / field-service headcount; NAURA carries not_disclosed for headcount-by-tool-family. ACM Research Shanghai is the exception that proves the rule with 672 after-sales personnel disclosed.",
     },
   ] satisfies ArticleFinding[],
   exhibitSlots: [

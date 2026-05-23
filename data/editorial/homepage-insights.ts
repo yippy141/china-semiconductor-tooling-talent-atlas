@@ -1,3 +1,5 @@
+import type { SourceStatus } from "@/data/editorial/firm-workforce-snapshots";
+
 export type HomepageInsight = {
   id: string;
   title: string;
@@ -6,6 +8,9 @@ export type HomepageInsight = {
   limit: string;
   href: string;
   linkLabel: string;
+  verificationStatus: SourceStatus;
+  sourceAnchor: string[];
+  reviewNotes: string;
 };
 
 export const homepageInsights: HomepageInsight[] = [
@@ -20,6 +25,10 @@ export const homepageInsights: HomepageInsight[] = [
       "The current dataset maps disciplines to tool segments. It does not yet measure graduate placement into equipment roles.",
     href: "/segments/deposition",
     linkLabel: "Open a segment brief",
+    verificationStatus: "source_checked",
+    sourceAnchor: ["CN_EDU_MOE_GRAD_DIR_2022"],
+    reviewNotes:
+      "Backed by the MOE 2022 graduate catalogue and the discipline-to-segment matrix rendered on the homepage. Card claims a mapping, not a graduate count.",
   },
   {
     id: "firm-filings",
@@ -32,6 +41,15 @@ export const homepageInsights: HomepageInsight[] = [
       "Firm categories are not standardized. R&D headcount, technical staff, and service staff should not be added into one score.",
     href: "/firms/amec",
     linkLabel: "Open AMEC dossier",
+    verificationStatus: "source_checked",
+    sourceAnchor: [
+      "CN_FILING_AMEC_2025",
+      "CN_FILING_ACM_SH_2025",
+      "CN_FILING_NAURA_2025",
+      "CN_FILING_PIOTECH_2025",
+    ],
+    reviewNotes:
+      "All four filings carry source_checked workforce categories in firm-workforce-snapshots.ts. Card claims relative usefulness vs education statistics, which is supported by the disclosed categories.",
   },
   {
     id: "city-records",
@@ -44,6 +62,10 @@ export const homepageInsights: HomepageInsight[] = [
       "A larger node means more public records. It does not mean more usable talent.",
     href: "/monitor?city=Shanghai",
     linkLabel: "Open Shanghai in monitor",
+    verificationStatus: "source_checked",
+    sourceAnchor: ["data/generated/city_signals.json", "data/raw/observations.csv"],
+    reviewNotes:
+      "Claim is derived from aggregated non-taxonomy observation rows by city; the CitySignalMap on the homepage uses the same aggregation. Card asserts ordering, which matches the generated city signals.",
   },
   {
     id: "customer-site-support",
@@ -56,5 +78,14 @@ export const homepageInsights: HomepageInsight[] = [
       "The missing layer is part of the finding. Field application, calibration, chamber recovery, and repeat deployment are the signals to track next.",
     href: "/methodology#evidence-vs-capability",
     linkLabel: "Read evidence limits",
+    verificationStatus: "source_checked",
+    sourceAnchor: [
+      "CN_FILING_AMEC_2025",
+      "CN_FILING_NAURA_2025",
+      "CN_FILING_PIOTECH_2025",
+      "CN_FILING_JINGCE_2025",
+    ],
+    reviewNotes:
+      "The thesis is supported empirically by the notDisclosed fields in firm-profiles.ts: AMEC, NAURA, Piotech, and Jingce all carry not_disclosed entries for service or after-sales headcount. ACM Research Shanghai is the partial exception (672 after-sales personnel disclosed), which is itself the proof that the field can be reported and usually isn't.",
   },
 ];
