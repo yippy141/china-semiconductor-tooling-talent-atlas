@@ -5,7 +5,6 @@ import {
   BarChart,
   CartesianGrid,
   LabelList,
-  ResponsiveContainer,
   XAxis,
   YAxis,
 } from "recharts";
@@ -155,45 +154,46 @@ export function FirmWorkforceChart() {
               </figcaption>
 
               <div
-                className="h-[220px] w-full"
+                className="w-full overflow-x-auto"
                 role="img"
                 aria-label={`${category.title} for ${data
                   .map((datum) => `${datum.firm} ${datum.displayValue}`)
                   .join(", ")}`}
               >
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={data}
-                    layout="vertical"
-                    margin={{ top: 8, right: 32, bottom: 8, left: 12 }}
-                  >
-                    <CartesianGrid
-                      stroke="#e7e5e4"
-                      horizontal={false}
-                      strokeDasharray="2 4"
+                <BarChart
+                  width={520}
+                  height={220}
+                  data={data}
+                  layout="vertical"
+                  margin={{ top: 8, right: 32, bottom: 8, left: 12 }}
+                  className="max-w-full"
+                >
+                  <CartesianGrid
+                    stroke="#e7e5e4"
+                    horizontal={false}
+                    strokeDasharray="2 4"
+                  />
+                  <XAxis
+                    type="number"
+                    stroke="#78716c"
+                    tick={{ fill: "#57534e", fontSize: 11 }}
+                    tickFormatter={category.formatTick}
+                  />
+                  <YAxis
+                    type="category"
+                    dataKey="firm"
+                    stroke="#78716c"
+                    tick={{ fill: "#1c1917", fontSize: 12 }}
+                    width={150}
+                  />
+                  <Bar dataKey="value" fill="#1c1917" radius={[0, 0, 0, 0]}>
+                    <LabelList
+                      dataKey="displayValue"
+                      position="right"
+                      style={{ fill: "#1c1917", fontSize: 11 }}
                     />
-                    <XAxis
-                      type="number"
-                      stroke="#78716c"
-                      tick={{ fill: "#57534e", fontSize: 11 }}
-                      tickFormatter={category.formatTick}
-                    />
-                    <YAxis
-                      type="category"
-                      dataKey="firm"
-                      stroke="#78716c"
-                      tick={{ fill: "#1c1917", fontSize: 12 }}
-                      width={150}
-                    />
-                    <Bar dataKey="value" fill="#1c1917" radius={[0, 0, 0, 0]}>
-                      <LabelList
-                        dataKey="displayValue"
-                        position="right"
-                        style={{ fill: "#1c1917", fontSize: 11 }}
-                      />
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
+                  </Bar>
+                </BarChart>
               </div>
 
               {missing.length > 0 ? (
