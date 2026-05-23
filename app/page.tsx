@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { articleBrief } from "@/data/editorial/article-brief";
 import { ArticleStatStrip } from "@/components/atlas/article-stat-strip";
+import { AnalystBriefRail } from "@/components/atlas/analyst-brief-rail";
 import { DisciplineSegmentMatrix } from "@/components/atlas/discipline-segment-matrix";
 import { FirmWorkforceChart } from "@/components/atlas/firm-workforce-chart";
 import { LabToFabChain } from "@/components/atlas/lab-to-fab-chain";
@@ -56,6 +57,10 @@ export default function HomePage() {
             </p>
           </aside>
         </div>
+      </section>
+
+      <section className="mx-auto w-full max-w-6xl px-6 py-12 sm:px-10 lg:px-12">
+        <AnalystBriefRail />
       </section>
 
       <section className="mx-auto w-full max-w-6xl px-6 py-12 sm:px-10 lg:px-12">
