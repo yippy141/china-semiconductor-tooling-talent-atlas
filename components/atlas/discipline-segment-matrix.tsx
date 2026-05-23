@@ -1,3 +1,4 @@
+import Link from "next/link";
 import disciplinesData from "@/data/generated/disciplines.json";
 import { segmentProfiles } from "@/data/editorial/segment-profiles";
 
@@ -64,7 +65,12 @@ export function DisciplineSegmentMatrix() {
                   scope="col"
                   className="px-3 py-3 text-center"
                 >
-                  {column.label}
+                  <Link
+                    href={`/segments/${column.id}`}
+                    className="underline-offset-4 hover:text-stone-950 hover:underline"
+                  >
+                    {column.label}
+                  </Link>
                 </th>
               ))}
             </tr>

@@ -30,8 +30,8 @@ export const homepageInsights: HomepageInsight[] = [
       "Their filings show R&D scale, technical staff, degree mix, product lines, and support categories.",
     limit:
       "Firm categories are not standardized. R&D headcount, technical staff, and service staff should not be added into one score.",
-    href: "/firms",
-    linkLabel: "Open firm dossiers",
+    href: "/firms/amec",
+    linkLabel: "Open AMEC dossier",
   },
   {
     id: "city-records",
@@ -42,8 +42,8 @@ export const homepageInsights: HomepageInsight[] = [
       "The monitor shows where current public evidence records cluster.",
     limit:
       "A larger node means more public records. It does not mean more usable talent.",
-    href: "/monitor",
-    linkLabel: "Open monitor",
+    href: "/monitor?city=Shanghai",
+    linkLabel: "Open Shanghai in monitor",
   },
   {
     id: "customer-site-support",

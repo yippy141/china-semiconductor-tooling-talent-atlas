@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   firmProfileBySlug,
   type FirmProfile,
@@ -159,7 +160,12 @@ export function ToolmakerFootprintGrid() {
                   scope="col"
                   className="px-3 py-3 text-left"
                 >
-                  {column.label}
+                  <Link
+                    href={`/segments/${column.id}`}
+                    className="underline-offset-4 hover:text-stone-950 hover:underline"
+                  >
+                    {column.label}
+                  </Link>
                 </th>
               ))}
             </tr>
@@ -175,9 +181,12 @@ export function ToolmakerFootprintGrid() {
                   className="px-6 py-4 text-left font-normal sm:px-8"
                 >
                   <div className="flex flex-col gap-1">
-                    <span className="text-sm font-semibold tracking-tight text-stone-950">
+                    <Link
+                      href={`/firms/${row.profile.slug}`}
+                      className="text-sm font-semibold tracking-tight text-stone-950 underline-offset-4 hover:underline"
+                    >
                       {row.profile.name}
-                    </span>
+                    </Link>
                     <span className="text-[11px] text-stone-500">
                       {row.profile.headquarters}
                     </span>

@@ -21,42 +21,42 @@ export function AnalystBriefRail() {
 
       <div className="grid grid-cols-1 gap-px bg-stone-200 lg:grid-cols-4">
         {homepageInsights.map((insight) => (
-          <article
+          <Link
             key={insight.id}
-            className="flex min-h-full flex-col bg-white p-6 sm:p-7"
+            href={insight.href}
+            className="group flex min-h-full flex-col bg-white p-6 transition-colors hover:bg-stone-50 sm:p-7"
           >
-            <h3 className="text-lg font-semibold leading-snug tracking-tight text-stone-950">
-              {insight.title}
-            </h3>
-            <p className="mt-4 text-sm leading-7 text-stone-700">
-              {insight.finding}
-            </p>
+            <article className="flex min-h-full flex-col">
+              <h3 className="text-lg font-semibold leading-snug tracking-tight text-stone-950 group-hover:underline group-hover:underline-offset-4">
+                {insight.title}
+              </h3>
+              <p className="mt-4 text-sm leading-7 text-stone-700">
+                {insight.finding}
+              </p>
 
-            <div className="mt-5 border-t border-dashed border-stone-300 pt-4">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-stone-500">
-                Record shows
-              </p>
-              <p className="mt-2 text-xs leading-6 text-stone-600">
-                {insight.recordShows}
-              </p>
-            </div>
+              <div className="mt-5 border-t border-dashed border-stone-300 pt-4">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-stone-500">
+                  Record shows
+                </p>
+                <p className="mt-2 text-xs leading-6 text-stone-600">
+                  {insight.recordShows}
+                </p>
+              </div>
 
-            <div className="mt-4">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-700">
-                Limit
-              </p>
-              <p className="mt-2 text-xs leading-6 text-stone-600">
-                {insight.limit}
-              </p>
-            </div>
+              <div className="mt-4">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-700">
+                  Limit
+                </p>
+                <p className="mt-2 text-xs leading-6 text-stone-600">
+                  {insight.limit}
+                </p>
+              </div>
 
-            <Link
-              href={insight.href}
-              className="mt-6 inline-flex items-center text-sm font-semibold text-stone-900 hover:text-stone-700"
-            >
-              {insight.linkLabel} &rarr;
-            </Link>
-          </article>
+              <span className="mt-6 inline-flex items-center text-sm font-semibold text-stone-900">
+                {insight.linkLabel} &rarr;
+              </span>
+            </article>
+          </Link>
         ))}
       </div>
     </section>

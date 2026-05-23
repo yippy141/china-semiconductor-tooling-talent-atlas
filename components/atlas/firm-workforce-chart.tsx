@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import {
   Bar,
   BarChart,
@@ -15,6 +16,12 @@ import {
 } from "@/data/editorial/firm-workforce-snapshots";
 
 const NOT_DISCLOSED = "Not disclosed in current filing";
+
+const firmHrefByName: Record<string, string> = {
+  AMEC: "/firms/amec",
+  "ACM Research Shanghai": "/firms/acm-research-shanghai",
+  "NAURA Technology Group": "/firms/naura",
+};
 
 function parseNumeric(value: string): number | null {
   const cleaned = value.replace(/,/g, "").replace(/%/g, "").trim();
@@ -81,6 +88,7 @@ const chartCategories = [
 
 type ChartDatum = {
   firm: string;
+  href: string;
   value: number;
   displayValue: string;
 };
@@ -96,6 +104,7 @@ function buildChartData(
       if (numeric === null) return null;
       return {
         firm: snapshot.firm,
+        href: firmHrefByName[snapshot.firm] ?? `/firms/${snapshot.id}`,
         value: numeric,
         displayValue: figure.value,
       } satisfies ChartDatum;
@@ -202,6 +211,21 @@ export function FirmWorkforceChart() {
                   {NOT_DISCLOSED.toLowerCase()}.
                 </p>
               ) : null}
+
+              <nav
+                aria-label={`Firm dossiers for ${category.title}`}
+                className="mt-auto flex flex-wrap gap-x-4 gap-y-2 border-t border-dashed border-stone-300 pt-4"
+              >
+                {data.map((datum) => (
+                  <Link
+                    key={datum.firm}
+                    href={datum.href}
+                    className="text-xs font-semibold text-stone-900 underline-offset-4 hover:underline"
+                  >
+                    {datum.firm}
+                  </Link>
+                ))}
+              </nav>
             </figure>
           );
         })}
@@ -229,7 +253,12 @@ export function FirmWorkforceChart() {
             {additionalRows.map((row) => (
               <tr key={row.firm} className="border-t border-stone-200">
                 <th scope="row" className="py-2 pr-4 font-medium text-stone-900">
-                  {row.firm}
+                  <Link
+                    href={firmHrefByName[row.firm] ?? "/firms"}
+                    className="underline-offset-4 hover:underline"
+                  >
+                    {row.firm}
+                  </Link>
                 </th>
                 <td className="py-2 pr-4 text-stone-700">
                   {row.total ? (
