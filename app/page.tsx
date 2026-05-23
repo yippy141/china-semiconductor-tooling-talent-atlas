@@ -146,7 +146,7 @@ export default function HomePage() {
       <section className="mx-auto w-full max-w-6xl px-6 py-12 sm:px-10 sm:py-16 lg:px-12">
         <SectionEyebrow number="03" label="Exhibits" />
         <h2 className="mt-3 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl">
-          What the public record actually shows.
+          What the public record shows.
         </h2>
 
         <div className="mt-8 flex flex-col gap-10">

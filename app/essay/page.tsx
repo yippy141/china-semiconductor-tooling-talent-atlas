@@ -86,7 +86,7 @@ export default function EssayPage() {
               Shanghai, a fresh deposition tool out of Shenyang, another
               workaround for U.S. export controls. The launches are
               genuine. They also describe only the first half of what a
-              foundry actually buys.
+              foundry needs.
             </p>
             <p>
               A semiconductor fab does not just want a machine. It wants a
