@@ -1,0 +1,1481 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Notes on the Atlas home — design review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,500;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:        #f3efe7;
+    --paper-deep:   #ece7dc;
+    --paper-edge:   #d9d2c2;
+    --ink:          #14110d;
+    --ink-soft:     #2a2620;
+    --muted:        #6b6358;
+    --muted-2:      #8a8174;
+    --rule:         #1c1917;
+    --rule-hair:    #c8c2b6;
+    --accent:       #b07418;   /* editorial amber */
+    --accent-deep:  #7c4f0f;
+    --sig-green:    #5a6b3e;
+    --black:        #08070a;
+    --serif: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+    --sans:  "IBM Plex Sans", system-ui, sans-serif;
+    --mono:  "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.55;
+    font-feature-settings: "ss01", "onum";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ── chrome ──────────────────────────────────────── */
+  .masthead {
+    border-bottom: 1px solid var(--rule);
+    background: var(--paper);
+    position: sticky; top: 0; z-index: 10;
+  }
+  .masthead-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 12px 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .masthead-inner .pub {
+    font-weight: 600;
+  }
+  .masthead-inner .meta {
+    display: flex;
+    gap: 28px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .masthead-inner .meta b { color: var(--ink); font-weight: 600; }
+
+  /* ── article shell ──────────────────────────────── */
+  .article {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 56px 120px;
+  }
+
+  .kicker {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 56px;
+  }
+  .kicker .num {
+    color: var(--ink);
+    font-weight: 600;
+    margin-right: 8px;
+  }
+
+  .display {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(40px, 5.4vw, 76px);
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+    margin: 16px 0 0;
+    max-width: 18ch;
+    text-wrap: balance;
+  }
+  .display em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent-deep);
+  }
+
+  .standfirst {
+    margin: 28px 0 0;
+    font-size: 22px;
+    line-height: 1.45;
+    color: var(--ink-soft);
+    max-width: 38em;
+    font-weight: 400;
+  }
+
+  .byline {
+    margin-top: 32px;
+    padding-top: 18px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    gap: 36px;
+    flex-wrap: wrap;
+  }
+  .byline span b { color: var(--ink); font-weight: 600; }
+
+  /* ── section headers ────────────────────────────── */
+  .section {
+    margin-top: 96px;
+    padding-top: 28px;
+    border-top: 1px solid var(--rule);
+  }
+  .section-header {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 32px;
+    align-items: baseline;
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .section-num::before {
+    content: "§";
+    margin-right: 6px;
+    color: var(--accent);
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 16px;
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 38px;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    margin: 0;
+    max-width: 24ch;
+    text-wrap: balance;
+  }
+
+  /* ── body grid ──────────────────────────────────── */
+  .body-grid {
+    margin-top: 36px;
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 32px;
+  }
+  .body-grid .gutter {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .prose {
+    max-width: 38em;
+    font-size: 18px;
+    line-height: 1.62;
+    color: var(--ink-soft);
+  }
+  .prose p { margin: 0 0 18px; }
+  .prose p:last-child { margin-bottom: 0; }
+  .prose strong { color: var(--ink); font-weight: 600; }
+  .prose em { color: var(--ink); font-style: italic; }
+
+  .lede::first-letter {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 4.2em;
+    line-height: 0.86;
+    float: left;
+    padding: 6px 12px 0 0;
+    color: var(--ink);
+  }
+
+  /* numbered list, editorial style */
+  .crit-list {
+    margin: 0; padding: 0; list-style: none;
+    counter-reset: crit;
+  }
+  .crit-list > li {
+    counter-increment: crit;
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 24px;
+    padding: 28px 0;
+    border-top: 1px solid var(--rule-hair);
+  }
+  .crit-list > li:first-child { border-top: none; padding-top: 8px; }
+  .crit-list > li::before {
+    content: counter(crit, decimal-leading-zero);
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    padding-top: 4px;
+    letter-spacing: 0.08em;
+  }
+  .crit-list h3 {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0 0 10px;
+    color: var(--ink);
+    max-width: 28ch;
+  }
+  .crit-list p { margin: 0 0 10px; max-width: 38em; color: var(--ink-soft); }
+
+  /* ── inline mockup frame ────────────────────────── */
+  .mock-wrap {
+    grid-column: 1 / -1;
+    margin: 24px 0 0;
+  }
+  .mock-caption {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .mock-caption .label { color: var(--ink); font-weight: 600; }
+  .mock {
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    box-shadow:
+      0 1px 0 var(--rule-hair),
+      0 24px 50px -32px rgba(15,12,8,0.18);
+  }
+  .mock + .mock { margin-top: 24px; }
+
+  /* ── REDESIGNED HOME — first scroll ─────────────── */
+  .m-hero {
+    padding: 32px 48px 44px;
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 56px;
+  }
+  .m-mast {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    grid-column: 1 / -1;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 36px;
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .m-mast .right { color: var(--muted); font-weight: 500; display: flex; gap: 22px;}
+  .m-mast .right b { color: var(--ink); font-weight: 600; }
+  .m-kicker {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--accent-deep);
+    font-weight: 600;
+    margin-bottom: 18px;
+  }
+  .m-title {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 56px;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    margin: 0;
+    max-width: 14ch;
+    text-wrap: balance;
+  }
+  .m-title em {
+    font-style: italic;
+    color: var(--accent-deep);
+    font-weight: 400;
+  }
+  .m-dek {
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.45;
+    color: var(--ink-soft);
+    margin: 24px 0 0;
+    max-width: 40em;
+    font-weight: 400;
+  }
+  .m-actions {
+    margin-top: 32px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    border-top: 1px solid var(--rule-hair);
+    padding-top: 20px;
+  }
+  .m-cta {
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 2px;
+  }
+  .m-cta.primary {
+    background: var(--ink);
+    color: var(--paper);
+    border: 1px solid var(--ink);
+    padding: 10px 18px;
+  }
+  .m-secondary {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .m-secondary a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--rule-hair); }
+
+  /* hero right column — lede exhibit */
+  .m-exhibit {
+    border-left: 1px solid var(--rule);
+    padding-left: 28px;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+  }
+  .m-exhibit .e-cap {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .m-exhibit .e-title {
+    font-family: var(--serif);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 18px;
+    line-height: 1.25;
+  }
+  .e-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px dotted var(--rule-hair);
+  }
+  .e-row:last-of-type { border-bottom: 0; }
+  .e-row .firm {
+    font-family: var(--serif);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .e-row .firm small {
+    display: block;
+    font-family: var(--sans);
+    font-weight: 400;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-top: 2px;
+    text-transform: uppercase;
+  }
+  .e-row .figure {
+    font-family: var(--serif);
+    font-feature-settings: "tnum";
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .e-row .figure small {
+    display: block;
+    font-family: var(--sans);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    text-align: right;
+    margin-top: 2px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .e-note {
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid var(--rule-hair);
+    font-family: var(--sans);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    line-height: 1.45;
+  }
+
+  /* ── second scroll — the argument ─────────────── */
+  .m-arg {
+    padding: 48px 48px 56px;
+    background: var(--paper);
+  }
+  .m-arg-head {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 32px;
+    align-items: baseline;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 24px;
+  }
+  .m-arg-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .m-arg-num::before { content: "§"; margin-right: 6px; color: var(--accent); font-family: var(--serif); font-style: italic; }
+  .m-arg-title {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 36px;
+    line-height: 1.05;
+    margin: 0;
+    letter-spacing: -0.015em;
+    max-width: 22ch;
+  }
+
+  .m-arg-grid {
+    margin-top: 36px;
+    display: grid;
+    grid-template-columns: 96px 1.1fr 1fr;
+    gap: 32px;
+  }
+  .m-arg-lede {
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+  .m-arg-lede::first-letter {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 3.4em;
+    line-height: 0.86;
+    float: left;
+    padding: 5px 10px 0 0;
+    color: var(--ink);
+  }
+  .m-finds {
+    display: flex;
+    flex-direction: column;
+  }
+  .m-find {
+    padding: 16px 0;
+    border-top: 1px solid var(--rule-hair);
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 12px;
+  }
+  .m-find:first-child { border-top: 1px solid var(--rule); }
+  .m-find .n {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    padding-top: 3px;
+    letter-spacing: 0.08em;
+  }
+  .m-find h4 {
+    font-family: var(--serif);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0 0 4px;
+    line-height: 1.25;
+  }
+  .m-find p {
+    font-family: var(--serif);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  .m-sources {
+    margin-top: 40px;
+    padding: 18px 0 0;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 96px repeat(4, 1fr);
+    gap: 32px;
+    align-items: baseline;
+  }
+  .m-sources .lbl {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .m-stat .n {
+    font-family: var(--serif);
+    font-feature-settings: "tnum";
+    font-size: 32px;
+    line-height: 1;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .m-stat .l {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 6px;
+    font-weight: 500;
+  }
+
+  /* ── side notes / pull quotes ─────────────────── */
+  .pull {
+    margin: 32px 0;
+    padding: 22px 28px;
+    background: var(--paper-deep);
+    border-left: 2px solid var(--accent);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.45;
+    color: var(--ink);
+    max-width: 38em;
+  }
+  .pull .src {
+    display: block;
+    margin-top: 10px;
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  /* ── style table ───────────────────────────────── */
+  .tokens {
+    margin-top: 28px;
+    border-top: 1px solid var(--rule);
+  }
+  .tok-row {
+    display: grid;
+    grid-template-columns: 180px 1fr 220px;
+    gap: 24px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--rule-hair);
+    align-items: center;
+  }
+  .tok-row .name {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink);
+  }
+  .tok-row .desc {
+    font-family: var(--serif);
+    font-size: 15px;
+    color: var(--ink-soft);
+    line-height: 1.4;
+  }
+  .tok-row .swatch {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .sw {
+    width: 26px; height: 26px;
+    border: 1px solid var(--rule-hair);
+    border-radius: 0;
+  }
+
+  .tok-group-title {
+    margin-top: 22px;
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  /* font specimens */
+  .specimens {
+    margin: 24px 0 8px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .spec {
+    padding: 18px 18px 22px;
+    border: 1px solid var(--rule-hair);
+    background: var(--paper);
+  }
+  .spec .lbl {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .spec .sample-1 { font-size: 28px; line-height: 1.05; letter-spacing: -0.015em; color: var(--ink); }
+  .spec .sample-2 { font-size: 13px; color: var(--ink-soft); margin-top: 8px; }
+  .spec .sample-3 { font-family: var(--sans); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-top: 14px; }
+  .spec.serif .sample-1 { font-family: var(--serif); font-weight: 500; }
+  .spec.serif .sample-2 { font-family: var(--serif); }
+  .spec.sans  .sample-1 { font-family: var(--sans); font-weight: 600; }
+  .spec.sans  .sample-2 { font-family: var(--sans); }
+  .spec.mono  .sample-1 { font-family: var(--mono); font-weight: 500; }
+  .spec.mono  .sample-2 { font-family: var(--mono); }
+
+  /* before-after schematic */
+  .ba {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 8px 0 0;
+  }
+  .ba-card {
+    border: 1px solid var(--rule-hair);
+    background: var(--paper);
+    padding: 18px;
+  }
+  .ba-card .h {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .ba-card.before .h { color: #8a4646; }
+  .ba-card.after  .h { color: var(--sig-green); }
+  .ba-card svg { display: block; width: 100%; height: auto; }
+
+  /* footer */
+  footer.colophon {
+    margin-top: 120px;
+    padding: 32px 0 0;
+    border-top: 1px solid var(--rule);
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+  footer.colophon b { color: var(--ink); font-weight: 600; }
+
+  @media (max-width: 880px) {
+    .article { padding: 0 24px 80px; }
+    .section-header, .body-grid, .m-arg-grid, .m-sources { grid-template-columns: 1fr; gap: 18px; }
+    .m-hero { grid-template-columns: 1fr; padding: 24px; }
+    .m-exhibit { border-left: 0; padding-left: 0; border-top: 1px solid var(--rule); padding-top: 24px; margin-top: 8px; }
+    .display { font-size: 44px; }
+    .m-title { font-size: 36px; }
+    .ba { grid-template-columns: 1fr; }
+    .specimens { grid-template-columns: 1fr; }
+    .tok-row { grid-template-columns: 1fr; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── masthead ───────────────────────────────────────────────── -->
+<div class="masthead">
+  <div class="masthead-inner">
+    <div class="pub">Atlas&nbsp;·&nbsp;Design Review</div>
+    <div class="meta">
+      <span><b>Confidential</b></span>
+      <span>For the Talent Atlas team</span>
+      <span>May 24, 2026</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── article ───────────────────────────────────────────────── -->
+<article class="article">
+
+  <!-- title block -->
+  <div class="kicker"><span class="num">M0</span> Memorandum &nbsp;·&nbsp; Home page hierarchy</div>
+  <h1 class="display">Notes on <em>the Atlas home.</em></h1>
+  <p class="standfirst">
+    The product reads as a serious public-source monitor — its restraint, its
+    source-checked badges, its refusal to rank firms — but the home page still
+    presents that material with the visual habits of a SaaS dashboard. Six notes
+    on hierarchy, with a redesigned first two scrolls.
+  </p>
+  <div class="byline">
+    <span><b>Reviewed</b>&nbsp; home, brief, four dossiers</span>
+    <span><b>Reference</b>&nbsp; FT&thinsp;/&thinsp;Economist&thinsp;/&thinsp;McKinsey Quarterly</span>
+    <span><b>Scope</b>&nbsp; Above the fold + style direction</span>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       § 1  CRITIQUE OF HIERARCHY
+       ═════════════════════════════════════════════════════════ -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">01 &nbsp; Hierarchy</div>
+      <h2 class="section-title">The home is four sections doing the same job.</h2>
+    </div>
+
+    <div class="body-grid">
+      <div class="gutter">Reading</div>
+      <div class="prose">
+        <p class="lede">
+          A reader landing on the page meets the headline question — <em>Can China
+          staff its chip-tooling push?</em> — and then, within two scrolls, encounters
+          the same three findings restated in three different layouts: a four-card
+          <em>Analyst Brief</em>, a three-card <em>Findings</em> row, and a
+          comparator frame in the body. Each block carries a fresh eyebrow
+          (<span style="font-family:var(--sans);font-size:13px;letter-spacing:.16em;text-transform:uppercase;">Analyst Brief · Findings · Comparator Frame · Listed-Company Disclosure</span>),
+          which gives every block equal billing and erases the lede.
+        </p>
+        <p>
+          The deeper problem is that the home asks the reader to <em>navigate</em> rather
+          than <em>read</em>. The hero offers three primary CTAs of identical weight;
+          the right column carries a <em>Core Question</em> pull-out that competes with
+          the headline; the source counts (43, 143, 4, 4) — which are the single
+          most important credibility signal on the page — are buried between
+          Analyst Brief and Findings as a quiet strip.
+        </p>
+      </div>
+    </div>
+
+    <ul class="crit-list" style="margin-top:32px;">
+      <li>
+        <div>
+          <h3>One lede, restated three times.</h3>
+          <p>
+            Sections 01 (Analyst Brief), 02 (Findings) and the dossier comparator
+            all carry the same three takeaways — STEM is the wrong denominator,
+            filings are the best window, customer-site support is invisible. Pick
+            one section to deliver the argument and let the others do supporting
+            work.
+          </p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>The hero scatters attention.</h3>
+          <p>
+            Three CTAs of equal weight, plus a Core Question pull-out, plus a beta
+            caveat, plus the title — the eye has nowhere to land. A McKinsey or FT
+            opener has one primary entry (<em>Read the brief</em>) and lets a single
+            exhibit do the talking on the right.
+          </p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Equal cards flatten the page.</h3>
+          <p>
+            White rounded-corner cards on a light gray field are SaaS dashboard
+            grammar. A brief has rules, not cards: hairlines, marginalia, drop
+            caps, indented standfirsts. Cards say <em>module</em>; rules say
+            <em>publication</em>.
+          </p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Eyebrow inflation.</h3>
+          <p>
+            Almost every block opens with its own uppercase kicker. When everything
+            is labelled, labels stop carrying any meaning. Reserve eyebrows for
+            section openers; let in-section blocks rely on the section's existing
+            frame.
+          </p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>The credibility numbers are hidden.</h3>
+          <p>
+            <span style="font-family:var(--mono);font-size:13px;">43 / 143 / 4 / 4</span>
+            is the answer to <em>“why should I trust this?”</em> It belongs near the
+            standfirst, not buried six blocks down as a thin strip beside Findings.
+          </p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>The caveat is in the wrong place.</h3>
+          <p>
+            <em>“Beta public-source monitor. Counts show source coverage, not
+            workforce size.”</em> is essential, but placing it under the headline
+            dilutes the lede. Move it to a methodology note at the foot of the
+            hero — visible, but not in headline weight.
+          </p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       § 2  REDESIGNED FIRST TWO SCROLLS
+       ═════════════════════════════════════════════════════════ -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">02 &nbsp; Layout</div>
+      <h2 class="section-title">A stronger opening — two scrolls, one argument.</h2>
+    </div>
+
+    <div class="body-grid">
+      <div class="gutter">Intent</div>
+      <div class="prose">
+        <p>
+          The first scroll should answer three questions before the reader's
+          thumb leaves the trackpad: <strong>what is this</strong>,
+          <strong>what is its headline claim</strong>, and
+          <strong>can I trust it</strong>. The second scroll should deliver the
+          finding once — in prose, not in cards — and only then promote the
+          source counts as the credibility band underneath.
+        </p>
+        <p>
+          The mockup below uses real text and figures from the brief and dossiers.
+          Visual mode is set against the current home: serif throughout, hairlines
+          instead of card chrome, a single amber accent, one primary action.
+        </p>
+      </div>
+    </div>
+
+    <!-- mockup A: hero -->
+    <div class="mock-wrap">
+      <div class="mock-caption">
+        <span><span class="label">Mockup A&nbsp;·</span> First scroll — hero</span>
+        <span>1240&nbsp;×&nbsp;auto</span>
+      </div>
+
+      <div class="mock">
+        <div class="m-hero">
+          <!-- internal masthead -->
+          <div class="m-mast">
+            <div>China Semiconductor Tooling Talent Atlas</div>
+            <div class="right">
+              <span>Brief</span>
+              <span>Firms</span>
+              <span>Segments</span>
+              <span>Explorer</span>
+              <span><b>Search</b></span>
+            </div>
+          </div>
+
+          <!-- left: title -->
+          <div>
+            <div class="m-kicker">Tooling Talent &nbsp;·&nbsp; Issue 04 &nbsp;·&nbsp; May 24, 2026</div>
+            <h1 class="m-title">Can China staff its <em>chip-tooling</em> push?</h1>
+            <p class="m-dek">
+              Chinese toolmakers are adding products and R&amp;D staff. The harder
+              test is whether they can build the field engineers, service teams
+              and calibration routines that make equipment work inside customer
+              fabs.
+            </p>
+            <div class="m-actions">
+              <a class="m-cta primary" href="#">Read the brief →</a>
+              <span class="m-secondary">
+                or <a href="#">jump to firm dossiers</a>
+                &nbsp;·&nbsp; <a href="#">inspect source rows</a>
+              </span>
+            </div>
+            <p style="margin-top:22px; font-family:var(--sans); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted);">
+              Beta public-source monitor &nbsp;·&nbsp; counts reflect source coverage, not workforce size &nbsp;·&nbsp; <a href="#" style="color:var(--ink);">methodology</a>
+            </p>
+          </div>
+
+          <!-- right: lede exhibit -->
+          <div class="m-exhibit">
+            <div class="e-cap">Exhibit 01 &nbsp;·&nbsp; Listed-firm disclosure</div>
+            <div class="e-title">What the four anchors disclose.</div>
+
+            <div class="e-row">
+              <div class="firm">AMEC<small>Etch · Shanghai</small></div>
+              <div class="figure">1,548<small>R&amp;D personnel</small></div>
+            </div>
+            <div class="e-row">
+              <div class="firm">ACM Research<small>Wet clean · Shanghai</small></div>
+              <div class="figure">1,228<small>Technical staff</small></div>
+            </div>
+            <div class="e-row">
+              <div class="firm">NAURA<small>Deposition+ · Beijing</small></div>
+              <div class="figure">21,101<small>Total employees</small></div>
+            </div>
+            <div class="e-row">
+              <div class="firm">Piotech<small>Deposition · Shenyang</small></div>
+              <div class="figure">638<small>R&amp;D personnel</small></div>
+            </div>
+
+            <p class="e-note">
+              Categories are not interchangeable. R&amp;D, technical staff and
+              total-employee counts should not be summed across firms. See
+              dossiers for denominators.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- mockup B: argument -->
+    <div class="mock-wrap" style="margin-top:24px;">
+      <div class="mock-caption">
+        <span><span class="label">Mockup B&nbsp;·</span> Second scroll — the argument</span>
+        <span>Replaces sections 01 + 02 of the current home</span>
+      </div>
+
+      <div class="mock">
+        <div class="m-arg">
+
+          <div class="m-arg-head">
+            <div class="m-arg-num">01 &nbsp; The argument</div>
+            <h2 class="m-arg-title">The public record shows scale<br/>before customer-site depth.</h2>
+          </div>
+
+          <div class="m-arg-grid">
+            <div></div>
+            <div>
+              <p class="m-arg-lede">
+                Most coverage of China's chip-tooling push tracks the same
+                scoreboard — a new etch platform from Shanghai, a fresh
+                deposition tool out of Shenyang. The launches are genuine. They
+                describe only the first half of what a foundry needs. The
+                vendor-side question is not whether the box ships, but whether
+                the firm shipping it can install, tune, match and recover the
+                tool inside a customer's ramp. The public record now shows
+                enough to say where that harder problem is being staffed and
+                where it is still being skipped.
+              </p>
+            </div>
+
+            <div class="m-finds">
+              <div class="m-find">
+                <div class="n">01</div>
+                <div>
+                  <h4>Broad STEM totals are the wrong denominator.</h4>
+                  <p>Etch, deposition, metrology and lithography-adjacent tools
+                  each draw on a different mix of plasma, thin-film, optical and
+                  controls talent. A national graduate total collapses those
+                  mixes into one number.</p>
+                </div>
+              </div>
+              <div class="m-find">
+                <div class="n">02</div>
+                <div>
+                  <h4>Listed-firm filings are the clearest workforce window.</h4>
+                  <p>AMEC, ACM Research Shanghai, NAURA and Piotech disclose
+                  more usable detail than education statistics — R&amp;D scale,
+                  technical staff, degree mix, after-sales categories.</p>
+                </div>
+              </div>
+              <div class="m-find">
+                <div class="n">03</div>
+                <div>
+                  <h4>Customer-site support is the hardest layer to see.</h4>
+                  <p>Product pages show ambition; filings show R&amp;D scale.
+                  Whether a firm can install, tune and recover a tool inside a
+                  customer fab — the package question — is barely disclosed.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- credibility band -->
+          <div class="m-sources">
+            <div class="lbl">Source base</div>
+            <div class="m-stat">
+              <div class="n">43</div>
+              <div class="l">Public sources</div>
+            </div>
+            <div class="m-stat">
+              <div class="n">143</div>
+              <div class="l">Evidence rows</div>
+            </div>
+            <div class="m-stat">
+              <div class="n">4</div>
+              <div class="l">Tool segments</div>
+            </div>
+            <div class="m-stat">
+              <div class="n">4</div>
+              <div class="l">Firm snapshots</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="body-grid" style="margin-top:36px;">
+      <div class="gutter">What changed</div>
+      <div class="prose">
+        <p>
+          The hero loses two CTAs and the right-column pull-out. In their place,
+          a single primary action and an immediate exhibit — the four anchor
+          firms with one disclosed figure each. The figures arrive before the
+          argument, so the reader knows what they are about to be told something
+          <em>about</em>.
+        </p>
+        <p>
+          The second scroll consolidates the four-card Analyst Brief and the
+          three-card Findings into a single argument page: one drop-cap
+          paragraph that carries the case, three subordinate findings as
+          numbered prose, and the credibility band (<span style="font-family:var(--mono);font-size:13px;">43 / 143 / 4 / 4</span>)
+          promoted to the foot of the scroll where it belongs.
+        </p>
+        <p>
+          The current dark <em>City signal map</em> and the firm dossier exhibit
+          remain — they are the strongest pieces on the page. Place them third
+          and fourth, after the argument has been made.
+        </p>
+      </div>
+    </div>
+
+    <!-- before / after schematics -->
+    <div class="body-grid" style="margin-top:32px;">
+      <div class="gutter">Schematic</div>
+      <div style="grid-column: 2; width: 100%;">
+        <div class="ba">
+          <div class="ba-card before">
+            <div class="h">Current — first two scrolls</div>
+            <svg viewBox="0 0 320 360" xmlns="http://www.w3.org/2000/svg">
+              <rect x="0" y="0" width="320" height="360" fill="#f3efe7"/>
+              <!-- hero -->
+              <rect x="14" y="14" width="200" height="14" fill="#c8c2b6"/>
+              <rect x="14" y="36" width="190" height="42" fill="#1c1917"/>
+              <rect x="14" y="86" width="170" height="10" fill="#c8c2b6"/>
+              <rect x="14" y="100" width="160" height="10" fill="#c8c2b6"/>
+              <rect x="14" y="124" width="36" height="14" fill="#2a2620"/>
+              <rect x="58" y="124" width="44" height="14" fill="#c8c2b6"/>
+              <rect x="110" y="124" width="44" height="14" fill="#c8c2b6"/>
+              <rect x="224" y="36" width="82" height="100" fill="none" stroke="#c8c2b6" stroke-dasharray="3 3"/>
+              <text x="232" y="56" font-family="IBM Plex Sans" font-size="7" fill="#8a8174" letter-spacing="1.5">CORE QUESTION</text>
+              <rect x="232" y="64" width="60" height="6" fill="#c8c2b6"/>
+              <rect x="232" y="74" width="64" height="6" fill="#c8c2b6"/>
+              <rect x="232" y="84" width="50" height="6" fill="#c8c2b6"/>
+              <!-- divider -->
+              <line x1="14" y1="156" x2="306" y2="156" stroke="#c8c2b6"/>
+              <!-- 4-card analyst brief -->
+              <rect x="14" y="170" width="60" height="10" fill="#8a8174"/>
+              <rect x="14" y="186" width="180" height="12" fill="#1c1917"/>
+              <g>
+                <rect x="14" y="210" width="68" height="100" fill="#fff" stroke="#c8c2b6"/>
+                <rect x="86" y="210" width="68" height="100" fill="#fff" stroke="#c8c2b6"/>
+                <rect x="158" y="210" width="68" height="100" fill="#fff" stroke="#c8c2b6"/>
+                <rect x="230" y="210" width="68" height="100" fill="#fff" stroke="#c8c2b6"/>
+              </g>
+              <!-- stats strip later -->
+              <rect x="14" y="324" width="284" height="22" fill="none" stroke="#c8c2b6" stroke-dasharray="2 3"/>
+              <text x="20" y="338" font-family="IBM Plex Sans" font-size="7" fill="#8a8174" letter-spacing="1.5">43 · 143 · 4 · 4 (hidden)</text>
+            </svg>
+          </div>
+
+          <div class="ba-card after">
+            <div class="h">Proposed — first two scrolls</div>
+            <svg viewBox="0 0 320 360" xmlns="http://www.w3.org/2000/svg">
+              <rect x="0" y="0" width="320" height="360" fill="#f3efe7"/>
+              <!-- hero -->
+              <rect x="14" y="14" width="180" height="9" fill="#b07418"/>
+              <rect x="14" y="32" width="190" height="50" fill="#1c1917"/>
+              <rect x="14" y="90" width="170" height="9" fill="#c8c2b6"/>
+              <rect x="14" y="102" width="160" height="9" fill="#c8c2b6"/>
+              <line x1="14" y1="124" x2="200" y2="124" stroke="#c8c2b6"/>
+              <rect x="14" y="132" width="68" height="18" fill="#1c1917"/>
+              <text x="20" y="144" font-family="IBM Plex Sans" font-size="7" fill="#f3efe7" letter-spacing="1.5">READ BRIEF →</text>
+              <rect x="92" y="138" width="60" height="6" fill="#c8c2b6"/>
+              <!-- exhibit right -->
+              <line x1="220" y1="32" x2="220" y2="156" stroke="#1c1917"/>
+              <text x="228" y="46" font-family="IBM Plex Sans" font-size="6.5" fill="#8a8174" letter-spacing="1.5">EXHIBIT 01</text>
+              <rect x="228" y="54" width="60" height="8" fill="#1c1917"/>
+              <g font-family="Source Serif 4" font-size="9" fill="#1c1917">
+                <text x="228" y="78">AMEC</text>     <text x="296" y="78" text-anchor="end" font-weight="600">1,548</text>
+                <text x="228" y="94">ACM</text>      <text x="296" y="94" text-anchor="end" font-weight="600">1,228</text>
+                <text x="228" y="110">NAURA</text>   <text x="296" y="110" text-anchor="end" font-weight="600">21,101</text>
+                <text x="228" y="126">Piotech</text> <text x="296" y="126" text-anchor="end" font-weight="600">638</text>
+              </g>
+              <line x1="14" y1="172" x2="306" y2="172" stroke="#1c1917"/>
+              <!-- argument scroll -->
+              <text x="14" y="190" font-family="IBM Plex Sans" font-size="7" fill="#8a8174" letter-spacing="1.5">§ 01  THE ARGUMENT</text>
+              <rect x="14" y="198" width="200" height="14" fill="#1c1917"/>
+              <rect x="14" y="220" width="180" height="60" fill="none" stroke="#c8c2b6"/>
+              <text x="20" y="234" font-family="Source Serif 4" font-weight="500" font-size="14" fill="#1c1917">M</text>
+              <rect x="36" y="226" width="148" height="6" fill="#c8c2b6"/>
+              <rect x="36" y="236" width="140" height="6" fill="#c8c2b6"/>
+              <rect x="14" y="246" width="160" height="6" fill="#c8c2b6"/>
+              <rect x="14" y="256" width="150" height="6" fill="#c8c2b6"/>
+              <rect x="14" y="266" width="140" height="6" fill="#c8c2b6"/>
+              <!-- right finds -->
+              <line x1="220" y1="220" x2="220" y2="290" stroke="#c8c2b6"/>
+              <text x="228" y="232" font-family="IBM Plex Mono" font-size="7" fill="#b07418">01</text>
+              <rect x="244" y="226" width="56" height="6" fill="#1c1917"/>
+              <text x="228" y="252" font-family="IBM Plex Mono" font-size="7" fill="#b07418">02</text>
+              <rect x="244" y="246" width="56" height="6" fill="#1c1917"/>
+              <text x="228" y="272" font-family="IBM Plex Mono" font-size="7" fill="#b07418">03</text>
+              <rect x="244" y="266" width="56" height="6" fill="#1c1917"/>
+              <!-- credibility band -->
+              <line x1="14" y1="306" x2="306" y2="306" stroke="#1c1917"/>
+              <g font-family="Source Serif 4" font-weight="500" fill="#1c1917">
+                <text x="14" y="328" font-size="6" font-family="IBM Plex Sans" fill="#8a8174" letter-spacing="1.5">SOURCE BASE</text>
+                <text x="80"  y="334" font-size="16">43</text>
+                <text x="140" y="334" font-size="16">143</text>
+                <text x="210" y="334" font-size="16">4</text>
+                <text x="260" y="334" font-size="16">4</text>
+              </g>
+              <g font-family="IBM Plex Sans" font-size="5.5" fill="#8a8174" letter-spacing="1">
+                <text x="80"  y="346">SOURCES</text>
+                <text x="140" y="346">ROWS</text>
+                <text x="210" y="346">SEGMENTS</text>
+                <text x="260" y="346">FIRMS</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       § 3  STYLE GUIDANCE
+       ═════════════════════════════════════════════════════════ -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">03 &nbsp; Style</div>
+      <h2 class="section-title">Tailwind-level direction.</h2>
+    </div>
+
+    <div class="body-grid">
+      <div class="gutter">Voice</div>
+      <div class="prose">
+        <p>
+          The aesthetic register to aim for is closer to an FT special report or a
+          McKinsey Quarterly piece than to a SaaS dashboard. That means:
+          <em>serif throughout</em>, hairlines and rules instead of card chrome,
+          one accent at most, monospace reserved for IDs and figures, generous
+          margins, and column-grid alignment so the page reads like printed pages
+          rather than a stack of widgets.
+        </p>
+      </div>
+    </div>
+
+    <!-- type specimens -->
+    <div class="specimens">
+      <div class="spec serif">
+        <div class="lbl">Display &amp; body — Source Serif&nbsp;4</div>
+        <div class="sample-1">Can China staff its chip-tooling push?</div>
+        <div class="sample-2">AMEC reports 1,548 R&amp;D personnel — 52.24% of all employees — and discloses that 57.88% of that R&amp;D layer holds a master's or doctoral degree.</div>
+        <div class="sample-3">Use weights 400 / 500 / 600. Optical sizes on.</div>
+      </div>
+      <div class="spec sans">
+        <div class="lbl">Chrome &amp; labels — IBM Plex Sans</div>
+        <div class="sample-1">Listed-firm disclosure</div>
+        <div class="sample-2">Eyebrows, navigation, source badges, captions, footnotes. Tracked +0.16em uppercase for kickers, +0.04em sentence for ordinary chrome.</div>
+        <div class="sample-3">11 / 12 / 14 PX  ·  UPPERCASE FOR LABELS</div>
+      </div>
+      <div class="spec mono">
+        <div class="lbl">Figures &amp; IDs — IBM Plex Mono</div>
+        <div class="sample-1">CN_FILING_AMEC_2025</div>
+        <div class="sample-2">Source IDs, evidence row IDs, methodology references, numeric annotations on charts. Never for body or headlines.</div>
+        <div class="sample-3">tabular-nums on for tables and stat strips</div>
+      </div>
+    </div>
+
+    <!-- tokens -->
+    <div class="tok-group-title" style="margin-top:36px;">Color tokens</div>
+    <div class="tokens">
+      <div class="tok-row">
+        <div class="name">--paper</div>
+        <div class="desc">Page background. Warm off-white, the colour of a printed page. Avoid pure white.</div>
+        <div class="swatch"><span class="sw" style="background:#f3efe7"></span>#F3EFE7&nbsp;·&nbsp;<span style="font-family:var(--sans);">stone-50</span></div>
+      </div>
+      <div class="tok-row">
+        <div class="name">--paper-deep</div>
+        <div class="desc">Pull-quote &amp; secondary surface. Same warmth, one step darker.</div>
+        <div class="swatch"><span class="sw" style="background:#ece7dc"></span>#ECE7DC&nbsp;·&nbsp;<span style="font-family:var(--sans);">stone-100</span></div>
+      </div>
+      <div class="tok-row">
+        <div class="name">--ink</div>
+        <div class="desc">Primary text. Warmer than pure black; reads on paper.</div>
+        <div class="swatch"><span class="sw" style="background:#14110d"></span>#14110D&nbsp;·&nbsp;<span style="font-family:var(--sans);">stone-950</span></div>
+      </div>
+      <div class="tok-row">
+        <div class="name">--muted</div>
+        <div class="desc">Eyebrows, captions, secondary metadata, denominators.</div>
+        <div class="swatch"><span class="sw" style="background:#6b6358"></span>#6B6358&nbsp;·&nbsp;<span style="font-family:var(--sans);">stone-500</span></div>
+      </div>
+      <div class="tok-row">
+        <div class="name">--rule</div>
+        <div class="desc">Primary 1px hairline — section dividers, exhibit edges.</div>
+        <div class="swatch"><span class="sw" style="background:#1c1917"></span>#1C1917&nbsp;·&nbsp;<span style="font-family:var(--sans);">stone-900</span></div>
+      </div>
+      <div class="tok-row">
+        <div class="name">--rule-hair</div>
+        <div class="desc">Tertiary hairline — list dividers, table rows.</div>
+        <div class="swatch"><span class="sw" style="background:#c8c2b6"></span>#C8C2B6&nbsp;·&nbsp;<span style="font-family:var(--sans);">stone-300</span></div>
+      </div>
+      <div class="tok-row">
+        <div class="name">--accent</div>
+        <div class="desc">Single editorial highlight. Section markers, drop caps, the one highlighted city on the map.</div>
+        <div class="swatch"><span class="sw" style="background:#b07418"></span>#B07418&nbsp;·&nbsp;<span style="font-family:var(--sans);">amber-700</span></div>
+      </div>
+      <div class="tok-row">
+        <div class="name">--sig-green</div>
+        <div class="desc">Keep — source-checked badges. The only place green appears.</div>
+        <div class="swatch"><span class="sw" style="background:#5a6b3e"></span>#5A6B3E&nbsp;·&nbsp;<span style="font-family:var(--sans);">olive (custom)</span></div>
+      </div>
+      <div class="tok-row">
+        <div class="name">--black</div>
+        <div class="desc">Reverse-out sections only (the city signal map). Not for ink.</div>
+        <div class="swatch"><span class="sw" style="background:#08070a"></span>#08070A&nbsp;·&nbsp;<span style="font-family:var(--sans);">zinc-950</span></div>
+      </div>
+    </div>
+
+    <div class="tok-group-title" style="margin-top:32px;">Spacing &amp; rules</div>
+    <div class="tokens">
+      <div class="tok-row">
+        <div class="name">grid</div>
+        <div class="desc">12-column, 1240px max content width, 56px outer margins desktop. Reduce to 4-column at 880px.</div>
+        <div class="swatch">tw: max-w-[1240px] px-14</div>
+      </div>
+      <div class="tok-row">
+        <div class="name">section spacing</div>
+        <div class="desc">96px between sections, 36px between section-header and body, 28px between paragraphs.</div>
+        <div class="swatch">mt-24 / mt-9 / mb-7</div>
+      </div>
+      <div class="tok-row">
+        <div class="name">rules</div>
+        <div class="desc">1px solid for section dividers; 1px dotted/hair for in-section dividers; no shadows, no borders &gt;1px, no rounded corners over 0px on text containers.</div>
+        <div class="swatch">border-t border-stone-900</div>
+      </div>
+      <div class="tok-row">
+        <div class="name">card chrome</div>
+        <div class="desc">Remove. White cards on gray are SaaS grammar. Replace with rule-bounded regions and 0px-radius edges.</div>
+        <div class="swatch">— delete —</div>
+      </div>
+      <div class="tok-row">
+        <div class="name">shadows</div>
+        <div class="desc">None on body content. Allow a single ultra-soft drop shadow only on raised exhibits (e.g. inset map overlay).</div>
+        <div class="swatch">shadow-[0_24px_50px_-32px_rgba(15,12,8,.18)]</div>
+      </div>
+      <div class="tok-row">
+        <div class="name">type sizes</div>
+        <div class="desc">Display 56–76 / Section 36–40 / Body 18–19 / Captions 13–14 / Chrome 10–12. Track chrome +0.16em uppercase.</div>
+        <div class="swatch">text-[56px]/[36px]/[19px]/[11px]</div>
+      </div>
+      <div class="tok-row">
+        <div class="name">numerals</div>
+        <div class="desc">Tabular numerals everywhere a column of figures appears (exhibits, stat strips, dossier values). Old-style numerals in body prose.</div>
+        <div class="swatch">font-feature-settings: "tnum" / "onum"</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       § 4  WHAT TO REMOVE
+       ═════════════════════════════════════════════════════════ -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">04 &nbsp; Subtract</div>
+      <h2 class="section-title">What to remove.</h2>
+    </div>
+
+    <ul class="crit-list" style="margin-top:24px;">
+      <li>
+        <div>
+          <h3>The <em>Core Question</em> pull-out in the hero.</h3>
+          <p>It restates the headline. A pull-quote that paraphrases the headline weakens both. Put the standfirst where the pull-out is; move the exhibit there instead.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Two of the three hero CTAs.</h3>
+          <p>Keep <em>Read the brief</em> as the single primary action. Demote <em>Open firm dossiers</em> and <em>Inspect source rows</em> to a quiet text link or the masthead nav.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Section 01 <em>Analyst Brief</em>'s four-card grid — or section 02 <em>Findings</em>. Not both.</h3>
+          <p>They carry the same content in different formats. The proposal in §02 above merges them into a single argument scroll with prose lede and numbered subordinate findings.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>White rounded-corner cards on light-gray background.</h3>
+          <p>Replace every card grid with rule-bounded regions. Cards are SaaS; rules are editorial. Keep card containers only inside the dark <em>City signal</em> exhibit, where they read as data-viz UI rather than chrome.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>The per-block eyebrows.</h3>
+          <p><span style="font-family:var(--sans);font-size:13px;letter-spacing:.16em;">LISTED-COMPANY DISCLOSURE</span>, <span style="font-family:var(--sans);font-size:13px;letter-spacing:.16em;">COMPARATOR FRAME</span>, <span style="font-family:var(--sans);font-size:13px;letter-spacing:.16em;">FIRM WORKFORCE CHART</span>, <span style="font-family:var(--sans);font-size:13px;letter-spacing:.16em;">PUBLIC PRODUCT RECORD</span> — the page is shouting. Keep an eyebrow only on the section opener.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>The beta caveat in headline weight.</h3>
+          <p>It's important; it isn't the lede. Move to a methodology line under the hero CTA in muted Plex Sans, 10–11px, tracked.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>The full nav row at the very top (<em>HOME / FIRMS / EXPLORER</em>) inside the article column.</h3>
+          <p>It floats unattached. Pin it to a thin masthead with the publication name, and treat it as chrome, not content.</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       § 5  WHAT NOT TO CHANGE
+       ═════════════════════════════════════════════════════════ -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">05 &nbsp; Keep</div>
+      <h2 class="section-title">What not to change.</h2>
+    </div>
+
+    <ul class="crit-list" style="margin-top:24px;">
+      <li>
+        <div>
+          <h3>The editorial restraint.</h3>
+          <p>No rankings, no scores, no composite indices, no leaderboards. This is the single feature that distinguishes the product from every other China-tech tracker; protect it.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>The dark <em>City signal map</em> exhibit.</h3>
+          <p>This is the strongest piece on the page. Reverse-out section, gridded background, restrained yellow highlight on the active node, paired with an inspector that names what the size means and what it doesn't. Use it as the visual template for any future exhibit.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>The denominator discipline.</h3>
+          <p>Every figure in the dossiers labels its denominator and refuses to roll up across categories. Keep that habit visible in the exhibits; it's the page's intellectual signature.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>The <em>Source checked</em> badge and the source-row ID treatment.</h3>
+          <p>The green check + monospace source-id pattern (<span style="font-family:var(--mono);font-size:13px;">CN_FILING_AMEC_2025</span>) reads as serious archival metadata. Keep it; reuse it consistently.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>The comparator frame's <em>Compare on / Do not compare on</em> list.</h3>
+          <p>This is the most McKinsey-feeling piece of writing on the site. It belongs in the brief, not in a competing home section, but the framing itself is exactly right.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>The bilingual firm names.</h3>
+          <p><em>AMEC&nbsp;/&nbsp;中微公司</em>, <em>Piotech&nbsp;/&nbsp;拓荆科技</em>. Quiet, factual, signals primary-source contact. Keep at every dossier head.</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       § 6  OTHER NOTES
+       ═════════════════════════════════════════════════════════ -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">06 &nbsp; Notes</div>
+      <h2 class="section-title">Other observations.</h2>
+    </div>
+
+    <ul class="crit-list" style="margin-top:24px;">
+      <li>
+        <div>
+          <h3>Give the brief a date and an issue number.</h3>
+          <p>Public-source monitors gain credibility by versioning visibly. <em>Issue 04 · May 24, 2026</em> tells the reader the work is maintained on a cadence. <em>april 17 (v1)</em> in the tab title is doing this work in the wrong place.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Lead with an exhibit, not with cards.</h3>
+          <p>The four anchor firms each have one disclosed figure that is interesting on its own (AMEC's 52.24% R&amp;D share, ACM's 49.42% technical-staff share, NAURA's 21,101, Piotech's 638). A four-row exhibit beside the headline does more work than the current Core Question pull-out.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Section numbers are doing two jobs. Pick one.</h3>
+          <p>Right now <em>01 ANALYST BRIEF</em> reads both as a chapter marker and as an eyebrow. Promote it (§&nbsp;01 in section heads, large, with a hair-rule above) or drop it. The half-state is what reads as SaaS.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Promote the <em>discipline-to-segment matrix</em> earlier.</h3>
+          <p>It is the cleverest piece of the whole atlas. Inside the home it currently sits below the dossier exhibit. Either pull it into the argument section as the second exhibit, or give it its own section header (<em>“Why STEM totals miss”</em>) and let the matrix stand alone.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Resist visualising what the data can't carry.</h3>
+          <p>The footprint grid (<em>Chinese toolmakers to watch</em>) is on the edge. <em>CORE SOURCE</em> filled cells next to <em>NO CURRENT RECORD</em> dashed cells look like a scorecard to a casual reader, even though the captions say otherwise. Consider re-rendering as a coverage matrix (dots scaled to row-count) so the visual cue matches the analytical one.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>One typeface change does most of the work.</h3>
+          <p>The single highest-leverage change is moving body and headlines to an editorial serif. The page is currently set in a default neo-grotesque sans that signals web product. A serif (Source Serif&nbsp;4, Tiempos, Lyon, GT Sectra — the family doesn't matter; the register does) repositions the entire artefact toward publication.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>The dossier page header has the right idea — promote it home.</h3>
+          <p>Big Latin name, smaller Hanzi, a single-line standfirst, segment chips, hairline rule, then the body in two columns (Analyst Read / Boundary Condition). That's the exact grammar the home hero should adopt.</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- pull -->
+  <div class="pull" style="margin-top:64px; margin-left:128px;">
+    The product is doing the difficult half right: it has refused to invent a
+    league table and built a record of denominators instead. The home page just
+    hasn't caught up to the seriousness of the work behind it.
+    <span class="src">Summary</span>
+  </div>
+
+  <footer class="colophon">
+    <span><b>Atlas&nbsp;·&nbsp;Design Review</b></span>
+    <span>Prepared as a single-document memo&nbsp;·&nbsp;HTML</span>
+    <span>End of memo</span>
+  </footer>
+
+</article>
+
+</body>
+</html>

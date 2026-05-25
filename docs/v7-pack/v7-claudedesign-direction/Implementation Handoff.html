@@ -1,0 +1,758 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>v7 — Implementation handoff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:#f3efe7; --paper-deep:#ece7dc; --paper-edge:#d9d2c2;
+    --ink:#14110d; --ink-soft:#2a2620; --muted:#6b6358; --muted-2:#8a8174;
+    --rule:#1c1917; --rule-hair:#c8c2b6;
+    --accent:#b07418; --accent-deep:#7c4f0f;
+    --sig-green:#5a6b3e;
+    --serif:"Source Serif 4",Georgia,serif;
+    --sans:"IBM Plex Sans",system-ui,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:var(--serif);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  body{font-size:18px;line-height:1.55;font-feature-settings:"ss01","onum"}
+  .mast{border-bottom:1px solid var(--rule);position:sticky;top:0;background:var(--paper);z-index:10}
+  .mast-inner{max-width:1240px;margin:0 auto;padding:12px 56px;display:flex;justify-content:space-between;align-items:center;font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  .mast .pub{font-weight:600}
+  .mast .meta{display:flex;gap:28px;color:var(--muted);font-weight:500}
+  .mast .meta b{color:var(--ink);font-weight:600}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 56px 120px}
+  .kicker{font-family:var(--sans);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:56px}
+  .kicker .num{color:var(--ink);font-weight:600;margin-right:8px}
+  h1.display{font-family:var(--serif);font-weight:500;font-size:clamp(40px,5.4vw,76px);line-height:.98;letter-spacing:-.02em;margin:16px 0 0;max-width:18ch;text-wrap:balance}
+  h1.display em{font-style:italic;font-weight:400;color:var(--accent-deep)}
+  .dek{margin:28px 0 0;font-size:22px;line-height:1.45;color:var(--ink-soft);max-width:38em;font-weight:400}
+  .byline{margin-top:32px;padding-top:18px;border-top:1px solid var(--rule);font-family:var(--sans);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);display:flex;gap:36px;flex-wrap:wrap}
+  .byline b{color:var(--ink);font-weight:600}
+
+  .section{margin-top:96px;padding-top:28px;border-top:1px solid var(--rule)}
+  .sh{display:grid;grid-template-columns:96px 1fr;gap:32px;align-items:baseline}
+  .sn{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+  .sn::before{content:"§";margin-right:6px;color:var(--accent);font-family:var(--serif);font-style:italic;font-size:16px}
+  .st{font-family:var(--serif);font-weight:500;font-size:38px;line-height:1.05;letter-spacing:-.015em;margin:0;max-width:24ch;text-wrap:balance}
+  .body{margin-top:36px;display:grid;grid-template-columns:96px 1fr;gap:32px}
+  .gutter{font-family:var(--sans);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .prose{max-width:38em;font-size:18px;line-height:1.62;color:var(--ink-soft)}
+  .prose p{margin:0 0 18px}
+  .prose strong{color:var(--ink);font-weight:600}
+  .prose em{color:var(--ink);font-style:italic}
+
+  /* file cards */
+  .files{margin-top:36px;display:grid;grid-template-columns:1fr;gap:0;border-top:1px solid var(--rule)}
+  .file{display:grid;grid-template-columns:48px 1fr 280px 100px;gap:24px;padding:22px 0;border-bottom:1px solid var(--rule-hair);align-items:baseline}
+  .file .n{font-family:var(--mono);font-size:13px;color:var(--accent);letter-spacing:.06em}
+  .file h3{font-family:var(--serif);font-weight:600;font-size:20px;margin:0 0 4px;color:var(--ink);line-height:1.25}
+  .file .path{font-family:var(--mono);font-size:11px;color:var(--muted-2);margin-bottom:8px;display:block}
+  .file p{font-family:var(--serif);font-size:15px;line-height:1.5;color:var(--ink-soft);margin:0;max-width:46em}
+  .file .who{font-family:var(--sans);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600;line-height:1.5}
+  .file .who b{color:var(--ink);font-weight:600;display:block;margin-bottom:2px}
+  .file .who small{display:block;color:var(--muted-2);font-weight:400;margin-top:2px;letter-spacing:.04em}
+  .file .link{font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);font-weight:600;text-decoration:none;border-bottom:1px solid var(--ink);padding-bottom:2px;justify-self:end;align-self:start}
+  .file .link:hover{color:var(--accent-deep);border-color:var(--accent-deep)}
+
+  /* tracks table */
+  .tracks{margin-top:24px;border-top:1px solid var(--rule)}
+  .track{display:grid;grid-template-columns:96px 1fr 220px 140px;gap:24px;padding:20px 0;border-bottom:1px solid var(--rule-hair);align-items:baseline}
+  .track .id{font-family:var(--serif);font-size:32px;font-weight:500;color:var(--ink);line-height:1}
+  .track .id small{display:block;font-family:var(--sans);font-size:10px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-top:6px;font-weight:600}
+  .track h4{font-family:var(--serif);font-weight:600;font-size:18px;margin:0 0 6px;color:var(--ink)}
+  .track p{margin:0;font-size:14px;color:var(--ink-soft);line-height:1.5;max-width:46em}
+  .track .scope{font-family:var(--sans);font-size:11px;color:var(--muted);letter-spacing:.04em;line-height:1.5}
+  .track .scope b{color:var(--ink);font-weight:600;display:block;font-size:10px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:4px}
+  .track .time{font-family:var(--mono);font-size:13px;color:var(--accent);text-align:right;font-weight:500}
+  .track .time small{display:block;font-family:var(--sans);color:var(--muted);letter-spacing:.16em;font-size:10px;text-transform:uppercase;margin-top:4px;font-weight:500}
+  .track.rec{background:var(--paper-deep);margin-left:-12px;padding-left:12px}
+  .track.rec h4::after{content:" · recommended";font-family:var(--sans);font-size:10px;letter-spacing:.18em;color:var(--accent-deep);font-weight:600;text-transform:uppercase}
+
+  /* prompt list */
+  .prompts{margin-top:24px;border-top:1px solid var(--rule)}
+  .prompt{display:grid;grid-template-columns:64px 1fr 160px;gap:24px;padding:18px 0;border-bottom:1px solid var(--rule-hair);align-items:baseline}
+  .prompt .n{font-family:var(--mono);font-size:13px;color:var(--accent);letter-spacing:.06em;font-weight:500}
+  .prompt h4{font-family:var(--serif);font-weight:600;font-size:17px;margin:0 0 3px;color:var(--ink)}
+  .prompt p{margin:0;font-size:14px;color:var(--ink-soft);line-height:1.5}
+  .prompt .files{margin:6px 0 0;padding:0;border:0;display:block;font-family:var(--mono);font-size:11px;color:var(--muted-2)}
+  .prompt .tag{font-family:var(--sans);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-align:right;font-weight:600;line-height:1.5}
+  .prompt .tag b{color:var(--ink);display:block;font-weight:600}
+  .prompt.l b{color:var(--muted)}
+  .prompt.m b{color:var(--accent-deep)}
+  .prompt.f b{color:var(--ink)}
+
+  /* arch diagram */
+  .arch{grid-column:1 / -1;margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .arch-card{border:1px solid var(--rule-hair);padding:22px;background:var(--paper)}
+  .arch-card .h{font-family:var(--sans);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;font-weight:600}
+  .arch-card.before .h{color:#8a4646}
+  .arch-card.after .h{color:var(--sig-green)}
+  .arch-card pre{font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--ink);background:transparent;padding:0;margin:0;white-space:pre-wrap;border:0}
+  .arch-card pre b{color:var(--accent-deep)}
+  .arch-card pre .strike{text-decoration:line-through;color:var(--muted-2)}
+
+  /* token preview */
+  .tokens{margin-top:24px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .tok{border:1px solid var(--rule-hair);padding:14px}
+  .tok .sw{height:56px;margin-bottom:10px}
+  .tok .name{font-family:var(--mono);font-size:11px;color:var(--ink)}
+  .tok .val{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:2px}
+  .tok .role{font-family:var(--sans);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-top:6px;font-weight:600}
+
+  /* questions */
+  .qs{counter-reset:q;margin-top:8px;list-style:none;padding:0}
+  .qs li{counter-increment:q;display:grid;grid-template-columns:48px 1fr 220px;gap:18px;padding:16px 0;border-top:1px solid var(--rule-hair);align-items:baseline}
+  .qs li:first-child{border-top:1px solid var(--rule)}
+  .qs li::before{content:counter(q,decimal-leading-zero);font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.06em}
+  .qs h5{font-family:var(--serif);font-weight:600;font-size:16px;color:var(--ink);margin:0 0 3px}
+  .qs p{margin:0;font-size:14px;color:var(--ink-soft);line-height:1.5}
+  .qs .def{font-family:var(--sans);font-size:11px;letter-spacing:.06em;color:var(--muted);text-align:right;line-height:1.5}
+  .qs .def b{color:var(--ink);display:block;font-size:10px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:3px;font-weight:600}
+
+  /* dl */
+  .stack{margin-top:24px}
+  .stack dl{display:grid;grid-template-columns:160px 1fr;gap:14px 24px;margin:0;border-top:1px solid var(--rule);padding-top:18px}
+  .stack dt{font-family:var(--mono);font-size:12px;color:var(--ink)}
+  .stack dd{margin:0;font-size:14px;color:var(--ink-soft);line-height:1.5}
+
+  /* foot */
+  footer{margin-top:120px;padding-top:32px;border-top:1px solid var(--rule);font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px}
+  footer b{color:var(--ink);font-weight:600}
+
+  /* pull */
+  .pull{margin:32px 0;padding:22px 28px;background:var(--paper-deep);border-left:2px solid var(--accent);font-family:var(--serif);font-size:17px;line-height:1.45;color:var(--ink);max-width:38em}
+  .pull .src{display:block;margin-top:10px;font-family:var(--sans);font-size:10px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;font-weight:600}
+
+  /* command */
+  code.cmd{font-family:var(--mono);font-size:13px;background:var(--paper-deep);padding:3px 8px;border:1px solid var(--rule-hair);color:var(--ink)}
+
+  @media (max-width: 980px) {
+    .wrap{padding:0 24px 80px}
+    .sh,.body{grid-template-columns:1fr;gap:18px}
+    .file,.track,.prompt,.qs li{grid-template-columns:1fr;gap:8px}
+    .file .link{justify-self:start}
+    .arch{grid-template-columns:1fr}
+    .tokens{grid-template-columns:repeat(2,1fr)}
+    h1.display{font-size:44px}
+  }
+</style>
+</head>
+<body>
+
+<!-- masthead -->
+<div class="mast">
+  <div class="mast-inner">
+    <div class="pub">Atlas&nbsp;·&nbsp;v7 design direction</div>
+    <div class="meta">
+      <span><b>Implementation handoff</b></span>
+      <span>PM&thinsp;+&thinsp;Claude Code&thinsp;+&thinsp;Codex</span>
+      <span>May 24, 2026</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="kicker"><span class="num">v7</span> Design direction &nbsp;·&nbsp; Home page hierarchy</div>
+  <h1 class="display">Implementation <em>handoff.</em></h1>
+  <p class="dek">
+    A drop-in pack for the home page redesign — diagnosis, decision options for
+    PM, exact tokens, sequential prompts for the coding agent, copy bank, and a
+    QA checklist. Slots into the repo as <code class="cmd">docs/v7-design-direction/</code>.
+  </p>
+  <div class="byline">
+    <span><b>Scope</b>&nbsp; Home page only</span>
+    <span><b>Stack</b>&nbsp; Next 16 · React 19 · Tailwind v4 · TS</span>
+    <span><b>Honors</b>&nbsp; AGENTS.md, no new deps, smallest diff</span>
+    <span><b>Touches</b>&nbsp; 0 data files</span>
+  </div>
+
+  <!-- ──────────────────────────────────────────────────
+       § 01  THE PACK
+       ────────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="sh">
+      <div class="sn">01 &nbsp; The pack</div>
+      <h2 class="st">Eight files. Two read paths.</h2>
+    </div>
+    <div class="body">
+      <div class="gutter">How to use</div>
+      <div class="prose">
+        <p>
+          The PM reads files <strong>00 → 01 → 02</strong> and answers ten open
+          questions at the foot of <strong>01</strong>. The coder reads
+          <strong>02 → 03 → 05</strong> for reference, then runs the prompts in
+          <strong>04</strong> one at a time. Reviewer signs off against
+          <strong>06</strong> after each prompt.
+        </p>
+        <p>
+          Files are plain markdown. Drop the folder into the repo's
+          <code class="cmd">docs/</code> directory and open them in VS Code
+          panels alongside the prompts you're running.
+        </p>
+      </div>
+    </div>
+
+    <div class="files">
+
+      <div class="file">
+        <div class="n">00</div>
+        <div>
+          <h3>Critique summary</h3>
+          <span class="path">docs/v7-design-direction/00_critique_summary.md</span>
+          <p>Diagnosis. Six points on hierarchy, what to remove, what not to change, seven other observations. The compact version of the standalone Design Critique.</p>
+        </div>
+        <div class="who"><b>For</b> PM, design lead, you<small>5 min read</small></div>
+        <a class="link" href="docs/v7-design-direction/00_critique_summary.md">Open →</a>
+      </div>
+
+      <div class="file">
+        <div class="n">01</div>
+        <div>
+          <h3>PM decision brief</h3>
+          <span class="path">docs/v7-design-direction/01_pm_decision_brief.md</span>
+          <p>Three implementation tracks (Light / Medium / Full) with trade-offs, time, risk. Four design trade-offs to choose (serif flavor, accent, exhibit format, Core Question disposition). Ten open questions for the PM to answer before handing to the coder.</p>
+        </div>
+        <div class="who"><b>For</b> PM AI<small>10 min read</small></div>
+        <a class="link" href="docs/v7-design-direction/01_pm_decision_brief.md">Open →</a>
+      </div>
+
+      <div class="file">
+        <div class="n">02</div>
+        <div>
+          <h3>Information architecture</h3>
+          <span class="path">docs/v7-design-direction/02_information_architecture.md</span>
+          <p>The new home page section list. Each row maps to a block in <code class="cmd">app/page.tsx</code>. What changes, what is preserved, where existing data lives.</p>
+        </div>
+        <div class="who"><b>For</b> PM + coder<small>5 min read</small></div>
+        <a class="link" href="docs/v7-design-direction/02_information_architecture.md">Open →</a>
+      </div>
+
+      <div class="file">
+        <div class="n">03</div>
+        <div>
+          <h3>Design tokens spec</h3>
+          <span class="path">docs/v7-design-direction/03_design_tokens_spec.md</span>
+          <p>Full replacement <code class="cmd">app/globals.css</code> with the Tailwind v4 <code class="cmd">@theme inline</code> block. Font binding via <code class="cmd">next/font/google</code> in <code class="cmd">app/layout.tsx</code>. Type ramp, spacing, color usage rules.</p>
+        </div>
+        <div class="who"><b>For</b> coder<small>10 min read</small></div>
+        <a class="link" href="docs/v7-design-direction/03_design_tokens_spec.md">Open →</a>
+      </div>
+
+      <div class="file">
+        <div class="n">04</div>
+        <div>
+          <h3>Coding agent prompts</h3>
+          <span class="path">docs/v7-design-direction/04_coding_agent_prompts.md</span>
+          <p>Seven sequential prompts in the v6-pack style. Pre-flight prompt + six implementation prompts. Each is self-contained, smallest coherent diff, with after-changes reporting. Run one at a time in Claude Code or Codex.</p>
+        </div>
+        <div class="who"><b>For</b> Claude Code + Codex<small>per-prompt</small></div>
+        <a class="link" href="docs/v7-design-direction/04_coding_agent_prompts.md">Open →</a>
+      </div>
+
+      <div class="file">
+        <div class="n">05</div>
+        <div>
+          <h3>Copy bank</h3>
+          <span class="path">docs/v7-design-direction/05_copy_bank.md</span>
+          <p>Every string the home page renders, source-traced. No new claims. The coder pastes from this; the PM audits by diff.</p>
+        </div>
+        <div class="who"><b>For</b> coder + PM<small>reference</small></div>
+        <a class="link" href="docs/v7-design-direction/05_copy_bank.md">Open →</a>
+      </div>
+
+      <div class="file">
+        <div class="n">06</div>
+        <div>
+          <h3>QA checklist</h3>
+          <span class="path">docs/v7-design-direction/06_qa_checklist.md</span>
+          <p>Acceptance criteria for each prompt. Universal, per-prompt, visual regression, accessibility, data-integrity, sub-page no-regression. Definition of done.</p>
+        </div>
+        <div class="who"><b>For</b> reviewer<small>reference</small></div>
+        <a class="link" href="docs/v7-design-direction/06_qa_checklist.md">Open →</a>
+      </div>
+
+      <div class="file">
+        <div class="n">+</div>
+        <div>
+          <h3>README — index &amp; orientation</h3>
+          <span class="path">docs/v7-design-direction/README.md</span>
+          <p>Pack entry point. Audience-by-file map, sequence, what changes at a glance, constraints honored.</p>
+        </div>
+        <div class="who"><b>For</b> first reader<small>3 min read</small></div>
+        <a class="link" href="docs/v7-design-direction/README.md">Open →</a>
+      </div>
+
+    </div>
+
+    <p style="font-family:var(--sans);font-size:11px;letter-spacing:.06em;color:var(--muted);margin-top:16px;line-height:1.6;">
+      Also still available: <a href="Design Critique.html" style="color:var(--ink);border-bottom:1px solid var(--rule-hair);text-decoration:none;font-weight:600;">Design Critique.html</a> — the original long-form critique &amp; mockup of redesigned first two scrolls. The pack above is the engineering-actionable distillation of that critique.
+    </p>
+  </section>
+
+  <!-- ──────────────────────────────────────────────────
+       § 02  THE THREE TRACKS
+       ────────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="sh">
+      <div class="sn">02 &nbsp; Tracks</div>
+      <h2 class="st">PM picks one. Tracks are additive.</h2>
+    </div>
+
+    <div class="body">
+      <div class="gutter">Logic</div>
+      <div class="prose">
+        <p>
+          The critique identifies six hierarchy problems. They cluster into
+          three families of change (visual register, hero recomposition,
+          argument consolidation). Each ships independently. Picking a track
+          tells the coder how many prompts to run.
+        </p>
+      </div>
+    </div>
+
+    <div class="tracks">
+
+      <div class="track">
+        <div class="id">L<small>Light</small></div>
+        <div>
+          <h4>Typography + tokens only</h4>
+          <p>
+            Move the site from default sans on white cards to editorial serif
+            on warm paper. Touches two files. Reflows every page. No layout
+            change. Lowest possible risk.
+          </p>
+        </div>
+        <div class="scope">
+          <b>Touches</b>
+          app/layout.tsx<br/>
+          app/globals.css<br/>
+          <b style="margin-top:6px;">Prompts</b>
+          01
+        </div>
+        <div class="time">~1 day<small>0 deps added</small></div>
+      </div>
+
+      <div class="track rec">
+        <div class="id">M<small>Medium</small></div>
+        <div>
+          <h4>L + hero recomposition + masthead</h4>
+          <p>
+            Single primary CTA. Beta caveat shrunk to footnote. Anchor-firms
+            exhibit replaces Core Question aside. Top masthead added. Addresses
+            four of six hierarchy problems while leaving the body alone.
+          </p>
+        </div>
+        <div class="scope">
+          <b>Touches</b>
+          + app/page.tsx (hero only)<br/>
+          + anchor-firms-exhibit.tsx<br/>
+          + atlas-masthead.tsx<br/>
+          <b style="margin-top:6px;">Prompts</b>
+          01 · 02 · 03
+        </div>
+        <div class="time">~2 days<small>0 deps added</small></div>
+      </div>
+
+      <div class="track">
+        <div class="id">F<small>Full</small></div>
+        <div>
+          <h4>M + argument consolidation</h4>
+          <p>
+            Merge the four-card Analyst Brief, the standalone stat strip and
+            the three-card Findings into one argument section with a drop-cap
+            lede, three prose findings, and the source-base band. Eyebrow
+            inflation stripped from exhibits. Strongest result.
+          </p>
+        </div>
+        <div class="scope">
+          <b>Touches</b>
+          + the-argument.tsx<br/>
+          + edits to four exhibit headers<br/>
+          + geography standfirst<br/>
+          + source-trail tokens<br/>
+          <b style="margin-top:6px;">Prompts</b>
+          01 · 02 · 03 · 04 · 05 · 06 · 07
+        </div>
+        <div class="time">~3–4 days<small>0 deps added</small></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────────────────
+       § 03  WHAT CHANGES
+       ────────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="sh">
+      <div class="sn">03 &nbsp; Diff</div>
+      <h2 class="st">What the home looks like, before and after.</h2>
+    </div>
+
+    <div class="body">
+      <div class="gutter">Sections</div>
+      <div class="prose">
+        <p>
+          The proposal preserves the city map, the lab-to-fab chain, and the
+          source-trail dark section — all already in the right editorial
+          register. The collapse is in the top half, where three blocks
+          currently restate the same three findings.
+        </p>
+      </div>
+    </div>
+
+    <div class="arch">
+      <div class="arch-card before">
+        <div class="h">v6 today</div>
+<pre><span class="strike">[ HERO ]
+  3 equal CTAs
+  Core question aside
+  Beta caveat (headline weight)</span>
+
+[ 01 Analyst brief ] <span class="strike">— 4 cards</span>
+[ Stat strip ]       <span class="strike">— 4 counts, buried</span>
+[ 02 Findings ]      <span class="strike">— 3 cards</span>
+
+[ 03 Exhibits ]
+  FirmWorkforceChart
+  DisciplineSegmentMatrix
+  ToolmakerFootprintGrid
+  ComparatorFrame
+
+[ 04 Geography ]   CitySignalMap
+[ 05 Visibility ]  LabToFabChain
+[ 06 Source trail ]</pre>
+      </div>
+      <div class="arch-card after">
+        <div class="h">v7 proposed</div>
+<pre><b>[ MASTHEAD strip ]   ← new, shared with all routes</b>
+[ HERO ]
+  <b>1 primary CTA + 2 quiet links</b>
+  <b>Lede exhibit — 4 anchor firms</b>
+  <b>Beta caveat (footnote weight)</b>
+
+<b>[ 01 The argument ]  ← merges 3 sections</b>
+  drop-cap lede paragraph
+  3 numbered findings (prose, no cards)
+  source-base band 43 / 143 / 4 / 4
+
+[ 02 Exhibits ]
+  FirmWorkforceChart
+  DisciplineSegmentMatrix
+  ToolmakerFootprintGrid
+  ComparatorFrame
+
+[ 03 Geography ]   CitySignalMap     <i>← unchanged</i>
+[ 04 Visibility ]  LabToFabChain     <i>← unchanged</i>
+[ 05 Source trail ]                  <i>← tokens only</i></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────────────────
+       § 04  PROMPTS AT A GLANCE
+       ────────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="sh">
+      <div class="sn">04 &nbsp; Prompts</div>
+      <h2 class="st">Seven prompts, in order. Stop at L or M boundary if scoped.</h2>
+    </div>
+
+    <div class="body">
+      <div class="gutter">Cadence</div>
+      <div class="prose">
+        <p>
+          After every prompt: <code class="cmd">npm run lint &amp;&amp; npm run build</code>.
+          Commit only on green. The prompts read the repo before changing
+          anything; both Claude Code and Codex understand them identically.
+        </p>
+      </div>
+    </div>
+
+    <div class="prompts">
+      <div class="prompt l">
+        <div class="n">00</div>
+        <div>
+          <h4>Pre-flight — read the repo</h4>
+          <p>Read AGENTS.md, the v7 pack, the home page + layout + globals + key data files. Report state. Change nothing.</p>
+        </div>
+        <div class="tag"><b>any track</b>~10 min</div>
+      </div>
+
+      <div class="prompt l">
+        <div class="n">01</div>
+        <div>
+          <h4>Design tokens + fonts</h4>
+          <p>Replace globals.css with the v7 @theme block. Bind Source Serif 4 + IBM Plex Sans/Mono via next/font/google in layout.tsx. Two files.</p>
+          <span class="files">app/layout.tsx · app/globals.css</span>
+        </div>
+        <div class="tag"><b>L · M · F</b>~½ day</div>
+      </div>
+
+      <div class="prompt m">
+        <div class="n">02</div>
+        <div>
+          <h4>Hero recomposition</h4>
+          <p>Single primary CTA, two demoted links, footnote-weight beta caveat, new AnchorFirmsExhibit on the right. Remove the Core Question aside.</p>
+          <span class="files">app/page.tsx (hero) · + components/atlas/anchor-firms-exhibit.tsx</span>
+        </div>
+        <div class="tag"><b>M · F</b>~½ day</div>
+      </div>
+
+      <div class="prompt m">
+        <div class="n">03</div>
+        <div>
+          <h4>AtlasMasthead</h4>
+          <p>Thin sticky strip with pub mark, five nav links, date from manifest.json. Shared with every route via app/layout.tsx.</p>
+          <span class="files">app/layout.tsx · + components/atlas/atlas-masthead.tsx</span>
+        </div>
+        <div class="tag"><b>M · F</b>~2 hrs</div>
+      </div>
+
+      <div class="prompt f">
+        <div class="n">04</div>
+        <div>
+          <h4>TheArgument</h4>
+          <p>Merge AnalystBriefRail + standalone ArticleStatStrip + inline Findings grid into one argument section. Drop-cap lede + 3 prose findings + source-base band. Old components left on disk for cheap rollback.</p>
+          <span class="files">app/page.tsx · + components/atlas/the-argument.tsx · globals.css (.drop-cap)</span>
+        </div>
+        <div class="tag"><b>F</b>~½–1 day</div>
+      </div>
+
+      <div class="prompt f">
+        <div class="n">05</div>
+        <div>
+          <h4>Strip exhibit eyebrows</h4>
+          <p>Remove per-block uppercase kickers inside the four exhibit components. Renumber sections sequentially after the prompt-4 merge.</p>
+          <span class="files">firm-workforce-chart · discipline-segment-matrix · toolmaker-footprint-grid · comparator-frame · app/page.tsx</span>
+        </div>
+        <div class="tag"><b>F</b>~2 hrs</div>
+      </div>
+
+      <div class="prompt f">
+        <div class="n">06</div>
+        <div>
+          <h4>Geography standfirst</h4>
+          <p>Surface the omitted "Shanghai and Beijing produce the most records" insight as a standfirst above CitySignalMap.</p>
+          <span class="files">app/page.tsx</span>
+        </div>
+        <div class="tag"><b>F</b>~30 min</div>
+      </div>
+
+      <div class="prompt f">
+        <div class="n">07</div>
+        <div>
+          <h4>Source-trail tokens</h4>
+          <p>Map dark-section colors to the new bg-reverse / text-paper / border-reverse-soft tokens. Strip any per-card eyebrows.</p>
+          <span class="files">app/page.tsx (final section)</span>
+        </div>
+        <div class="tag"><b>F</b>~30 min</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────────────────
+       § 05  TOKENS
+       ────────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="sh">
+      <div class="sn">05 &nbsp; Tokens</div>
+      <h2 class="st">Color &amp; type at a glance.</h2>
+    </div>
+
+    <div class="body">
+      <div class="gutter">Preview</div>
+      <div class="prose">
+        <p>
+          Full tokens with Tailwind utility names and a drop-in
+          <code class="cmd">app/globals.css</code> replacement live in
+          <strong>03_design_tokens_spec.md</strong>. The preview below is a
+          visual sanity check.
+        </p>
+      </div>
+    </div>
+
+    <div class="tokens">
+      <div class="tok"><div class="sw" style="background:#f3efe7;border:1px solid var(--rule-hair)"></div><div class="name">--paper</div><div class="val">#F3EFE7</div><div class="role">Page background</div></div>
+      <div class="tok"><div class="sw" style="background:#ece7dc"></div><div class="name">--paper-deep</div><div class="val">#ECE7DC</div><div class="role">Pull-quote surface</div></div>
+      <div class="tok"><div class="sw" style="background:#14110d"></div><div class="name">--ink</div><div class="val">#14110D</div><div class="role">Primary text</div></div>
+      <div class="tok"><div class="sw" style="background:#6b6358"></div><div class="name">--muted</div><div class="val">#6B6358</div><div class="role">Captions</div></div>
+      <div class="tok"><div class="sw" style="background:#1c1917"></div><div class="name">--rule</div><div class="val">#1C1917</div><div class="role">Section dividers</div></div>
+      <div class="tok"><div class="sw" style="background:#c8c2b6"></div><div class="name">--rule-hair</div><div class="val">#C8C2B6</div><div class="role">Row dividers</div></div>
+      <div class="tok"><div class="sw" style="background:#b07418"></div><div class="name">--accent</div><div class="val">#B07418</div><div class="role">One editorial highlight</div></div>
+      <div class="tok"><div class="sw" style="background:#5a6b3e"></div><div class="name">--sig-green</div><div class="val">#5A6B3E</div><div class="role">Source-checked badge</div></div>
+    </div>
+
+    <div class="stack">
+      <dl>
+        <dt>--font-serif</dt><dd>Source Serif 4 (Google Fonts via next/font). Display + body + headlines.</dd>
+        <dt>--font-sans</dt><dd>IBM Plex Sans. Chrome, labels, eyebrows, navigation, captions.</dd>
+        <dt>--font-mono</dt><dd>IBM Plex Mono. Source IDs, evidence row IDs, numeric annotations.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────────────────
+       § 06  OPEN QUESTIONS
+       ────────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="sh">
+      <div class="sn">06 &nbsp; For the PM</div>
+      <h2 class="st">Ten questions to answer before the coder runs.</h2>
+    </div>
+
+    <div class="body">
+      <div class="gutter">Why</div>
+      <div class="prose">
+        <p>
+          Each question has a sensible default. Confirming or overriding now
+          prevents an awkward re-roll later. Full reasoning for each lives in
+          <strong>01_pm_decision_brief.md</strong>.
+        </p>
+      </div>
+    </div>
+
+    <ol class="qs">
+      <li>
+        <div>
+          <h5>Track choice</h5>
+          <p>L, M, or F? Picks how many prompts the coder runs.</p>
+        </div>
+        <div class="def"><b>Default</b>M</div>
+      </li>
+      <li>
+        <div>
+          <h5>Typeface flavor</h5>
+          <p>Serif throughout (Economist register) or serif headlines + sans body (FT/Bloomberg register)?</p>
+        </div>
+        <div class="def"><b>Default</b>Serif throughout</div>
+      </li>
+      <li>
+        <div>
+          <h5>Accent</h5>
+          <p>Single editorial amber on §-glyphs and drop caps, or pure monochrome?</p>
+        </div>
+        <div class="def"><b>Default</b>Amber</div>
+      </li>
+      <li>
+        <div>
+          <h5>Anchor-firms exhibit format</h5>
+          <p>Bare list of four firms with one figure each, or tiny bar visualization? Bars risk implying cross-firm comparison the denominators don't support.</p>
+        </div>
+        <div class="def"><b>Default</b>Bare list</div>
+      </li>
+      <li>
+        <div>
+          <h5>What happens to the Core question pull-out</h5>
+          <p>Drop, move next to ComparatorFrame, or move to the brief head?</p>
+        </div>
+        <div class="def"><b>Default</b>Move to brief</div>
+      </li>
+      <li>
+        <div>
+          <h5>Issue number</h5>
+          <p>Use <em>Issue 04</em> or just <em>Beta · May 2026</em>? The dataset is versioned by manifest.json.</p>
+        </div>
+        <div class="def"><b>Default</b>Beta + date</div>
+      </li>
+      <li>
+        <div>
+          <h5>Masthead nav items</h5>
+          <p>Which four (or five) routes appear in the top nav on every page?</p>
+        </div>
+        <div class="def"><b>Default</b>Brief · Firms · Segments · Explorer · Methodology</div>
+      </li>
+      <li>
+        <div>
+          <h5>What to call the home</h5>
+          <p>Used in masthead and HTML &lt;title&gt; tag.</p>
+        </div>
+        <div class="def"><b>Default</b>Tooling Talent Atlas</div>
+      </li>
+      <li>
+        <div>
+          <h5>Body lede language</h5>
+          <p>Lift the first paragraph of /essay verbatim, or write a fresh summary for the home? Verbatim = single source of truth, no drift.</p>
+        </div>
+        <div class="def"><b>Default</b>Lift verbatim</div>
+      </li>
+      <li>
+        <div>
+          <h5>Scope creep</h5>
+          <p>Should this pack also rework the toolmaker footprint grid, add print.css, or apply v7 to dossier pages? Flagged as next-steps, not in scope today.</p>
+        </div>
+        <div class="def"><b>Default</b>Home only</div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ──────────────────────────────────────────────────
+       § 07  HONORED
+       ────────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="sh">
+      <div class="sn">07 &nbsp; Honored</div>
+      <h2 class="st">Constraints from AGENTS.md.</h2>
+    </div>
+
+    <div class="body">
+      <div class="gutter">Editorial</div>
+      <div class="prose">
+        <p>
+          <strong>Never invent data.</strong> Every number, name and ID rendered by v7 is read from an existing file under
+          <code class="cmd">data/editorial/</code> or <code class="cmd">lib/</code>.
+        </p>
+        <p>
+          <strong>No score, ranking, or composite index.</strong> The forbidden-string list in §6 of the copy bank guards against this.
+        </p>
+        <p>
+          <strong>Public-source signal language.</strong> "Public evidence signal," "evidence strength," denominators visible — preserved.
+        </p>
+        <p>
+          <strong>Mainland PRC only.</strong> No new geographic claims.
+        </p>
+      </div>
+    </div>
+
+    <div class="body" style="margin-top:18px;">
+      <div class="gutter">Technical</div>
+      <div class="prose">
+        <p>
+          <strong>Next.js App Router + TypeScript + Tailwind v4.</strong> v7 uses the CSS-first <code class="cmd">@theme inline</code> block already in use. No <code class="cmd">tailwind.config.ts</code> introduced.
+        </p>
+        <p>
+          <strong>No new dependencies.</strong> <code class="cmd">next/font/google</code> is bundled with Next 16.
+        </p>
+        <p>
+          <strong>Local CSV + generated JSON.</strong> No DB, no auth, no scraping. Untouched.
+        </p>
+        <p>
+          <strong>Smallest coherent diff.</strong> Each prompt in 04 touches between 1 and 5 files; total v7 surface area is &lt; 12 files.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="pull" style="margin-top:80px;margin-left:128px;">
+    The product is doing the difficult half right: it has refused to invent a
+    league table and built a record of denominators instead. The home page
+    just hasn't caught up to the seriousness of the work behind it. v7 is the
+    smallest set of changes that closes that gap.
+    <span class="src">Summary</span>
+  </div>
+
+  <footer>
+    <span><b>Atlas · v7 design direction</b></span>
+    <span>Drop-in pack&nbsp;·&nbsp;docs/v7-design-direction/</span>
+    <span>End of handoff</span>
+  </footer>
+
+</div>
+</body>
+</html>
