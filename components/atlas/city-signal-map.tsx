@@ -122,8 +122,8 @@ export function CitySignalMap() {
           </h3>
         </div>
         <p className="max-w-sm text-xs leading-6 text-stone-400">
-          Node size scales with the count of non-taxonomy evidence rows tied
-          to a city. This is visibility coverage, not a talent ranking.
+          Node size reflects public-record count for each city, not workforce
+          size. This is visibility coverage, not a geographic ranking.
         </p>
       </header>
 

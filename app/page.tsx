@@ -85,13 +85,13 @@ export default function HomePage() {
       <section className="mx-auto w-full max-w-6xl px-6 py-12 sm:px-10 sm:py-16 lg:px-12">
         <SectionEyebrow number="03" label="Exhibits" />
         <h2 className="mt-3 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl">
-          What the public record shows.
+          What the workforce test requires
         </h2>
 
         <div className="mt-8 flex flex-col gap-10">
+          <DisciplineSegmentMatrix />
           <FirmWorkforceChart />
           <ComparatorFrame />
-          <DisciplineSegmentMatrix />
           <ToolmakerFootprintGrid />
         </div>
       </section>
@@ -99,8 +99,13 @@ export default function HomePage() {
       <section className="mx-auto w-full max-w-6xl px-6 pb-12 sm:px-10 sm:pb-16 lg:px-12">
         <SectionEyebrow number="04" label="Geography" />
         <h2 className="mt-3 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl">
-          Where the records concentrate.
+          Where public records cluster.
         </h2>
+        <p className="mt-4 max-w-3xl text-base leading-7 text-ink-soft">
+          Shanghai and Beijing lead the current public record set because
+          listed firms, industrial parks, universities, and policy documents
+          are easier to observe there.
+        </p>
         <div className="mt-8">
           <CitySignalMap />
         </div>
@@ -109,7 +114,7 @@ export default function HomePage() {
       <section className="mx-auto w-full max-w-6xl px-6 pb-12 sm:px-10 sm:pb-16 lg:px-12">
         <SectionEyebrow number="05" label="Visibility" />
         <h2 className="mt-3 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl">
-          Where the public record goes quiet.
+          Where public records go quiet.
         </h2>
         <div className="mt-8">
           <LabToFabChain />

@@ -7,9 +7,6 @@ export function ComparatorFrame() {
       className="border border-stone-300 bg-white"
     >
       <header className="flex flex-col gap-3 border-b border-stone-200 px-6 py-6 sm:px-8">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500">
-          Comparator frame
-        </p>
         <h3
           id="comparator-frame-heading"
           className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"

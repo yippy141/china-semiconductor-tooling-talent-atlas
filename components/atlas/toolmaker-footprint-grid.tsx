@@ -50,31 +50,33 @@ const statusMeta: Record<
   { label: string; className: string; description: string }
 > = {
   core: {
-    label: "Core source",
+    label: "Source checked",
     className: "bg-stone-900 text-stone-50",
-    description: "Public records anchor this firm in this segment.",
+    description:
+      "A source-checked public record places this firm in this segment.",
   },
   exposure: {
-    label: "Some exposure",
+    label: "Public product record",
     className: "bg-stone-200 text-stone-900",
     description:
-      "Public records mention this segment as adjacent or partial coverage.",
+      "A public product page or filing lists this segment for the firm.",
   },
   sidebar: {
-    label: "Sidebar",
+    label: "Watchlist",
     className: "bg-stone-100 text-stone-700 border border-stone-300",
     description:
-      "Treated as a context sidebar rather than a primary capability claim.",
+      "Carried as a context sidebar; not a primary segment for this firm.",
   },
   check: {
     label: "Needs source check",
     className: "bg-amber-50 text-amber-900 border border-amber-300",
     description:
-      "Light dossier; the full filing should be reviewed before stronger claims.",
+      "Light dossier; full filing not yet reviewed in this ledger.",
   },
   none: {
-    label: "No current record",
-    className: "bg-stone-50 text-stone-400 border border-dashed border-stone-300",
+    label: "No current public row",
+    className:
+      "bg-stone-50 text-stone-400 border border-dashed border-stone-300",
     description: "No source in the current ledger maps this firm here.",
   },
 };
@@ -137,9 +139,6 @@ export function ToolmakerFootprintGrid() {
       className="border border-stone-300 bg-white"
     >
       <header className="flex flex-col gap-3 border-b border-stone-200 px-6 py-6 sm:px-8">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500">
-          Toolmaker footprint grid
-        </p>
         <h3
           id="toolmaker-footprint-heading"
           className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
@@ -148,8 +147,7 @@ export function ToolmakerFootprintGrid() {
         </h3>
         <p className="max-w-3xl text-sm leading-7 text-stone-600">
           Each cell describes how the public record places a firm in a
-          segment. Cell labels carry the strength of the source rather than a
-          checkmark.
+          segment. Cell labels report source coverage, not capability.
         </p>
       </header>
 
