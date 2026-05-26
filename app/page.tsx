@@ -1,25 +1,13 @@
 import Link from "next/link";
 import { articleBrief } from "@/data/editorial/article-brief";
-import { ArticleStatStrip } from "@/components/atlas/article-stat-strip";
-import { AnalystBriefRail } from "@/components/atlas/analyst-brief-rail";
+import { AnchorFirmsExhibit } from "@/components/atlas/anchor-firms-exhibit";
 import { CitySignalMap } from "@/components/atlas/city-signal-map";
 import { ComparatorFrame } from "@/components/atlas/comparator-frame";
 import { DisciplineSegmentMatrix } from "@/components/atlas/discipline-segment-matrix";
 import { FirmWorkforceChart } from "@/components/atlas/firm-workforce-chart";
 import { LabToFabChain } from "@/components/atlas/lab-to-fab-chain";
+import { TheArgument } from "@/components/atlas/the-argument";
 import { ToolmakerFootprintGrid } from "@/components/atlas/toolmaker-footprint-grid";
-
-const heroPrimaryLinks = [
-  { label: "Read the brief", href: "/essay" },
-  { label: "Open firm dossiers", href: "/firms" },
-  { label: "Inspect source rows", href: "/explorer" },
-];
-
-const findingNextLinks = [
-  { label: "Open segment brief", href: "/segments/deposition" },
-  { label: "Open firm dossiers", href: "/firms" },
-  { label: "View source rows", href: "/explorer?entity_id=ent_acm_sh" },
-];
 
 function SectionEyebrow({
   number,
@@ -39,109 +27,60 @@ function SectionEyebrow({
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-stone-100 text-stone-950">
-      <section className="border-b border-stone-300 bg-stone-50">
-        <div className="mx-auto grid w-full max-w-6xl gap-10 px-6 py-10 sm:px-10 sm:py-14 lg:grid-cols-[1fr_19rem] lg:px-12">
+      <section className="border-b border-rule-hair bg-paper">
+        <div className="mx-auto grid w-full max-w-[1240px] gap-10 px-6 py-12 sm:px-10 sm:py-16 lg:grid-cols-[1fr_19rem] lg:px-14">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-stone-500">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted">
               China Semiconductor Tooling Talent Atlas
             </p>
-            <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
-              Can China Staff Its Chip-Tooling Push?
+            <h1 className="mt-4 max-w-3xl font-serif text-4xl font-semibold leading-[1.08] tracking-tight text-ink sm:text-[3.25rem]">
+              Can China staff its chip-tooling push?
             </h1>
-            <p className="mt-5 max-w-3xl text-lg leading-8 text-stone-700">
+            <p className="mt-5 max-w-2xl text-lg leading-8 text-ink-soft">
               Chinese toolmakers are adding products and R&amp;D staff. The
-              harder test is whether they can build field engineers, service
-              teams, calibration routines, and customer-support systems that
-              make equipment work in fabs.
-            </p>
-            <p className="mt-3 max-w-3xl text-xs leading-6 text-stone-500">
-              Beta public-source monitor. Counts show source coverage, not
-              workforce size.
+              harder test is whether they can build the field engineers,
+              service teams, calibration routines, and customer-support
+              systems that make equipment work in fabs.
             </p>
 
-            <nav
-              aria-label="Primary article links"
-              className="mt-6 flex flex-wrap gap-3"
-            >
-              {heroPrimaryLinks.map((link, index) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`inline-flex h-11 items-center justify-center px-5 text-sm font-semibold transition-colors ${
-                    index === 0
-                      ? "bg-stone-950 text-stone-50 hover:bg-stone-800"
-                      : "border border-stone-300 bg-white text-stone-950 hover:border-stone-950"
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
+            <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
+              <Link
+                href="/essay"
+                className="inline-flex h-11 items-center justify-center bg-ink px-5 text-sm font-semibold text-paper transition-colors hover:bg-ink-soft"
+              >
+                Read the brief -&gt;
+              </Link>
+              <Link
+                href="/firms"
+                className="text-sm font-medium text-ink underline-offset-4 hover:underline"
+              >
+                firm dossiers -&gt;
+              </Link>
+              <Link
+                href="/explorer"
+                className="text-sm font-medium text-ink underline-offset-4 hover:underline"
+              >
+                inspect source rows -&gt;
+              </Link>
+            </div>
+
+            <p className="mt-6 text-xs leading-6 text-muted">
+              Beta public-source monitor · counts reflect source coverage,
+              not workforce size ·{" "}
+              <Link
+                href="/methodology"
+                className="underline underline-offset-2 hover:text-ink"
+              >
+                methodology
+              </Link>
+            </p>
           </div>
 
-          <aside className="border-l-2 border-stone-900 pl-6 lg:self-end">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500">
-              Core question
-            </p>
-            <p className="mt-3 text-base font-semibold leading-7 tracking-tight text-stone-950">
-              Are Chinese semiconductor-equipment firms building the workforce
-              and support organizations needed to make domestic tools work in
-              customer fabs?
-            </p>
-          </aside>
+          <AnchorFirmsExhibit />
         </div>
       </section>
 
-      <section
-        aria-labelledby="home-brief"
-        className="mx-auto w-full max-w-6xl px-6 pt-8 sm:px-10 lg:px-12"
-      >
-        <SectionEyebrow number="01" label="Analyst brief" />
-        <h2 id="home-brief" className="sr-only">
-          Analyst brief
-        </h2>
-        <div className="mt-4">
-          <AnalystBriefRail />
-        </div>
-      </section>
-
-      <section className="mx-auto w-full max-w-6xl px-6 pt-12 sm:px-10 lg:px-12">
-        <ArticleStatStrip />
-      </section>
-
-      <section className="mt-12 border-y border-stone-300 bg-white">
-        <div className="mx-auto w-full max-w-6xl px-6 py-12 sm:px-10 sm:py-16 lg:px-12">
-          <SectionEyebrow number="02" label="Findings" />
-          <h2 className="mt-3 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl">
-            The public record shows scale before customer-site depth.
-          </h2>
-
-          <div className="mt-8 grid grid-cols-1 gap-px border border-stone-300 bg-stone-300 lg:grid-cols-3">
-            {articleBrief.findings.map((finding, index) => (
-              <article key={finding.title} className="bg-white p-6 sm:p-7">
-                <p className="font-mono text-[11px] font-semibold text-stone-500">
-                  0{index + 1}
-                </p>
-                <h3 className="mt-3 text-xl font-semibold leading-snug tracking-tight text-stone-950">
-                  {finding.title}
-                </h3>
-                <p className="mt-4 text-sm leading-7 text-stone-700">
-                  {finding.body}
-                </p>
-                <p className="mt-5 border-t border-dashed border-stone-300 pt-4 text-xs leading-6 text-stone-600">
-                  {finding.evidenceRead}
-                </p>
-                <Link
-                  href={findingNextLinks[index]?.href ?? "/explorer"}
-                  className="mt-5 inline-flex text-sm font-semibold text-stone-900 underline-offset-4 hover:underline"
-                >
-                  {findingNextLinks[index]?.label ?? "View source rows"} -&gt;
-                </Link>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+      <TheArgument />
 
       <section className="mx-auto w-full max-w-6xl px-6 py-12 sm:px-10 sm:py-16 lg:px-12">
         <SectionEyebrow number="03" label="Exhibits" />
@@ -151,9 +90,9 @@ export default function HomePage() {
 
         <div className="mt-8 flex flex-col gap-10">
           <FirmWorkforceChart />
+          <ComparatorFrame />
           <DisciplineSegmentMatrix />
           <ToolmakerFootprintGrid />
-          <ComparatorFrame />
         </div>
       </section>
 
