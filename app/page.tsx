@@ -4,6 +4,7 @@ import { CitySignalMap } from "@/components/atlas/city-signal-map";
 import { ComparatorFrame } from "@/components/atlas/comparator-frame";
 import { DisciplineSegmentMatrix } from "@/components/atlas/discipline-segment-matrix";
 import { FirmWorkforceChart } from "@/components/atlas/firm-workforce-chart";
+import { GlobalTalentContext } from "@/components/atlas/global-talent-context";
 import { LabToFabChain } from "@/components/atlas/lab-to-fab-chain";
 import { TheArgument } from "@/components/atlas/the-argument";
 import { ToolmakerFootprintGrid } from "@/components/atlas/toolmaker-footprint-grid";
@@ -139,6 +140,7 @@ export default function HomePage() {
             </span>
           </Link>
           <FirmWorkforceChart />
+          <GlobalTalentContext />
           <ComparatorFrame />
           <ToolmakerFootprintGrid />
         </div>
