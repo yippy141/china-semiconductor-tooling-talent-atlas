@@ -41,6 +41,12 @@ const segmentCountsByCity = (() => {
   for (const observation of observationsData) {
     if (!observation.city) continue;
     if (observation.evidence_type === "manual_inference") continue;
+    if (
+      observation.entity_type === "source" ||
+      observation.entity_type === "proxy_source"
+    ) {
+      continue;
+    }
     if (!observation.segment) continue;
 
     const segments =
@@ -122,8 +128,8 @@ export function CitySignalMap() {
           </h3>
         </div>
         <p className="max-w-sm text-xs leading-6 text-stone-400">
-          The beta dataset has public records in these cities. Node size does
-          not show talent density, workforce size, or city capability.
+          The map shows where this beta dataset has public records. It does not
+          show talent density, workforce size, or city capability.
         </p>
       </header>
 
@@ -250,7 +256,9 @@ export function CitySignalMap() {
                 className="inline-block rounded-full bg-stone-100/40"
                 style={{ width: 20, height: 20 }}
               />
-              <span className="ml-1">Node size = public records per city</span>
+              <span className="ml-1">
+                Node size = source-backed records in this dataset
+              </span>
             </span>
             <span>Province outline for orientation. City placement is approximate.</span>
           </div>
@@ -285,7 +293,7 @@ export function CitySignalMap() {
                 </div>
                 <div>
                   <dt className="text-[10px] uppercase tracking-[0.2em] text-stone-500">
-                    Distinct sources
+                    Source documents
                   </dt>
                   <dd className="mt-1 text-2xl font-semibold text-stone-50">
                     {activeNode.sourceCount}
@@ -334,6 +342,12 @@ export function CitySignalMap() {
             Visibility reflects what public records currently disclose. It is
             not a talent ranking.
           </p>
+          <Link
+            href="/supply"
+            className="text-sm font-semibold text-amber-200 hover:text-amber-100"
+          >
+            Want the talent geography? Start with the supply pipeline -&gt;
+          </Link>
         </aside>
       </div>
     </section>

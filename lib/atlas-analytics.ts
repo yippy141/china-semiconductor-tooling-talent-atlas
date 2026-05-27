@@ -52,6 +52,14 @@ export const nonTaxonomyEvidenceRows = observationsData.filter(
   (observation) => observation.evidence_type !== "manual_inference",
 );
 
+function isSubstantiveObservation(observation: Observation) {
+  return (
+    observation.evidence_type !== "manual_inference" &&
+    observation.entity_type !== "source" &&
+    observation.entity_type !== "proxy_source"
+  );
+}
+
 function getEvidenceGroup(evidenceType: string): EvidenceGroup {
   return evidenceTypeGroups[evidenceType] ?? "analytical_proxy";
 }
@@ -128,6 +136,7 @@ export const topCitiesByEvidence: CityEvidenceRow[] = (() => {
 
   for (const observation of observationsData) {
     if (!observation.city) continue;
+    if (!isSubstantiveObservation(observation)) continue;
 
     const key = `${observation.city}|${observation.province}`;
     const existingRows = groups.get(key) ?? [];
