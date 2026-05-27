@@ -112,18 +112,18 @@ export function CitySignalMap() {
       <header className="flex flex-col gap-3 border-b border-stone-800 px-6 py-5 sm:flex-row sm:items-end sm:justify-between sm:px-8">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-200/80">
-            City signal map · province outline
+            City source coverage · province outline
           </p>
           <h3
             id={headingId}
             className="mt-2 text-xl font-semibold tracking-tight text-stone-50 sm:text-2xl"
           >
-            Where evidence concentrates across mainland China
+            Source coverage by city
           </h3>
         </div>
         <p className="max-w-sm text-xs leading-6 text-stone-400">
-          Node size reflects public-record count for each city, not workforce
-          size. This is visibility coverage, not a geographic ranking.
+          The beta dataset has public records in these cities. Node size does
+          not show talent density, workforce size, or city capability.
         </p>
       </header>
 
@@ -207,7 +207,7 @@ export function CitySignalMap() {
                   }
                   className="group absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none"
                   style={{ left: `${node.x}%`, top: `${node.y}%` }}
-                  aria-label={`${node.city}, ${node.province}: ${node.count} evidence rows. Open city in evidence explorer.`}
+                  aria-label={`${node.city}, ${node.province}: ${node.count} public records. Open city in evidence explorer.`}
                 >
                   <span
                     aria-hidden
@@ -277,7 +277,7 @@ export function CitySignalMap() {
               <dl className="grid grid-cols-2 gap-4 border-y border-stone-800 py-4">
                 <div>
                   <dt className="text-[10px] uppercase tracking-[0.2em] text-stone-500">
-                    Evidence rows
+                    Public records
                   </dt>
                   <dd className="mt-1 text-2xl font-semibold text-stone-50">
                     {activeNode.count}
@@ -305,14 +305,14 @@ export function CitySignalMap() {
                       >
                         <span>{segment.label}</span>
                         <span className="text-xs text-stone-500">
-                          {segment.count} rows
+                          {segment.count} records
                         </span>
                       </li>
                     ))}
                   </ul>
                 ) : (
                   <p className="mt-3 text-sm text-stone-500">
-                    No non-taxonomy segment rows recorded for this city yet.
+                    No non-taxonomy segment records found for this city yet.
                   </p>
                 )}
               </div>
@@ -321,12 +321,12 @@ export function CitySignalMap() {
                 prefetch={false}
                 className="inline-flex w-fit items-center text-sm font-semibold text-amber-200 hover:text-amber-100"
               >
-                View source rows in explorer &rarr;
+                View source records in explorer &rarr;
               </Link>
             </>
           ) : (
             <p className="text-sm text-stone-400">
-              Hover or focus a city node to inspect its evidence.
+              Hover or focus a city node to inspect its public records.
             </p>
           )}
 

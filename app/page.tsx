@@ -25,9 +25,9 @@ const sourceTrailLinks = [
     description: "Etch, deposition, metrology, and the lithography sidebar.",
   },
   {
-    label: "Inspect source rows",
+    label: "Inspect source records",
     href: "/explorer",
-    description: "Filter evidence rows by city, firm, segment, or source.",
+    description: "Filter source records by city, firm, segment, or source.",
   },
   {
     label: "Read the methodology",
@@ -65,9 +65,9 @@ export default function HomePage() {
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-ink-soft">
               Chinese toolmakers are adding products and R&amp;D staff. The
-              harder test is whether they can build the field engineers,
-              service teams, calibration routines, and customer-support
-              systems that make equipment work in fabs.
+              harder support-capacity question is whether they can build the
+              field engineers, service teams, calibration routines, and
+              customer-support systems that make equipment work in fabs.
             </p>
 
             <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
@@ -87,7 +87,7 @@ export default function HomePage() {
                 href="/explorer"
                 className="text-sm font-medium text-ink underline-offset-4 hover:underline"
               >
-                inspect source rows -&gt;
+                inspect source records -&gt;
               </Link>
             </div>
 
@@ -114,7 +114,7 @@ export default function HomePage() {
       <section className="mx-auto w-full max-w-6xl px-6 py-12 sm:px-10 sm:py-16 lg:px-12">
         <SectionEyebrow number="03" label="Exhibits" />
         <h2 className="mt-3 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl">
-          What the workforce test requires
+          What the workforce question requires
         </h2>
 
         <div className="mt-8 flex flex-col gap-10">
@@ -128,12 +128,13 @@ export default function HomePage() {
       <section className="mx-auto w-full max-w-6xl px-6 pb-12 sm:px-10 sm:pb-16 lg:px-12">
         <SectionEyebrow number="04" label="Geography" />
         <h2 className="mt-3 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl">
-          Where public records cluster.
+          Source coverage by city
         </h2>
         <p className="mt-4 max-w-3xl text-base leading-7 text-ink-soft">
-          Shanghai and Beijing lead the current public record set because
-          listed firms, industrial parks, universities, and policy documents
-          are easier to observe there.
+          This map shows where the beta dataset has public records. It does
+          not show talent density, workforce size, or city capability. Large
+          nodes usually mean filings, park documents, shortage notices, or
+          official sources are easier to observe there.
         </p>
         <div className="mt-8">
           <CitySignalMap />
@@ -143,7 +144,7 @@ export default function HomePage() {
       <section className="mx-auto w-full max-w-6xl px-6 pb-12 sm:px-10 sm:pb-16 lg:px-12">
         <SectionEyebrow number="05" label="Visibility" />
         <h2 className="mt-3 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl">
-          Where public records go quiet.
+          Where filings stop short
         </h2>
         <div className="mt-8">
           <LabToFabChain />
@@ -161,7 +162,7 @@ export default function HomePage() {
           </h2>
           <p className="mt-4 max-w-3xl text-base leading-7 text-paper/80">
             Start with the brief, then move into firm dossiers, segment pages,
-            source rows, and methodology as needed.
+            source records, and methodology as needed.
           </p>
 
           <nav

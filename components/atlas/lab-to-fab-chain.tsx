@@ -14,7 +14,7 @@ export function LabToFabChain() {
           id="lab-to-fab-chain-heading"
           className="mt-3 text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
         >
-          The staffing test runs from lab tool to fab routine.
+          The hard part starts after the product claim
         </h2>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-stone-700">
           Visibility falls off step by step. Product breadth and R&D headcount

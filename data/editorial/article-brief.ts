@@ -42,13 +42,13 @@ export const articleBrief = {
   hero: {
     title: "Can China Staff Its Chip-Tooling Push?",
     deck:
-      "Public filings and company records show Chinese toolmakers adding R&D scale and product breadth. The harder test is whether they are building field engineers, service teams, calibration routines, and customer-support capacity.",
+      "Public filings and company records show Chinese toolmakers adding R&D scale and product breadth. The harder support-capacity question is whether they are building field engineers, service teams, calibration routines, and customer-support capacity.",
     intro:
       "China's semiconductor-equipment push is usually tracked through product announcements, export controls, and market share. Those indicators matter, but they do not show whether a firm can install a tool, tune it at a customer site, keep chambers matched, recover after maintenance, and support repeat deployment.",
   },
   heroClaim: {
     rendered:
-      "Chinese toolmakers are adding products and R&D staff. The harder test is whether they can build field engineers, service teams, calibration routines, and customer-support systems that make equipment work in fabs.",
+      "Chinese toolmakers are adding products and R&D staff. The harder support-capacity question is whether they can build field engineers, service teams, calibration routines, and customer-support systems that make equipment work in fabs.",
     beta:
       "Beta public-source monitor. Counts show source coverage, not workforce size.",
     verificationStatus: "source_checked",
@@ -64,7 +64,7 @@ export const articleBrief = {
   primaryLinks: [
     { label: "Open firm index", href: "/firms" },
     { label: "Read methodology", href: "/methodology" },
-    { label: "Explore rows", href: "/explorer" },
+    { label: "Explore source records", href: "/explorer" },
   ] satisfies ArticleLink[],
   findings: [
     {
@@ -191,7 +191,7 @@ export const articleBrief = {
     {
       label: "Explorer",
       href: "/explorer",
-      description: "Filter evidence rows by segment, city, and source type.",
+      description: "Filter source records by segment, city, and source type.",
     },
     {
       label: "Sources",
