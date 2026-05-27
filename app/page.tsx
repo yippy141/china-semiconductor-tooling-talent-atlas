@@ -93,6 +93,11 @@ export default function HomePage() {
               </Link>
             </div>
 
+            <p className="mt-4 max-w-2xl text-xs leading-6 text-muted">
+              A longer essay version will publish separately. This site is the
+              interactive source companion.
+            </p>
+
             <p className="mt-6 text-xs leading-6 text-muted">
               Beta public-source monitor · counts reflect source coverage,
               not workforce size ·{" "}

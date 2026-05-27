@@ -1,72 +1,89 @@
 # China Semiconductor Tooling Talent Atlas
 
-Beta public-source monitor.
+Beta interactive source companion for an essay on whether Chinese semiconductor-equipment firms are building the people and support organizations needed to move from product claims to working fab tools.
 
-## Product promise
+This is an editorial evidence product, not a SaaS app. It uses local CSV files, generated JSON, and Next.js App Router pages to organize public records, caveats, and interpretation. Counts describe public-record coverage, not workforce size, talent density, or technical capability.
 
-A public-source monitor for whether Chinese semiconductor-equipment firms are building the R&D, service, field-application, calibration, and training capacity needed to turn product claims into working fab tools. The site reads as an editorial brief, not a dashboard: a homepage that frames the question, firm dossiers, segment briefs, an evidence-row explorer, a methodology page, and a source ledger. Counts describe public-record coverage, not workforce size or technical capability.
+## Current Scope
 
-## What it measures
+The atlas focuses on mainland PRC semiconductor tooling talent signals:
 
-- Public-record coverage from filings, company pages, policy documents, industrial-park records, shortage lists, and analytical proxies.
-- Firm-level workforce categories where filings disclose them: total employees, R&D personnel, technical personnel, degree mix, after-sales or service categories, and product-family breadth.
-- Discipline-to-segment mappings from the MOE graduate catalogue.
-- City-level visibility in the current evidence rows.
+- Listed-firm disclosures for AMEC, NAURA, ACM Research Shanghai, Piotech, and related toolmakers.
+- Segment briefs for etch and clean, deposition, metrology and inspection, and lithography-adjacent work.
+- Feeder-discipline context from existing MOE-coded discipline data.
+- Source coverage by city, explicitly not a talent geography map.
+- Public source records and evidence types behind each observation.
+- Methodology caveats for verification status, proxy evidence, and beta data limits.
 
-## What it does not measure
-
-- Workforce totals for China's semiconductor-equipment industry.
-- Product performance, yield, installed-base quality, customer uptime, or parity with foreign suppliers.
-- Segment-specific headcount unless a source explicitly discloses it.
-- Individual scientists, engineers, students, or employees.
-- Real-time market conditions or claims outside the local source ledger.
+The longer public essay will publish separately. Until that URL exists, `/essay` remains the working on-site brief and `/` remains the interactive companion entry point.
 
 ## Routes
 
-- `/` — editorial homepage and first-read brief.
-- `/essay` — long-form brief.
-- `/firms` — firm index.
-- `/firms/[slug]` — firm dossiers.
-- `/segments/[segment]` — segment briefs.
-- `/explorer` — evidence-row explorer with filters for segment, city, evidence type, and entity.
-- `/sources` — public source ledger.
-- `/methodology` — scope, evidence rules, verification status, and citation guidance.
-- `/monitor` — reference monitor view with city, role, and workforce exhibits.
+- `/` - homepage, reader paths, interpretation modules, exhibits, source coverage map.
+- `/essay` - working version of the long-form brief.
+- `/firms` - firm index.
+- `/firms/[slug]` - firm dossiers for individual companies.
+- `/segments/[segment]` - segment briefs by tool family.
+- `/supply` - talent supply pipeline scaffold using local discipline data.
+- `/explorer` - source-record explorer with filters.
+- `/sources` - public source ledger.
+- `/methodology` - scope, evidence rules, verification status, and responsible-use notes.
+- `/monitor` - reference monitor view retained for comparison and review.
 
-## Data pipeline commands
+## Data Model
+
+Raw CSV files live in `data/raw/`. Generated JSON files live in `data/generated/` and are produced by `npm run build:data`.
+
+Important rules:
+
+- Every observation should have a `source_id`.
+- Do not invent values from qualitative claims.
+- Keep direct evidence separate from proxy evidence.
+- Treat `data/raw/observations.csv` as staging until manually verified.
+- Do not include individual-level personal data.
+- Do not add a database, authentication, or scraping workflow for v1.
+
+Editorial interpretation lives in `data/editorial/`. Those files should stay aligned with the source ledger and should not introduce unsupported claims.
+
+## Local Commands
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Regenerate local JSON data:
 
 ```bash
 npm run build:data
 ```
 
-Reads CSV files from `data/raw` and writes generated JSON tables to `data/generated`.
+Start the local dev server:
+
+```bash
+npm run dev
+```
+
+Open `http://localhost:3000`.
+
+Run quality checks:
 
 ```bash
 npm run lint
 npm run build
 ```
 
-Runs linting and the production Next.js build.
+## Beta Status
 
-## Local development commands
+This project is still a beta public-source monitor. The site is useful for reading evidence signals and caveats, but it should not be cited as a workforce census, capability ranking, or city talent map. The map shows source coverage only. Firm workforce numbers are filing-level disclosures and should not be read as segment-specific staffing unless the source says so.
+
+## Final Checklist
+
+Before shipping or deploying, run:
 
 ```bash
-npm install
 npm run build:data
-npm run dev
+npm run lint
+npm run build
 ```
-
-Open `http://localhost:3000` after the dev server starts.
-
-## Update workflow
-
-1. Add or revise source rows in `data/raw/sources.csv` with a stable `source_id`, title, publisher, and URL.
-2. Add observations in `data/raw/observations.csv`. Every row needs a `source_id` that already exists in the ledger.
-3. Update editorial TypeScript files under `data/editorial/` only after the underlying source rows exist. Set `verificationStatus` to `staging` or `needs_check` until you have read the source.
-4. Run `npm run build:data` to regenerate `data/generated/`.
-5. Run `npm run lint` and `npm run build` before opening a PR.
-6. Promote a row from `staging` or `needs_check` to `source_checked` only after a human has read the cited source and confirmed the wording.
-
-## Beta status
-
-Observations remain beta until verified against the underlying public sources. Treat `data/raw/observations.csv` as staging material. The product separates source coverage from capability, uses verification-status labels where they exist, and avoids individual-level personal data.

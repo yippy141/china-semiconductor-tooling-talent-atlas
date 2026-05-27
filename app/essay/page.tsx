@@ -26,6 +26,10 @@ export default function EssayPage() {
               ← Homepage brief
             </Link>
           </nav>
+          <p className="mt-6 border border-stone-300 bg-white p-4 text-sm leading-7 text-stone-700">
+            This on-site brief is the working version of the essay. A public
+            essay link will be added after publication.
+          </p>
           <p className="mt-8 text-xs font-semibold uppercase tracking-[0.22em] text-stone-500">
             Brief
           </p>
