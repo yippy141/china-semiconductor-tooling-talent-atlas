@@ -129,9 +129,8 @@ export default async function SegmentPage({ params }: SegmentPageProps) {
               {profile.plainEnglishDefinition}
             </p>
             <p className="mt-4 text-sm leading-7 text-stone-600">
-              The four tooling segments in this monitor are not interchangeable.
-              Thin-film talent is not lithography talent. Etch talent is not
-              metrology talent. This brief lists the role families, bottlenecks,
+              Each tooling segment draws on a different mix of disciplines and
+              support roles. This brief lists the role families, bottlenecks,
               and public signals tied specifically to {profile.label.toLowerCase()}.
             </p>
           </article>
@@ -152,7 +151,7 @@ export default async function SegmentPage({ params }: SegmentPageProps) {
             id="capabilities"
             eyebrow="Capability taxonomy"
             title="Capabilities attached to this segment"
-            description="Each capability names a discrete technical problem a competent supplier has to solve. The list is taxonomy, not a score."
+            description="Each capability names a discrete technical problem a competent supplier has to solve. The list is taxonomy and should not be read as a score."
           />
           {capabilities.length === 0 ? (
             <p className="px-6 py-6 text-sm text-stone-600 sm:px-8">
@@ -258,8 +257,8 @@ export default async function SegmentPage({ params }: SegmentPageProps) {
                 />
                 <span>
                   Capability and role-family counts on this page describe how
-                  much taxonomy is catalogued. They are not workforce size, market
-                  share, or capability score.
+                  much taxonomy is catalogued. They do not measure workforce
+                  size, market share, or capability.
                 </span>
               </li>
               <li className="flex gap-3">

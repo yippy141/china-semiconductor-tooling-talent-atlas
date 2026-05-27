@@ -195,8 +195,8 @@ export default function MethodologyPage() {
           title="Out of scope"
         >
           <p>
-            The atlas is not a labour-market census, a capability index, or a
-            ranking. It avoids several specific kinds of claim:
+            The atlas avoids labour-market census, capability-index, and
+            ranking claims. Several claims remain out of scope:
           </p>
           <ul className="space-y-2 pl-5">
             <li className="list-disc">
@@ -270,9 +270,8 @@ export default function MethodologyPage() {
             </table>
           </div>
           <p className="text-xs text-stone-600">
-            An observation tagged with an evidence type that is not in this
-            table will default to the analytical-proxy group when read by the
-            explorer.
+            The explorer defaults unlisted evidence types to the
+            analytical-proxy group.
           </p>
         </Section>
 
@@ -320,8 +319,8 @@ export default function MethodologyPage() {
             bodies choose to disclose. They do not expose chamber recovery,
             customer-ramp judgement, calibration habits, or the quiet learning
             that makes a tool work in a fab. A segment can look strong because
-            its firms file thoroughly, or weak because its firms publish less —
-            neither tells you about real engineering depth.
+            its firms file thoroughly, or weak because its firms publish less.
+            Neither pattern measures engineering depth.
           </p>
           <p>
             For that reason the atlas avoids composite scores. Each tier of
@@ -367,13 +366,12 @@ export default function MethodologyPage() {
             types: firm, institution, industrial park, city, segment,
             capability, discipline, or role family. Named individuals only
             appear when they are unavoidable bibliographic attribution in a
-            source title — never as a subject of analysis.
+            source title. They are never a subject of analysis.
           </p>
           <p>
-            This rule is editorial, not just legal. The atlas exists to make
-            the structure of public evidence legible. Profiling specific
-            engineers would change the product into something it is not meant
-            to be.
+            This editorial rule keeps the product focused on public evidence
+            structure. Profiling specific engineers would turn it into a
+            different kind of product.
           </p>
         </Section>
 
@@ -402,7 +400,7 @@ export default function MethodologyPage() {
             </li>
             <li className="list-disc">
               When publishing derivative analysis, flag the same caveats this
-              page lists — particularly the absence of tacit production
+              page lists, particularly the absence of tacit production
               know-how from the public record.
             </li>
           </ul>

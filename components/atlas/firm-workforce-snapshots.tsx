@@ -69,9 +69,10 @@ export function FirmWorkforceSnapshots() {
           their workforce
         </h3>
         <p className="max-w-3xl text-sm leading-7 text-stone-600">
-          These categories come from each firm&apos;s filing as published. They
-          are not standardized across firms and describe whole-firm staffing,
-          not tooling-segment headcount.
+          These categories come from each firm&apos;s filing as published. Firms
+          use different labels and denominators, and the figures describe
+          whole-firm staffing. Tooling-segment headcount would need separate
+          disclosure.
         </p>
       </header>
 
@@ -198,8 +199,8 @@ export function FirmWorkforceSnapshots() {
       <div className="border-t border-stone-200 px-6 py-4 sm:px-8">
         <p className="text-[11px] leading-6 text-stone-500">
           Firms use different workforce categories. R&amp;D share, technical
-          staff, service staff, and advanced-degree counts are not
-          interchangeable.
+          staff, service staff, and advanced-degree counts should stay
+          separate.
         </p>
         <ul className="mt-3 flex flex-wrap gap-2">
           {(Object.keys(statusMeta) as SourceStatus[]).map((status) => (

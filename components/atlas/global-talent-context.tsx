@@ -14,9 +14,8 @@ export function GlobalTalentContext() {
           How to read the scale
         </h3>
         <p className="max-w-3xl text-sm leading-7 text-stone-600">
-          The firm numbers sit inside a wider talent constraint. They are
-          context for interpreting disclosure strength, not a country
-          scorecard.
+          The firm numbers sit inside a wider talent constraint. Use them as
+          context for disclosure strength and avoid country scorecard readings.
         </p>
       </header>
 

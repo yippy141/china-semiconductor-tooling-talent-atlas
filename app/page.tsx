@@ -160,10 +160,10 @@ export default function HomePage() {
           Source coverage by city
         </h2>
         <p className="mt-4 max-w-3xl text-base leading-7 text-ink-soft">
-          This map shows where the beta dataset has public records. It does
-          not show talent density, workforce size, or city capability. Large
-          nodes usually mean filings, park documents, shortage notices, or
-          official sources are easier to observe there.
+          This map shows where the beta dataset has public records. Large nodes
+          usually mean filings, park documents, shortage notices, or official
+          sources are easier to observe there. They do not count engineers,
+          workforce size, or city capability.
         </p>
         <div className="mt-8">
           <CitySignalMap />

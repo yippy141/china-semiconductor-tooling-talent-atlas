@@ -172,7 +172,7 @@ export function FirmWorkforceChart() {
       <div className="border-t border-stone-200 px-6 py-4 sm:px-8">
         <p className="text-[11px] leading-6 text-stone-500">
           Categories vary across firms. R&amp;D share, technical staff,
-          service staff, and advanced-degree counts are not interchangeable.
+          service staff, and advanced-degree counts should stay separate.
         </p>
         <ul className="mt-3 flex flex-wrap gap-2">
           {(Object.keys(statusMeta) as SourceStatus[]).map((status) => (

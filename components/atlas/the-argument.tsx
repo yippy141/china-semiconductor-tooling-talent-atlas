@@ -8,8 +8,8 @@ import {
 const findings = [
   {
     number: "01",
-    title: "Broad STEM totals are the wrong denominator.",
-    body: "Etch, deposition, metrology, and lithography-adjacent tools each draw on a different mix of plasma, thin-film, optical, controls, and field-support talent. A national graduate total collapses those mixes into one number.",
+    title: "Broad STEM totals miss the toolmaking mix.",
+    body: "The hard roles combine disciplines: plasma with RF hardware, ALD chemistry with vacuum behavior, optics with algorithms, and precision motion with calibration.",
   },
   {
     number: "02",
@@ -53,8 +53,8 @@ export function TheArgument() {
           Most coverage of China&apos;s chip-tooling push tracks product
           launches: a new etch platform from Shanghai, a deposition tool out of
           Shenyang, a metrology product tied to a domestic fab. Those launches
-          matter. They describe only the first half of what a foundry needs.
-          The vendor-side question is whether the firm shipping the tool can
+          matter, but they only begin the vendor-side question: whether the
+          firm shipping the tool can
           install it, tune it, match it across chambers, recover it after
           maintenance, and support repeat deployment inside a customer&apos;s
           ramp.

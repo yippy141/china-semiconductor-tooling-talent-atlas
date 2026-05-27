@@ -40,7 +40,7 @@ export const firmWorkforceSnapshots: FirmWorkforceSnapshot[] = [
     strongerSignal:
       "Growth in field application engineers, service training, chamber matching, advanced-memory validation, and repeat customer deployment.",
     reasonableInference:
-      "The filing supports an R&D-intensive reading of AMEC, not a customer-support reading.",
+      "The filing supports an R&D-intensive reading of AMEC. It leaves customer-support depth unresolved.",
     doNotInfer:
       "Do not infer etch-specific service depth or installed-base support from the R&D count.",
     figures: [
@@ -55,7 +55,7 @@ export const firmWorkforceSnapshots: FirmWorkforceSnapshot[] = [
         label: "R&D personnel, share of total staff",
         value: "52.24%",
         denominator: "Total staff, as disclosed in the filing.",
-        note: "Use as an R&D intensity signal; not a segment-specific staffing measure.",
+        note: "Use as an R&D intensity signal. Segment-specific staffing would need a separate disclosure.",
         sourceStatus: "source_checked",
       },
       {
@@ -76,14 +76,14 @@ export const firmWorkforceSnapshots: FirmWorkforceSnapshot[] = [
         label: "Doctoral degree holders, company-wide",
         value: "291",
         denominator: "Company-wide.",
-        note: "Filing-disclosed absolute count; a company-wide total-employee figure is not disclosed in the checked filing sections, so a share cannot be computed.",
+        note: "Filing-disclosed absolute count; the checked filing sections do not disclose a company-wide total-employee figure, so a share cannot be computed.",
         sourceStatus: "source_checked",
       },
       {
         label: "Master's degree holders, company-wide",
         value: "989",
         denominator: "Company-wide.",
-        note: "Filing-disclosed absolute count; total-employee denominator is not disclosed in the checked filing sections.",
+        note: "Filing-disclosed absolute count; the checked filing sections do not disclose a total-employee denominator.",
         sourceStatus: "source_checked",
       },
       {
@@ -169,7 +169,7 @@ export const firmWorkforceSnapshots: FirmWorkforceSnapshot[] = [
     editorialRead:
       "NAURA gives the strongest scale signal among the listed equipment firms in this layer, but its breadth makes segment attribution especially risky.",
     numberRead:
-      "NAURA's scale makes it a broad equipment group rather than a single-segment specialist. Its R&D and customer-service figures show organizational mass, but they blur tool-family depth.",
+      "NAURA's scale marks it as a broad equipment group. Its R&D and customer-service figures show organizational mass, while tool-family depth remains blurred.",
     strongerSignal:
       "Headcount or hiring split by etch, deposition, furnace, wet, service, and applications roles.",
     reasonableInference:
@@ -181,7 +181,7 @@ export const firmWorkforceSnapshots: FirmWorkforceSnapshot[] = [
         label: "Total employees",
         value: "21,101",
         denominator: "Whole firm.",
-        note: "Broad equipment group, not a deposition-only workforce.",
+        note: "Broad equipment group workforce figure.",
         sourceStatus: "source_checked",
       },
       {
@@ -216,7 +216,7 @@ export const firmWorkforceSnapshots: FirmWorkforceSnapshot[] = [
         label: "R&D personnel, share of total employees",
         value: "30.86%",
         denominator: "Total employees.",
-        note: "R&D intensity signal; role labels are not directly comparable to job postings.",
+        note: "R&D intensity signal. Filing role labels and job-posting role labels do not map cleanly.",
         sourceStatus: "source_checked",
       },
       {
@@ -249,7 +249,7 @@ export const firmWorkforceSnapshots: FirmWorkforceSnapshot[] = [
       },
     ],
     caveat:
-      "The filing covers a broad equipment group, so the figures should frame scale and R&D intensity rather than tooling-segment capacity.",
+      "The filing covers a broad equipment group, so the figures should frame scale and R&D intensity. Tooling-segment capacity would need a separate disclosure.",
     source_ids: ["CN_FILING_NAURA_2025"],
   },
   {
@@ -260,7 +260,7 @@ export const firmWorkforceSnapshots: FirmWorkforceSnapshot[] = [
     editorialRead:
       "Piotech is the dedicated deposition vendor in this dossier set; the 2025 financing report supplies its first source-checked workforce figures.",
     numberRead:
-      "Piotech keeps the deposition story from being swallowed by NAURA. Its filings show R&D concentration and deposition product breadth, but not a full customer-support organization.",
+      "Piotech keeps the deposition story from being swallowed by NAURA. Its filings show R&D concentration and deposition product breadth. Customer-support capacity remains unresolved.",
     strongerSignal:
       "Application and service capacity tied to PECVD, ALD, SACVD, HDPCVD, and Flowable CVD product families.",
     reasonableInference:
@@ -305,7 +305,7 @@ export const firmWorkforceSnapshots: FirmWorkforceSnapshot[] = [
       },
     ],
     caveat:
-      "Piotech's disclosures come from a financing report, not a standard annual filing; treat product and demand framing as corporate filing evidence.",
+      "Piotech's disclosures come from a financing report. Treat product and demand framing as corporate filing evidence.",
     source_ids: ["CN_FILING_PIOTECH_2025"],
   },
 ];

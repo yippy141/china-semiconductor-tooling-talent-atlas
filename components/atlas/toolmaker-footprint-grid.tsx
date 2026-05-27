@@ -65,7 +65,7 @@ const statusMeta: Record<
     label: "Watchlist",
     className: "bg-stone-100 text-stone-700 border border-stone-300",
     description:
-      "Carried as a context sidebar; not a primary segment for this firm.",
+      "Carried as a context sidebar for this firm.",
   },
   check: {
     label: "Needs source check",

@@ -4,7 +4,7 @@ const linkClass =
   "font-medium text-stone-900 underline decoration-stone-400 decoration-1 underline-offset-4 transition-colors hover:decoration-stone-900";
 
 const sections = [
-  { number: "01", title: "Product announcements do not prove fab support." },
+  { number: "01", title: "Product announcements leave fab support open." },
   { number: "02", title: "What toolmaking talent means." },
   { number: "03", title: "What listed firms disclose." },
   { number: "04", title: "Where the public record thins out." },
@@ -40,7 +40,7 @@ export default function EssayPage() {
             Beijing has spent four years pouring money into semiconductor
             equipment. The product launches are easy to count. The people
             who make those tools work inside customer fabs are harder to
-            see — and the public record now shows enough to say where that
+            see. The public record now shows enough to say where that
             harder problem is being solved and where it is being skipped.
           </p>
 
@@ -82,37 +82,35 @@ export default function EssayPage() {
               id={`${slugFor("01")}-heading`}
               className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
             >
-              Product announcements do not prove fab support.
+              Product announcements leave fab support open.
             </h2>
             <p>
               Most coverage of China&apos;s push into chip-making equipment
               tracks the same scoreboard: a new etch platform from
               Shanghai, a fresh deposition tool out of Shenyang, another
-              workaround for U.S. export controls. The launches are
-              genuine. They also describe only the first half of what a
-              foundry needs.
+              workaround for U.S. export controls. The launches are genuine
+              and describe only the first half of what a foundry needs.
             </p>
             <p>
-              A semiconductor fab does not just want a machine. It wants a
-              vendor that can ship the tool to a cleanroom in Wuxi or
-              Hefei, install it without contaminating the line, hand-tune
-              the recipe to that fab&apos;s wafer flow, match chamber-to-
-              chamber drift across a population, recover the tool after
-              every preventive-maintenance cycle, and come back the next
-              year with a unit that behaves the same way. Applied
+              A semiconductor fab needs more than a machine. It needs a vendor
+              that can ship the tool to a cleanroom in Wuxi or Hefei, install
+              it without contaminating the line, hand-tune the recipe to that
+              fab&apos;s wafer flow, match chamber-to-chamber drift across a
+              population, recover the tool after every preventive-maintenance
+              cycle, and come back the next year with a unit that behaves the
+              same way. Applied
               Materials, Lam Research, and Tokyo Electron sell that whole
               package. The question for AMEC, NAURA, ACM Research
               Shanghai, and Piotech is whether they can build the same
-              package — not whether they can build the box.
+              package. The box is only the starting point.
             </p>
             <p>
-              The box is a catalog problem. The package is a people
-              problem. And people problems show up in different documents:
-              annual-report workforce tables, recruitment listings for
-              field-application engineers, customer-validation language
-              buried in financing prospectuses, training programs at
-              vocational schools. Those documents exist. They are just
-              spread across more sources than the average product-launch
+              Product catalogues capture the box. Field work decides whether
+              the package exists. That work shows up in annual-report workforce
+              tables, recruitment listings for field-application engineers,
+              customer-validation language buried in financing prospectuses,
+              and training programs at vocational schools. Those documents
+              exist, spread across more sources than the average product-launch
               headline.
             </p>
             <p>
@@ -139,54 +137,50 @@ export default function EssayPage() {
             </h2>
             <p>
               &ldquo;Semiconductor talent&rdquo; usually arrives as a
-              national STEM number — graduates per year, engineers per
-              capita, advanced-degree share. For tool firms the
-              denominator is wrong. An etch tool, a deposition platform,
-              and an overlay metrology system do not draw on the same
-              labor pool, and a country can be well-supplied in one and
-              thinly staffed in another.
+              national STEM number: graduates per year, engineers per capita,
+              advanced-degree share. Tool firms need a narrower denominator.
+              Etch tools, deposition platforms, and overlay metrology systems
+              draw on different labor pools. A country can be well supplied in
+              one and thinly staffed in another.
             </p>
             <p>
-              Etch and clean tools — the segment AMEC anchors and ACM
-              Research Shanghai serves through wet processing — run on
-              plasma physicists, surface chemists, wet-chemistry process
-              engineers, and field-application engineers who can keep
-              chambers matched after rework. The bottleneck specific to
-              this segment is high-aspect-ratio profile control with low
-              damage, and post-etch residue removal that does not lose
-              pattern.
+              Etch and clean tools, the segment AMEC anchors and ACM Research
+              Shanghai serves through wet processing, run on plasma physicists,
+              surface chemists, wet-chemistry process engineers, and
+              field-application engineers who can keep chambers matched after
+              rework. The bottleneck specific to this segment is
+              high-aspect-ratio profile control with low damage, and post-etch
+              residue removal that preserves pattern.
             </p>
             <p>
-              Deposition tools — the heart of NAURA&apos;s and
-              Piotech&apos;s product breadth — need thin-film scientists,
-              ALD, CVD, and PVD process engineers, vacuum and gas-delivery
-              specialists, and validation engineers who follow a tool out
-              of the lab and into a customer&apos;s ramp. The defining
-              problem is conformal film growth at production-worthy
-              throughput, with stable chamber behavior across maintenance
-              cycles.
+              Deposition tools, the heart of NAURA&apos;s and Piotech&apos;s
+              product breadth, need thin-film scientists, ALD, CVD, and PVD
+              process engineers, vacuum and gas-delivery specialists, and
+              validation engineers who follow a tool out of the lab and into a
+              customer&apos;s ramp. The defining problem is conformal film
+              growth at production-worthy throughput, with stable chamber
+              behavior across maintenance cycles.
             </p>
             <p>
-              Metrology and inspection tools — where Jingce Electronics
-              and BEIM operate — pull optical and imaging scientists,
-              algorithm and data engineers, and field-calibration
-              specialists onto the same team. The work is optics-plus-
-              software integration that holds sensitivity without false
-              alarms, and recalibration inside the customer&apos;s line.
+              Metrology and inspection tools, where Jingce Electronics and BEIM
+              operate, pull optical and imaging scientists, algorithm and data
+              engineers, and field-calibration specialists onto the same team.
+              The work is optics-plus-software integration that holds
+              sensitivity without false alarms, and recalibration inside the
+              customer&apos;s line.
             </p>
             <p>
-              Lithography-adjacent work — the deliberate sidebar in this
-              brief, where SMEE sits — is the hardest of the four. It
-              combines optical engineering, stage and mechatronics
-              control, and contamination discipline. Each of the four
-              segments draws on a different mix of physics, chemistry,
-              materials, instrument science, optics, and control science
-              programs. National graduate totals collapse those mixes
-              into one number. The segments do not.
+              Lithography-adjacent work, the deliberate sidebar in this brief,
+              is the hardest of the four. SMEE sits here. The work combines
+              optical engineering, stage and mechatronics control, and
+              contamination discipline. Each segment draws on a different mix
+              of physics, chemistry, materials, instrument science, optics, and
+              control science programs. National graduate totals collapse those
+              mixes into one number.
             </p>
             <p>
               One pattern repeats across all four. Research scientists
-              and production engineers leave public traces — patents,
+              and production engineers leave public traces: patents,
               filings, conference papers. Technicians leave fewer.
               Chamber seasoning, alarm triage, tool matching, and
               handoff routines during a fab ramp leave almost none.
@@ -217,14 +211,14 @@ export default function EssayPage() {
                 AMEC
               </Link>
               , Shanghai&apos;s etch anchor, reports 1,548 R&amp;D
-              personnel — 52.24% of all employees — and discloses that
+              personnel, 52.24% of all employees, and discloses that
               57.88% of that R&amp;D layer holds a master&apos;s or
               doctoral degree. The composition is the part that matters.
               Half of the company is in R&amp;D, and more than half of
               that R&amp;D layer carries an advanced degree. For a firm
-              whose competition is Lam Research, that is the signature of
-              a science-heavy product organisation rather than a
-              service-heavy one.
+              whose competition is Lam Research, that is the signature of a
+              science-heavy product organisation. Service depth remains less
+              visible.
             </p>
             <p>
               <Link
@@ -234,13 +228,13 @@ export default function EssayPage() {
                 ACM Research Shanghai
               </Link>{" "}
               discloses a different shape. The firm reports 2,485 total
-              employees and 1,228 technical personnel — 49.42% of the
-              firm. The figure is technical staff, not R&amp;D, and the
+              employees and 1,228 technical personnel, 49.42% of the
+              firm. The filing labels the figure technical staff, and the
               distinction is meaningful: wet-clean tools live or die on
               the engineers who keep them running in a customer fab. ACM
               is the closest the public record comes to a Chinese
               equipment firm whose disclosed structure leans toward the
-              process-support layer, not away from it.
+              process-support layer.
             </p>
             <p>
               <Link href="/firms/naura" className={linkClass}>
@@ -251,17 +245,17 @@ export default function EssayPage() {
               spans deposition, etch, clean, furnaces, RTP, and epi tools,
               which is why the company-wide numbers cannot be split by
               tool family from the outside. Read them as scale signals
-              for a broad equipment group, not as headcount for any one
-              segment.
+              for a broad equipment group. A tool-family headcount would need
+              separate disclosure.
             </p>
             <p>
               <Link href="/firms/piotech" className={linkClass}>
                 Piotech
               </Link>
               , based in Shenyang, narrows the lens to deposition. Its
-              public materials map a product portfolio — PECVD, ALD,
+              public materials map a product portfolio: PECVD, ALD,
               SACVD, HDPCVD, Flowable CVD, hybrid-bonding tools,
-              deposition-adjacent metrology — that is unusually specific
+              deposition-adjacent metrology. That portfolio is unusually specific
               for a non-listed Chinese vendor. Piotech does not yet
               publish the workforce tables the listed three do, which is
               the relevant disclosure gap: a pure-play deposition vendor
@@ -277,17 +271,15 @@ export default function EssayPage() {
               reached the scale of its international peers in raw
               R&amp;D bodies. Piotech answers whether a younger
               deposition specialist has narrowed its product story
-              enough to be tracked at all. None of the four answers the
-              field-support question — and the absence of that disclosure
-              is itself the signal.
+              enough to be tracked at all. The field-support question remains
+              open, and the missing disclosure is part of the signal.
             </p>
             <p>
-              Workforce categories are not interchangeable. AMEC does not
-              publish a total-employee figure on this slate. ACM does not
-              publish degree composition. NAURA does not break out
-              service or after-sales staff. R&amp;D headcount, technical
-              staff, and service teams should not be added into a single
-              score. The{" "}
+              Keep workforce categories separate. AMEC does not publish a
+              total-employee figure on this slate. ACM does not publish degree
+              composition. NAURA does not break out service or after-sales
+              staff. R&amp;D headcount, technical staff, and service teams
+              should not be added into a single score. The{" "}
               <Link
                 href="/methodology"
                 className={linkClass}
@@ -335,8 +327,8 @@ export default function EssayPage() {
               Tokyo Electron does.
             </p>
             <p>
-              Tuning the process window — recipe development, defect-
-              feedback loops, chamber-match work — happens inside one
+              Tuning the process window, from recipe development to defect-
+              feedback loops and chamber-match work, happens inside one
               customer&apos;s fab and stays there. The firm that supplied
               the tool knows what it learned. The competitor in the next
               city does not. The public record almost never describes
@@ -352,13 +344,11 @@ export default function EssayPage() {
               decide whether a sale becomes a relationship.
             </p>
             <p>
-              The asymmetry is not a flaw in any one firm&apos;s
-              disclosures. It is a feature of what gets written down.
-              Product launches generate documents. Service teams
-              generate the tools&apos; reputation, which generates the
-              next order, which is what eventually shows up in revenue.
-              The lag between the work and its public trace is the
-              hardest part of this question.
+              This asymmetry reflects what gets written down. Product launches
+              generate documents. Service teams generate the tools&apos;
+              reputation, which generates the next order, which is what
+              eventually shows up in revenue. The lag between the work and its
+              public trace is the hardest part of this question.
             </p>
           </section>
 
@@ -398,7 +388,7 @@ export default function EssayPage() {
               service application engineer. The trend over twelve months
               matters more than any one posting. A firm that is adding
               dozens of field engineers in Hefei and Wuxi is preparing
-              for an installed-base ramp. A firm that is not is
+              for an installed-base ramp. A firm without that pattern is
               betting on a different business model.
             </p>
             <p>
@@ -415,7 +405,7 @@ export default function EssayPage() {
               international toolmakers&apos; disclosures and is largely
               absent from Chinese ones. The moment a Chinese equipment
               firm publishes a service or after-sales headcount on its
-              own — not lumped into &ldquo;other staff&rdquo; — is the
+              own, separate from &ldquo;other staff,&rdquo; is the
               moment the public record starts answering the second half
               of the staffing question.
             </p>
@@ -472,8 +462,8 @@ export default function EssayPage() {
                 source explorer
               </Link>{" "}
               expose the underlying observation rows. Each row points
-              back to a public source — a filing, a product page, a
-              recruitment notice, a policy document — with a
+              back to a public source, such as a filing, a product page, a
+              recruitment notice, or a policy document, with a
               verification status attached. Readers should treat
               observation rows as staging until manually checked
               against the source. The figures cited for AMEC, ACM
@@ -490,16 +480,16 @@ export default function EssayPage() {
               score. Direct evidence is distinguished from analytical
               proxies and from taxonomy-scaffold rows. R&amp;D
               headcount, technical staff, and service staff are tracked
-              as separate categories rather than added together.
+              as separate categories and never added together.
             </p>
             <p>
-              The question this brief asks does not have a public-record
-              answer yet. Chinese toolmakers are visibly building
-              products and R&amp;D scale. The harder layer — the
-              engineers, technicians, and routines that decide whether
-              tools work in a customer&apos;s fab — is partly visible,
-              partly inferred, and largely still to be disclosed. The
-              monitor is built to follow that disclosure as it arrives.
+              The public record has not answered the staffing question yet.
+              Chinese toolmakers are visibly building products and R&amp;D
+              scale. The harder layer, the engineers, technicians, and routines
+              that decide whether tools work in a customer&apos;s fab, is
+              partly visible, partly inferred, and largely still to be
+              disclosed. The monitor is built to follow that disclosure as it
+              arrives.
             </p>
           </section>
         </article>

@@ -50,8 +50,8 @@ export default function FirmsPage() {
 
         <p className="max-w-3xl border-t border-stone-300 pt-5 text-xs leading-6 text-stone-600">
           The index separates fuller dossiers from lighter watch cards based on
-          current public-source coverage. It is not a ranking, benchmark, or
-          measure of technical performance.
+          current public-source coverage. Use it to compare disclosure depth,
+          not to rank firms or measure technical performance.
         </p>
       </div>
     </main>

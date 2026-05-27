@@ -45,10 +45,10 @@ export function CapabilityRoleMatrix() {
           Tooling talent, by segment.
         </h3>
         <p className="max-w-3xl text-sm leading-7 text-stone-600">
-          The equipment race is not a STEM headcount. Each tool family
-          relies on a specific mix of role families, process-window
-          judgement, and customer-ramp know-how; public records expose each
-          piece unevenly.
+          Equipment work depends on more than STEM headcount. Each tool family
+          relies on a specific mix of role families, process-window judgement,
+          and customer-ramp know-how. Public records expose each piece
+          unevenly.
         </p>
       </header>
 

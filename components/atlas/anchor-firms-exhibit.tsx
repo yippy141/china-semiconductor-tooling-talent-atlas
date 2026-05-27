@@ -63,8 +63,8 @@ export function AnchorFirmsExhibit() {
           Anchor firm disclosures
         </p>
         <p className="max-w-3xl text-xs leading-5 text-muted">
-          Categories are not interchangeable. R&amp;D, technical staff,
-          service staff, and total employees use different denominators.
+          Keep categories separate. R&amp;D, technical staff, service staff,
+          and total employees use different denominators.
         </p>
       </div>
       <ul className="grid grid-cols-1 divide-y divide-rule-hair sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-4">

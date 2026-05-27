@@ -128,8 +128,9 @@ export function CitySignalMap() {
           </h3>
         </div>
         <p className="max-w-sm text-xs leading-6 text-stone-400">
-          The map shows where this beta dataset has public records. It does not
-          show talent density, workforce size, or city capability.
+          The map shows where this beta dataset has public records. Node size
+          tracks source-backed records, not engineers, workforce size, or city
+          capability.
         </p>
       </header>
 
@@ -339,8 +340,8 @@ export function CitySignalMap() {
           )}
 
           <p className="mt-auto text-[11px] leading-5 text-stone-500">
-            Visibility reflects what public records currently disclose. It is
-            not a talent ranking.
+            Visibility reflects current public records. It does not rank city
+            talent.
           </p>
           <Link
             href="/supply"

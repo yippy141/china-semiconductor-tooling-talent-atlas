@@ -18,10 +18,9 @@ export function MonitoringQuestions() {
           What to watch next
         </h3>
         <p className="max-w-3xl text-sm leading-7 text-stone-700">
-          For corporate and policy users, the useful signal is not a product
-          announcement alone. The stronger signal is whether a firm is
-          building the people and routines that move a tool from lab result
-          to customer-site operation.
+          Corporate and policy users need more than product announcements.
+          Stronger signals show whether a firm is building the people and
+          routines that move a tool from lab result to customer-site operation.
         </p>
       </header>
 

@@ -14,11 +14,10 @@ export function ComparatorFrame() {
           How to read a toolmaker workforce signal
         </h3>
         <p className="max-w-3xl text-sm leading-7 text-stone-600">
-          Mature equipment firms are not only R&amp;D shops. They run field
-          service, applications engineering, calibration, training,
-          spare-parts, and customer-support systems around an installed base.
-          Chinese filings show parts of that structure. They rarely show the
-          full customer-site layer.
+          Mature equipment firms run more than R&amp;D. Installed-base work
+          depends on field service, applications engineering, calibration,
+          training, spare parts, and customer support. Chinese filings show
+          parts of that structure and rarely show the full customer-site layer.
         </p>
       </header>
 
@@ -58,8 +57,8 @@ export function ComparatorFrame() {
       </div>
 
       <p className="border-t border-stone-200 px-6 py-4 text-[11px] leading-6 text-stone-500 sm:px-8">
-        References frame what disclosures can mean. Not rankings, parity
-        claims, or performance measures.
+        References frame what disclosures can mean. They do not rank firms,
+        claim parity, or measure performance.
       </p>
     </section>
   );

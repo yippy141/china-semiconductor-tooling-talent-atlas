@@ -2,7 +2,7 @@
 
 Beta interactive source companion for an essay on whether Chinese semiconductor-equipment firms are building the people and support organizations needed to move from product claims to working fab tools.
 
-This is an editorial evidence product, not a SaaS app. It uses local CSV files, generated JSON, and Next.js App Router pages to organize public records, caveats, and interpretation. Counts describe public-record coverage, not workforce size, talent density, or technical capability.
+The project is an editorial evidence product built with local CSV files, generated JSON, and Next.js App Router pages. It organizes public records, caveats, and interpretation. Counts describe public-record coverage. They do not measure workforce size, talent density, or technical capability.
 
 ## Current Scope
 
@@ -11,7 +11,7 @@ The atlas focuses on mainland PRC semiconductor tooling talent signals:
 - Listed-firm disclosures for AMEC, NAURA, ACM Research Shanghai, Piotech, and related toolmakers.
 - Segment briefs for etch and clean, deposition, metrology and inspection, and lithography-adjacent work.
 - Feeder-discipline context from existing MOE-coded discipline data.
-- Source coverage by city, explicitly not a talent geography map.
+- Source coverage by city, with talent geography kept out of scope.
 - Public source records and evidence types behind each observation.
 - Methodology caveats for verification status, proxy evidence, and beta data limits.
 
@@ -76,7 +76,7 @@ npm run build
 
 ## Beta Status
 
-This project is still a beta public-source monitor. The site is useful for reading evidence signals and caveats, but it should not be cited as a workforce census, capability ranking, or city talent map. The map shows source coverage only. Firm workforce numbers are filing-level disclosures and should not be read as segment-specific staffing unless the source says so.
+This project is still a beta public-source monitor. Use it for evidence signals, caveats, and source trails. Avoid citing it as a workforce census, capability ranking, or city talent map. The map shows source coverage only. Firm workforce numbers are filing-level disclosures; segment-specific staffing requires source language that says so directly.
 
 ## Final Checklist
 

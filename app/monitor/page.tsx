@@ -143,8 +143,7 @@ export default function MonitorPage() {
               <span className="text-stone-500">01–04</span>
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              What is visible in the public record &mdash; and what stays out
-              of it.
+              What the public record shows, and where it thins out.
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
               Four findings from the current dataset, with the source pattern
@@ -206,7 +205,8 @@ export default function MonitorPage() {
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
               Public records cluster around Shanghai, Beijing, and a small
-              set of coastal hubs. That is coverage, not capability depth.
+              set of coastal hubs. The cluster shows coverage, not capability
+              depth.
             </p>
           </div>
           <CitySignalMap />
@@ -246,7 +246,7 @@ export default function MonitorPage() {
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
               Three listed firms publish enough workforce structure to anchor
-              the picture. Categories are firm-level, not segment-level.
+              the picture. Categories describe firms, not segments.
             </p>
           </div>
           <FirmWorkforceSnapshots />
@@ -262,7 +262,7 @@ export default function MonitorPage() {
               <span className="text-stone-500">Who this is for</span>
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              Who this is for, and what it can and cannot answer.
+              Who this is for, and where the evidence stops.
             </h2>
           </div>
 
@@ -318,7 +318,7 @@ export default function MonitorPage() {
               <span className="text-stone-500">Evidence ladder</span>
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              The 172 rows are not one number.
+              The 172 rows sit in separate evidence tiers.
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
               Three tiers sit under the headline count. Mixing them inflates

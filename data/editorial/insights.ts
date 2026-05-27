@@ -33,7 +33,7 @@ export const insights: EditorialInsight[] = [
     id: "city-records-cluster",
     title: "Shanghai and Beijing dominate the visible record.",
     summary:
-      "Shanghai leads the city view, followed by Beijing. The concentration reflects firm filings, park records, and shortage notices, not a full labor-market map.",
+      "Shanghai leads the city view, followed by Beijing. The concentration reflects firm filings, park records, and shortage notices. It does not map the full labor market.",
     implication:
       "Shanghai-area filings, Beijing park records, and a small set of coastal shortage notices are the first stops for a primary-source check.",
     source_ids: [
@@ -48,7 +48,7 @@ export const insights: EditorialInsight[] = [
     summary:
       "Chamber recovery, field calibration, tool matching, and customer-ramp support rarely appear in public records, even when firms publish product lines and R&D counts.",
     implication:
-      "Production-support signals — service hiring, field application language, customer-ramp staffing — carry more weight than product-line announcements.",
+      "Production-support signals, including service hiring, field application language, and customer-ramp staffing, carry more weight than product-line announcements.",
     source_ids: ["CN_FILING_NAURA_2025", "CN_FILING_ACM_SH_2025"],
   },
 ];

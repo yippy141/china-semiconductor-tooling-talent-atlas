@@ -76,13 +76,13 @@ export default function SupplyPage() {
             Talent supply pipeline
           </h1>
           <p className="mt-5 max-w-4xl text-lg leading-8 text-stone-700">
-            Tooling talent does not come from one major. Etch draws on plasma,
+            Tooling talent draws from several disciplines. Etch uses plasma,
             surface chemistry, materials, RF, controls, and process
-            engineering. Deposition draws on thin films, precursor chemistry,
-            vacuum behavior, and chamber control. Metrology draws on optics,
+            engineering. Deposition uses thin films, precursor chemistry,
+            vacuum behavior, and chamber control. Metrology uses optics,
             instrumentation, algorithms, calibration, and field support. This
-            page maps the disciplines and institutions that plausibly feed
-            those role families, and marks where official data stop.
+            page maps disciplines and institutions that plausibly feed those
+            role families, then marks where official data stop.
           </p>
         </header>
 
@@ -95,8 +95,8 @@ export default function SupplyPage() {
             <p className="mt-3 text-sm leading-7 text-stone-700">
               Official records can establish the formal training and
               institutional base around tooling-relevant disciplines. They are
-              useful for framing the upstream pool, not for assigning exact
-              people to tool families.
+              useful for framing the upstream pool. Exact people-to-tool
+              assignments need placement data.
             </p>
             <ul className="mt-5 space-y-2 text-sm leading-6 text-stone-700">
               {countableRecords.map((item) => (
@@ -114,9 +114,9 @@ export default function SupplyPage() {
               What official data cannot isolate
             </h2>
             <p className="mt-3 text-sm leading-7 text-stone-700">
-              The same records do not isolate niche roles, customer-site work,
-              or firm-specific absorption. Those claims need a later research
-              pass tied to placement, hiring, and support evidence.
+              The same records leave niche roles, customer-site work, and
+              firm-specific absorption unresolved. Those claims need a later
+              research pass tied to placement, hiring, and support evidence.
             </p>
             <ul className="mt-5 space-y-2 text-sm leading-6 text-stone-700">
               {isolationLimits.map((item) => (
@@ -138,7 +138,7 @@ export default function SupplyPage() {
             <p className="mt-3 max-w-3xl text-sm leading-7 text-stone-700">
               This table uses the current MOE-coded discipline scaffold. It
               shows plausible feeder disciplines and why they matter for tool
-              roles, without claiming exact graduate counts or placements.
+              roles. It avoids exact graduate counts or placement claims.
             </p>
           </div>
 

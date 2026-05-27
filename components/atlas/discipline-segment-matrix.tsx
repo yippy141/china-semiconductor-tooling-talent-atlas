@@ -105,7 +105,7 @@ export function DisciplineSegmentMatrix() {
                     const isMarked = relevant.has(column.id);
                     const labelText = isMarked
                       ? `${discipline.name_en} is most relevant to ${column.label}`
-                      : `${discipline.name_en} is not listed among most relevant disciplines for ${column.label}`;
+                      : `${discipline.name_en} is outside the most relevant discipline set for ${column.label}`;
                     return (
                       <td
                         key={column.id}

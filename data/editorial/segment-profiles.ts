@@ -127,7 +127,7 @@ export const segmentProfiles: SegmentProfile[] = [
       "Policy and park references to IC equipment ecosystems",
     ],
     caveat:
-      "This is a sidebar for context, not a claim that public evidence can measure lithography readiness.",
+      "This sidebar provides context. Public evidence in this dataset cannot measure lithography readiness.",
     whatToWatch: [
       "Specialized optics hiring",
       "Service and training infrastructure",

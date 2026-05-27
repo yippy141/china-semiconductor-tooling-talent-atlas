@@ -80,14 +80,14 @@ export const firmProfiles: FirmProfile[] = [
       {
         label: "R&D personnel",
         value: "1,548",
-        note: "Filing-disclosed firm-level R&D headcount; not split by etch, deposition, service, or customer-ramp work.",
+        note: "Filing-disclosed firm-level R&D headcount. The filing does not split it by etch, deposition, service, or customer-ramp work.",
         verificationStatus: "source_checked",
         source_id: "CN_FILING_AMEC_2025",
       },
       {
         label: "R&D personnel, share of total staff",
         value: "52.24%",
-        note: "R&D intensity signal as filed; not a segment-specific staffing measure.",
+        note: "R&D intensity signal as filed. Segment-specific staffing would need a separate disclosure.",
         verificationStatus: "source_checked",
         source_id: "CN_FILING_AMEC_2025",
       },
@@ -108,14 +108,14 @@ export const firmProfiles: FirmProfile[] = [
       {
         label: "Doctoral degree holders, company-wide",
         value: "291",
-        note: "Filing-disclosed absolute count; a company-wide total-employee figure is not disclosed in the checked filing sections.",
+        note: "Filing-disclosed absolute count; the checked filing sections do not disclose a company-wide total-employee figure.",
         verificationStatus: "source_checked",
         source_id: "CN_FILING_AMEC_2025",
       },
       {
         label: "Master's degree holders, company-wide",
         value: "989",
-        note: "Filing-disclosed absolute count; total-employee denominator is not disclosed in the checked filing sections.",
+        note: "Filing-disclosed absolute count; the checked filing sections do not disclose a total-employee denominator.",
         verificationStatus: "source_checked",
         source_id: "CN_FILING_AMEC_2025",
       },
@@ -132,7 +132,7 @@ export const firmProfiles: FirmProfile[] = [
       "Disclosure of total-employee headcount (would let the R&D share be benchmarked against non-R&D functions)",
       "After-sales, service, or field-application headcount broken out from R&D",
       "Repeat-order language for the same etch platform at the same domestic customer",
-      "Master's or doctoral share broken out by R&D function instead of as a single R&D total",
+      "Master's or doctoral share broken out by R&D function",
     ],
     doNotInfer: [
       "Yield",
@@ -193,7 +193,7 @@ export const firmProfiles: FirmProfile[] = [
       {
         label: "Total employees",
         value: "21,101",
-        note: "Whole-firm scale signal; broad equipment group, not a deposition-only workforce.",
+        note: "Whole-firm scale signal for a broad equipment group.",
         verificationStatus: "source_checked",
         source_id: "CN_FILING_NAURA_2025",
       },
@@ -228,7 +228,7 @@ export const firmProfiles: FirmProfile[] = [
       {
         label: "R&D personnel, share of total employees",
         value: "30.86%",
-        note: "R&D intensity signal; role labels are not directly comparable to job postings.",
+        note: "R&D intensity signal. Filing role labels and job-posting role labels do not map cleanly.",
         verificationStatus: "source_checked",
         source_id: "CN_FILING_NAURA_2025",
       },
@@ -255,18 +255,18 @@ export const firmProfiles: FirmProfile[] = [
       },
     ],
     analystRead:
-      "NAURA gives the clearest scale and breadth signal among listed peers. The same breadth is the trap: whole-firm R&D and employee totals describe an equipment group, not a tooling segment.",
+      "NAURA gives the clearest scale and breadth signal among listed peers. Its whole-firm R&D and employee totals describe an equipment group, so segment depth remains unresolved.",
     watchSignals: [
       "Service-team and customer-service spending language in successive annual reports",
       "Deposition product-platform validation tied to specific domestic fabs",
       "Field-application and service-engineer hiring across the equipment group",
-      "Revenue or backlog mix disclosed by tool family rather than as a single equipment total",
+      "Revenue or backlog mix disclosed by tool family",
     ],
     changesTheRead: [
       "Headcount split by tool family within the equipment group (deposition vs etch vs RTP vs implant)",
       "After-sales or service-team headcount disclosed separately from R&D personnel",
       "Customer-validation language tied to a specific deposition or etch platform at a named fab",
-      "Revenue mix disclosed by tool family rather than as a single equipment total",
+      "Revenue mix disclosed by tool family",
     ],
     doNotInfer: [
       "Segment-specific workforce depth from whole-firm R&D counts",
@@ -322,7 +322,7 @@ export const firmProfiles: FirmProfile[] = [
       {
         label: "Total employees",
         value: "2,485",
-        note: "Whole-firm figure; it cannot be read as clean/strip-specific headcount.",
+        note: "Whole-firm figure. Clean/strip-specific headcount would need a separate disclosure.",
         verificationStatus: "source_checked",
         source_id: "CN_FILING_ACM_SH_2025",
       },
@@ -442,7 +442,7 @@ export const firmProfiles: FirmProfile[] = [
       },
     ],
     analystRead:
-      "Piotech is the cleanest addition to the deposition story because its public source trail is specific to deposition product families. The current dossier supports product-breadth monitoring, not claims about production performance, customer yield, or parity with foreign suppliers.",
+      "Piotech is the cleanest addition to the deposition story because its public source trail is specific to deposition product families. The current dossier supports product-breadth monitoring. Production performance, customer yield, and parity claims need other evidence.",
     watchSignals: [
       "Customer-validation language by specific deposition tool family",
       "Field-application and service-team hiring in Shenyang and at customer fab cities",
@@ -568,14 +568,14 @@ export const firmProfiles: FirmProfile[] = [
     nameCn: "上海微电子装备",
     headquarters: "Shanghai",
     oneLine:
-      "SMEE anchors the lithography-adjacent sidebar in this brief — the domestic source of optical, alignment, stage, and calibration talent that adjacent tools draw on.",
+      "SMEE anchors the lithography-adjacent sidebar in this brief as a domestic source of optical, alignment, stage, and calibration talent.",
     segments: ["Lithography sidebar", "Metrology and inspection"],
     productFamilies: [
       {
         segment: "Lithography sidebar",
         label: "Lithography-adjacent company anchor",
         publicRecord:
-          "The official company homepage names SMEE's application footprint across IC, packaging, display, MEMS, LED, and power-device lithography — but does not separate IC platforms from the rest.",
+          "The official company homepage names SMEE's application footprint across IC, packaging, display, MEMS, LED, and power-device lithography. It does not separate IC platforms from the rest.",
         verificationStatus: "needs_check",
         source_id: "CN_FIRM_SMEE",
       },
@@ -590,7 +590,7 @@ export const firmProfiles: FirmProfile[] = [
     ],
     workforceSignals: [],
     analystRead:
-      "SMEE is the lithography-adjacent anchor in this brief — not a frontline contest with ASML, but the domestic source of optical, alignment, stage, and calibration talent that adjacent tools draw on. The current homepage source names the application footprint (IC, packaging, display, MEMS, LED, power devices) without separating IC lithography platforms from the rest. The dossier stays at watchcard depth until product pages confirm that split.",
+      "SMEE is the lithography-adjacent anchor in this brief: a domestic source of optical, alignment, stage, and calibration talent that adjacent tools draw on. The current homepage source names the application footprint (IC, packaging, display, MEMS, LED, power devices) without separating IC lithography platforms from the rest. The dossier stays at watchcard depth until product pages confirm that split.",
     watchSignals: [
       "Detailed product pages that separate IC lithography platforms from display, MEMS, LED, and power-device platforms",
       "Hiring for optical design, alignment, stage, mechatronics, and calibration work",
@@ -627,14 +627,14 @@ export const firmProfiles: FirmProfile[] = [
         segment: "Metrology and inspection",
         label: "Inspection and measurement category anchor",
         publicRecord:
-          "The public company profile names pattern defect inspection, micro/nano morphology metrology, and mask or inspection-adjacent measurement — but the front-end semiconductor share of that portfolio is not separated from broader measurement work.",
+          "The public company profile names pattern defect inspection, micro/nano morphology metrology, and mask or inspection-adjacent measurement. The front-end semiconductor share of that portfolio remains grouped with broader measurement work.",
         verificationStatus: "needs_check",
         source_id: "CN_FIRM_BEIM",
       },
     ],
     workforceSignals: [],
     analystRead:
-      "BEIM anchors the Beijing metrology and inspection presence in the dossier set. The public company profile names pattern defect inspection, micro/nano morphology metrology, and mask-adjacent categories, but the front-end semiconductor share of that portfolio is not separated from broader measurement work. The dossier stays at watchcard depth until product-level disclosures confirm the split.",
+      "BEIM anchors the Beijing metrology and inspection presence in the dossier set. The public company profile names pattern defect inspection, micro/nano morphology metrology, and mask-adjacent categories. The front-end semiconductor share of that portfolio remains grouped with broader measurement work. The dossier stays at watchcard depth until product-level disclosures confirm the split.",
     watchSignals: [
       "Product pages that separate front-end semiconductor inspection from general electronics measurement",
       "Calibration, defect review, and application-support language tied to specific platforms",
