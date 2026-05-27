@@ -347,7 +347,7 @@ export function CitySignalMap() {
             href="/supply"
             className="text-sm font-semibold text-amber-200 hover:text-amber-100"
           >
-            Want the talent geography? Start with the supply pipeline -&gt;
+            For talent geography, start with the supply pipeline -&gt;
           </Link>
         </aside>
       </div>

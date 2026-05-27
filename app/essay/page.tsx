@@ -213,7 +213,7 @@ export default function EssayPage() {
               , Shanghai&apos;s etch anchor, reports 1,548 R&amp;D
               personnel, 52.24% of all employees, and discloses that
               57.88% of that R&amp;D layer holds a master&apos;s or
-              doctoral degree. The composition is the part that matters.
+              doctoral degree. The composition is the part that one should watch.
               Half of the company is in R&amp;D, and more than half of
               that R&amp;D layer carries an advanced degree. For a firm
               whose competition is Lam Research, that is the signature of a

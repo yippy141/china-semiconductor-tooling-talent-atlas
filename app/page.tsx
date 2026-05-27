@@ -139,12 +139,12 @@ export default function HomePage() {
               Where might the talent come from?
             </h3>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-stone-700">
-              The supply page separates formal training from firm absorption.
-              It maps feeder disciplines now and marks the institution-level
-              counts that need a dedicated research pass.
+              The supply page maps official counts, feeder disciplines, visible
+              institutions, and city supply-demand joins. It does not claim to
+              measure tool-specific graduate output.
             </p>
             <span className="mt-5 inline-flex text-sm font-semibold text-stone-950 underline-offset-4 group-hover:underline">
-              Open supply pipeline -&gt;
+              Open supply page -&gt;
             </span>
           </Link>
           <FirmWorkforceChart />
