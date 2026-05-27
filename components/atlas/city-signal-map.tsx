@@ -112,7 +112,7 @@ export function CitySignalMap() {
       <header className="flex flex-col gap-3 border-b border-stone-800 px-6 py-5 sm:flex-row sm:items-end sm:justify-between sm:px-8">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-200/80">
-            City signal map · schematic
+            City signal map · province outline
           </p>
           <h3
             id={headingId}
@@ -154,7 +154,7 @@ export function CitySignalMap() {
               aria-hidden
               className="absolute inset-0 bg-no-repeat"
               style={{
-                backgroundImage: "url(/china-mainland-schematic.svg)",
+                backgroundImage: "url(/china-schematic.svg)",
                 backgroundSize: "100% 100%",
                 backgroundPosition: "center",
               }}
@@ -163,13 +163,13 @@ export function CitySignalMap() {
               aria-hidden
               className="absolute left-4 top-3 text-[10px] uppercase tracking-[0.22em] text-stone-500"
             >
-              Mainland PRC · schematic
+              Mainland PRC · province outline
             </p>
             <p
               aria-hidden
               className="absolute bottom-3 right-4 text-[10px] uppercase tracking-[0.22em] text-stone-500"
             >
-              Not to geographic scale
+              City placement is approximate
             </p>
 
             {nodes.map((node) => {
@@ -252,7 +252,7 @@ export function CitySignalMap() {
               />
               <span className="ml-1">Node size = public records per city</span>
             </span>
-            <span>Schematic mainland outline. City placement is approximate.</span>
+            <span>Province outline for orientation. City placement is approximate.</span>
           </div>
         </div>
 

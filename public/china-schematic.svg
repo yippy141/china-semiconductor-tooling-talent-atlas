@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="850" viewBox="0 0 1000 850" preserveAspectRatio="xMidYMid meet">
-<title>Schematic mainland China outline</title>
-<desc>Province paths flattened into one translucent silhouette. Not an official boundary map.</desc>
+<title>China province outline map</title>
+<desc>Province paths used as an approximate orientation layer. Not an official boundary map.</desc>
 <defs>
   <style type="text/css">
-    * { fill: rgba(168,162,158,0.30) !important; stroke: none !important; }
-    #pTW, #pTW * { fill: rgba(168,162,158,0.15) !important; }
+    * { fill: rgba(214,211,209,0.12) !important; stroke: rgba(214,211,209,0.28) !important; stroke-width: 0.8 !important; vector-effect: non-scaling-stroke; }
+    #pTW, #pTW * { fill: rgba(214,211,209,0.08) !important; stroke: rgba(214,211,209,0.18) !important; }
   </style>
 </defs>
 <g id="layer3">

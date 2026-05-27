@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { articleBrief } from "@/data/editorial/article-brief";
 import { AnchorFirmsExhibit } from "@/components/atlas/anchor-firms-exhibit";
 import { CitySignalMap } from "@/components/atlas/city-signal-map";
 import { ComparatorFrame } from "@/components/atlas/comparator-frame";
@@ -8,6 +7,34 @@ import { FirmWorkforceChart } from "@/components/atlas/firm-workforce-chart";
 import { LabToFabChain } from "@/components/atlas/lab-to-fab-chain";
 import { TheArgument } from "@/components/atlas/the-argument";
 import { ToolmakerFootprintGrid } from "@/components/atlas/toolmaker-footprint-grid";
+
+const sourceTrailLinks = [
+  {
+    label: "Read the brief",
+    href: "/essay",
+    description: "The argument, with sources cited.",
+  },
+  {
+    label: "Open firm dossiers",
+    href: "/firms",
+    description: "AMEC, ACM, NAURA, Piotech, and the watchlist.",
+  },
+  {
+    label: "Compare tool segments",
+    href: "/segments/deposition",
+    description: "Etch, deposition, metrology, and the lithography sidebar.",
+  },
+  {
+    label: "Inspect source rows",
+    href: "/explorer",
+    description: "Filter evidence rows by city, firm, segment, or source.",
+  },
+  {
+    label: "Read the methodology",
+    href: "/methodology",
+    description: "Definitions, source policy, and verification status.",
+  },
+];
 
 function SectionEyebrow({
   number,
@@ -28,8 +55,8 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-stone-100 text-stone-950">
       <section className="border-b border-rule-hair bg-paper">
-        <div className="mx-auto grid w-full max-w-[1240px] gap-10 px-6 py-12 sm:px-10 sm:py-16 lg:grid-cols-[1fr_19rem] lg:px-14">
-          <div>
+        <div className="mx-auto w-full max-w-[1240px] px-6 py-12 sm:px-10 sm:py-16 lg:px-14">
+          <div className="max-w-4xl">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted">
               China Semiconductor Tooling Talent Atlas
             </p>
@@ -76,7 +103,9 @@ export default function HomePage() {
             </p>
           </div>
 
-          <AnchorFirmsExhibit />
+          <div className="mt-12">
+            <AnchorFirmsExhibit />
+          </div>
         </div>
       </section>
 
@@ -121,39 +150,39 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="bg-stone-950 text-stone-100">
+      <section className="bg-reverse text-paper">
         <div className="mx-auto w-full max-w-6xl px-6 py-12 sm:px-10 sm:py-16 lg:px-12">
-          <p className="flex items-baseline gap-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-400">
-            <span className="font-mono text-stone-100">06</span>
+          <p className="flex items-baseline gap-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-2">
+            <span className="font-mono text-paper">06</span>
             <span>Source trail</span>
           </p>
           <h2 className="mt-3 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl">
             Open the source trail.
           </h2>
+          <p className="mt-4 max-w-3xl text-base leading-7 text-paper/80">
+            Start with the brief, then move into firm dossiers, segment pages,
+            source rows, and methodology as needed.
+          </p>
 
           <nav
-            aria-label="Next clicks"
-            className="mt-8 grid grid-cols-1 gap-px border border-stone-800 bg-stone-800 sm:grid-cols-2 lg:grid-cols-5"
+            aria-label="Reader paths"
+            className="mt-8 grid grid-cols-1 gap-px border border-reverse-soft bg-reverse-soft sm:grid-cols-2 lg:grid-cols-5"
           >
-            {articleBrief.nextClicks.map((link) => (
+            {sourceTrailLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="group flex min-h-40 flex-col justify-between bg-stone-950 p-5 transition-colors hover:bg-stone-900"
+                className="group flex min-h-40 flex-col justify-between bg-reverse p-5 transition-colors hover:bg-reverse-soft"
               >
-                <span className="text-lg font-semibold tracking-tight text-stone-50">
+                <span className="text-lg font-semibold tracking-tight text-paper">
                   {link.label}
                 </span>
-                <span className="mt-4 text-xs leading-6 text-stone-500 group-hover:text-stone-300">
+                <span className="mt-4 text-xs leading-6 text-muted-2 group-hover:text-paper">
                   {link.description}
                 </span>
               </Link>
             ))}
           </nav>
-
-          <p className="mt-8 max-w-3xl text-[11px] leading-6 text-stone-500">
-            {articleBrief.footnote}
-          </p>
         </div>
       </section>
     </main>

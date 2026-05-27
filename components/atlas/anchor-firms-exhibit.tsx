@@ -56,30 +56,36 @@ export function AnchorFirmsExhibit() {
   return (
     <aside
       aria-label="Anchor firm disclosures"
-      className="border border-rule-hair bg-paper-deep"
+      className="border-y border-rule-hair bg-paper"
     >
-      <p className="border-b border-rule-hair px-5 py-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-muted">
-        Anchor firm disclosures
-      </p>
-      <ul className="divide-y divide-rule-hair">
+      <div className="grid gap-3 border-b border-rule-hair py-4 sm:grid-cols-[12rem_1fr] sm:items-end">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted">
+          Anchor firm disclosures
+        </p>
+        <p className="max-w-3xl text-xs leading-5 text-muted">
+          Categories are not interchangeable. R&amp;D, technical staff,
+          service staff, and total employees use different denominators.
+        </p>
+      </div>
+      <ul className="grid grid-cols-1 divide-y divide-rule-hair sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-4">
         {rows.map((row) => (
           <li
             key={row.snapshot.id}
-            className="flex flex-col gap-2 px-5 py-4"
+            className="flex min-h-44 flex-col justify-between gap-5 py-5 sm:px-5 first:sm:pl-0 last:sm:pr-0"
           >
-            <div className="flex items-baseline justify-between gap-3">
-              <p className="text-sm font-semibold text-ink">
+            <div>
+              <p className="text-base font-semibold leading-snug text-ink">
                 {row.snapshot.firm}
               </p>
-              <span className="border border-rule-hair px-2 py-0.5 text-[10px] uppercase tracking-[0.18em] text-muted">
+              <p className="mt-2 text-[10px] uppercase tracking-[0.18em] text-muted">
                 {row.snapshot.segmentSignals[0]}
-              </span>
+              </p>
             </div>
-            <div className="flex items-baseline gap-3">
-              <p className="font-mono text-2xl font-semibold tabular-nums text-ink">
+            <div>
+              <p className="font-mono text-3xl font-semibold tabular-nums text-ink">
                 {row.figure.value}
               </p>
-              <p className="text-[11px] leading-5 text-muted-2">
+              <p className="mt-2 text-xs leading-5 text-muted-2">
                 {row.figure.label}
               </p>
             </div>
@@ -92,10 +98,6 @@ export function AnchorFirmsExhibit() {
           </li>
         ))}
       </ul>
-      <p className="border-t border-rule-hair px-5 py-3 text-[10px] leading-5 text-muted">
-        Categories are not interchangeable. R&amp;D, technical staff, service
-        staff, and total employees use different denominators.
-      </p>
     </aside>
   );
 }
