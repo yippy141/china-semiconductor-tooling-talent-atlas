@@ -119,6 +119,25 @@ export default function HomePage() {
 
         <div className="mt-8 flex flex-col gap-10">
           <DisciplineSegmentMatrix />
+          <Link
+            href="/supply"
+            className="group border border-stone-300 bg-white p-6 transition-colors hover:border-stone-900 sm:p-7"
+          >
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500">
+              Talent supply
+            </p>
+            <h3 className="mt-3 text-2xl font-semibold tracking-tight text-stone-950">
+              Where might the talent come from?
+            </h3>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-stone-700">
+              The supply page separates formal training from firm absorption.
+              It maps feeder disciplines now and marks the institution-level
+              counts that need a dedicated research pass.
+            </p>
+            <span className="mt-5 inline-flex text-sm font-semibold text-stone-950 underline-offset-4 group-hover:underline">
+              Open supply pipeline -&gt;
+            </span>
+          </Link>
           <FirmWorkforceChart />
           <ComparatorFrame />
           <ToolmakerFootprintGrid />
