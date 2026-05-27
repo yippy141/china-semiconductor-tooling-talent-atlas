@@ -18,6 +18,10 @@ export type FirmWorkforceSnapshot = {
   homeBase: string;
   segmentSignals: string[];
   editorialRead: string;
+  numberRead?: string;
+  strongerSignal?: string;
+  reasonableInference?: string;
+  doNotInfer?: string;
   figures: WorkforceFigure[];
   caveat: string;
   source_ids: string[];
@@ -31,6 +35,14 @@ export const firmWorkforceSnapshots: FirmWorkforceSnapshot[] = [
     segmentSignals: ["Etch, clean, and strip", "Deposition"],
     editorialRead:
       "AMEC is the clearest public anchor for the etch story, with disclosed R&D staffing that points to a science-heavy equipment organization.",
+    numberRead:
+      "AMEC's R&D scale supports the view that its etch story is being built through a research-heavy organization. Advanced etch depends on plasma behavior, chamber design, materials interaction, and process control.",
+    strongerSignal:
+      "Growth in field application engineers, service training, chamber matching, advanced-memory validation, and repeat customer deployment.",
+    reasonableInference:
+      "The filing supports an R&D-intensive reading of AMEC, not a customer-support reading.",
+    doNotInfer:
+      "Do not infer etch-specific service depth or installed-base support from the R&D count.",
     figures: [
       {
         label: "R&D personnel",
@@ -93,6 +105,14 @@ export const firmWorkforceSnapshots: FirmWorkforceSnapshot[] = [
     segmentSignals: ["Etch, clean, and strip", "Deposition"],
     editorialRead:
       "ACM Research Shanghai makes the wet-clean and strip workforce layer more visible than most firms, especially through technical and service-heavy disclosures.",
+    numberRead:
+      "ACM's after-sales service category is the closest disclosed measure in this set to customer-site support. That matters because clean and strip tools depend heavily on process support at the fab.",
+    strongerSignal:
+      "A split between field service, installation, applications engineering, and tool-family support.",
+    reasonableInference:
+      "ACM gives a stronger public service signal than firms that disclose only R&D and degree mix.",
+    doNotInfer:
+      "Do not infer clean-specific staffing or customer success from the aggregate after-sales number.",
     figures: [
       {
         label: "Total employees",
@@ -148,6 +168,14 @@ export const firmWorkforceSnapshots: FirmWorkforceSnapshot[] = [
     segmentSignals: ["Deposition", "Etch, clean, and strip"],
     editorialRead:
       "NAURA gives the strongest scale signal among the listed equipment firms in this layer, but its breadth makes segment attribution especially risky.",
+    numberRead:
+      "NAURA's scale makes it a broad equipment group rather than a single-segment specialist. Its R&D and customer-service figures show organizational mass, but they blur tool-family depth.",
+    strongerSignal:
+      "Headcount or hiring split by etch, deposition, furnace, wet, service, and applications roles.",
+    reasonableInference:
+      "NAURA has visible organizational scale across equipment categories.",
+    doNotInfer:
+      "Do not read whole-firm R&D or service categories as deposition-specific or etch-specific depth.",
     figures: [
       {
         label: "Total employees",
@@ -231,6 +259,14 @@ export const firmWorkforceSnapshots: FirmWorkforceSnapshot[] = [
     segmentSignals: ["Deposition"],
     editorialRead:
       "Piotech is the dedicated deposition vendor in this dossier set; the 2025 financing report supplies its first source-checked workforce figures.",
+    numberRead:
+      "Piotech keeps the deposition story from being swallowed by NAURA. Its filings show R&D concentration and deposition product breadth, but not a full customer-support organization.",
+    strongerSignal:
+      "Application and service capacity tied to PECVD, ALD, SACVD, HDPCVD, and Flowable CVD product families.",
+    reasonableInference:
+      "Piotech is a focused deposition vendor with visible R&D investment.",
+    doNotInfer:
+      "Do not infer mature installed-base support from deposition product breadth alone.",
     figures: [
       {
         label: "R&D personnel (as of 2025-06-30)",

@@ -97,6 +97,32 @@ export function FirmWorkforceChart() {
               {snapshot.editorialRead}
             </p>
 
+            {snapshot.numberRead ? (
+              <div className="mt-5 border border-stone-300 bg-stone-50 p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
+                  How to read this number
+                </p>
+                <dl className="mt-3 space-y-3">
+                  <InterpretationRow
+                    label="Read"
+                    value={snapshot.numberRead}
+                  />
+                  <InterpretationRow
+                    label="Stronger signal"
+                    value={snapshot.strongerSignal}
+                  />
+                  <InterpretationRow
+                    label="Reasonable inference"
+                    value={snapshot.reasonableInference}
+                  />
+                  <InterpretationRow
+                    label="Do not infer"
+                    value={snapshot.doNotInfer}
+                  />
+                </dl>
+              </div>
+            ) : null}
+
             <dl className="mt-5 flex flex-col gap-4">
               {snapshot.figures.map((figure) => (
                 <div
@@ -157,6 +183,25 @@ export function FirmWorkforceChart() {
         </ul>
       </div>
     </section>
+  );
+}
+
+function InterpretationRow({
+  label,
+  value,
+}: {
+  label: string;
+  value?: string;
+}) {
+  if (!value) return null;
+
+  return (
+    <div className="grid gap-1 sm:grid-cols-[8rem_1fr] sm:gap-3">
+      <dt className="text-[11px] font-semibold uppercase tracking-[0.16em] text-stone-500">
+        {label}
+      </dt>
+      <dd className="text-xs leading-6 text-stone-700">{value}</dd>
+    </div>
   );
 }
 
