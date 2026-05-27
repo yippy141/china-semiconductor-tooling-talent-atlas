@@ -6,6 +6,7 @@ import { DisciplineSegmentMatrix } from "@/components/atlas/discipline-segment-m
 import { FirmWorkforceChart } from "@/components/atlas/firm-workforce-chart";
 import { GlobalTalentContext } from "@/components/atlas/global-talent-context";
 import { LabToFabChain } from "@/components/atlas/lab-to-fab-chain";
+import { ReaderPaths } from "@/components/atlas/reader-paths";
 import { TheArgument } from "@/components/atlas/the-argument";
 import { ToolmakerFootprintGrid } from "@/components/atlas/toolmaker-footprint-grid";
 
@@ -109,6 +110,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <ReaderPaths />
 
       <TheArgument />
 
