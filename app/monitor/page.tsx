@@ -143,7 +143,7 @@ export default function MonitorPage() {
               <span className="text-stone-500">01–04</span>
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              What the public record shows, and where it thins out.
+              What the public record shows, and where it thins out
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
               Four findings from the current dataset, with the source pattern
@@ -201,7 +201,7 @@ export default function MonitorPage() {
               <span className="text-stone-500">Geography of visibility</span>
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              Visible evidence concentrates in a handful of cities.
+              Visible evidence concentrates in a handful of cities
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
               Public records cluster around Shanghai, Beijing, and a small
@@ -222,7 +222,7 @@ export default function MonitorPage() {
               <span className="text-stone-500">What the work looks like</span>
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              Tooling talent, by segment.
+              Tooling talent, by segment
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
               Each tool family pulls on a different mix of roles, bottlenecks,
@@ -242,7 +242,7 @@ export default function MonitorPage() {
               <span className="text-stone-500">Employer-side evidence</span>
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              Employer disclosures anchor the public record.
+              Employer disclosures anchor the public record
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
               Three listed firms publish enough workforce structure to anchor
@@ -262,7 +262,7 @@ export default function MonitorPage() {
               <span className="text-stone-500">Who this is for</span>
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              Who this is for, and where the evidence stops.
+              Who this is for, and where the evidence stops
             </h2>
           </div>
 
@@ -318,7 +318,7 @@ export default function MonitorPage() {
               <span className="text-stone-500">Evidence ladder</span>
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              The 172 rows sit in separate evidence tiers.
+              The 172 rows sit in separate evidence tiers
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
               Three tiers sit under the headline count. Mixing them inflates
@@ -338,7 +338,7 @@ export default function MonitorPage() {
               <span className="text-stone-500">Monitoring brief</span>
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              Four signals worth monitoring.
+              Four signals worth monitoring
             </h2>
             <p className="mt-4 text-base leading-7 text-stone-700">
               For corporate and policy readers: what to watch, what the
@@ -369,7 +369,7 @@ export default function MonitorPage() {
                 <span className="text-stone-400">Pick a thread</span>
               </div>
               <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-                Pick how you want to dig in.
+                Pick how you want to dig in
               </h2>
             </div>
             <p className="max-w-sm text-sm leading-7 text-stone-400">

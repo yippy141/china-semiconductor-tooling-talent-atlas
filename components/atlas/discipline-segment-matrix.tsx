@@ -39,7 +39,7 @@ export function DisciplineSegmentMatrix() {
           id="discipline-segment-matrix-heading"
           className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
         >
-          Why broad STEM numbers are too blunt.
+          Why broad STEM numbers are too blunt
         </h3>
         <p className="max-w-3xl text-sm leading-7 text-stone-600">
           Each row is an MOE-coded discipline. A marked cell means the

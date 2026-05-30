@@ -23,8 +23,8 @@ export const homepageInsights: HomepageInsight[] = [
       "The segment briefs separate tool families and role families instead of treating technical supply as one pool.",
     limit:
       "The current dataset maps disciplines to tool segments. It does not yet measure graduate placement into equipment roles.",
-    href: "/segments/deposition",
-    linkLabel: "Open a segment brief",
+    href: "/segments",
+    linkLabel: "Compare segment briefs",
     verificationStatus: "source_checked",
     sourceAnchor: ["CN_EDU_MOE_GRAD_DIR_2022"],
     reviewNotes:
@@ -39,8 +39,8 @@ export const homepageInsights: HomepageInsight[] = [
       "Their filings show R&D scale, technical staff, degree mix, product lines, and support categories.",
     limit:
       "Firm categories are not standardized. R&D headcount, technical staff, and service staff should not be added into one score.",
-    href: "/firms/amec",
-    linkLabel: "Open AMEC dossier",
+    href: "/firms",
+    linkLabel: "Compare firm dossiers",
     verificationStatus: "source_checked",
     sourceAnchor: [
       "CN_FILING_AMEC_2025",

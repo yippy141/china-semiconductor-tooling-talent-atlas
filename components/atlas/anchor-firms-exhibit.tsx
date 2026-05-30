@@ -1,3 +1,5 @@
+import { FirmLogo } from "@/components/atlas/firm-logo";
+import { firmProfileBySlug } from "@/data/editorial/firm-profiles";
 import {
   firmWorkforceSnapshots,
   type FirmWorkforceSnapshot,
@@ -68,15 +70,23 @@ export function AnchorFirmsExhibit() {
         </p>
       </div>
       <ul className="grid grid-cols-1 divide-y divide-rule-hair sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-4">
-        {rows.map((row) => (
-          <li
-            key={row.snapshot.id}
-            className="flex min-h-44 flex-col justify-between gap-5 py-5 sm:px-5 first:sm:pl-0 last:sm:pr-0"
-          >
+        {rows.map((row) => {
+          const profile = firmProfileBySlug.get(row.snapshot.id);
+
+          return (
+            <li
+              key={row.snapshot.id}
+              className="flex min-h-44 flex-col justify-between gap-5 py-5 sm:px-5 first:sm:pl-0 last:sm:pr-0"
+            >
             <div>
-              <p className="text-base font-semibold leading-snug text-ink">
-                {row.snapshot.firm}
-              </p>
+              <div className="flex items-start justify-between gap-3">
+                <p className="text-base font-semibold leading-snug text-ink">
+                  {row.snapshot.firm}
+                </p>
+                {profile ? (
+                  <FirmLogo profile={profile} className="h-10 w-16 shrink-0" />
+                ) : null}
+              </div>
               <p className="mt-2 text-[10px] uppercase tracking-[0.18em] text-muted">
                 {row.snapshot.segmentSignals[0]}
               </p>
@@ -96,7 +106,8 @@ export function AnchorFirmsExhibit() {
               ) : null}
             </div>
           </li>
-        ))}
+          );
+        })}
       </ul>
     </aside>
   );

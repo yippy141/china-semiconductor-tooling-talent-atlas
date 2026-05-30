@@ -23,7 +23,7 @@ const sourceTrailLinks = [
   },
   {
     label: "Compare tool segments",
-    href: "/segments/deposition",
+    href: "/segments",
     description: "Etch, deposition, metrology, and the lithography sidebar.",
   },
   {
@@ -67,9 +67,9 @@ export default function HomePage() {
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-ink-soft">
               Chinese toolmakers are adding products and R&amp;D staff. The
-              harder support-capacity question is whether they can build the
-              field engineers, service teams, calibration routines, and
-              customer-support systems that make equipment work in fabs.
+              harder test is whether they can build the field engineers, service
+              teams, calibration routines, and customer-support systems that
+              make equipment work in fabs.
             </p>
 
             <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
@@ -94,8 +94,8 @@ export default function HomePage() {
             </div>
 
             <p className="mt-4 max-w-2xl text-xs leading-6 text-muted">
-              A longer essay version will publish separately. This site is the
-              interactive source companion.
+              A full essay will publish separately. This site holds the
+              underlying source record.
             </p>
 
             <p className="mt-6 text-xs leading-6 text-muted">
@@ -187,7 +187,7 @@ export default function HomePage() {
             <span>Source trail</span>
           </p>
           <h2 className="mt-3 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl">
-            Open the source trail.
+            Open the source trail
           </h2>
           <p className="mt-4 max-w-3xl text-base leading-7 text-paper/80">
             Start with the brief, then move into firm dossiers, segment pages,

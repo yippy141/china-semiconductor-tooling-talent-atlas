@@ -13,7 +13,7 @@ export const globalContextCards: GlobalContextCard[] = [
       "Framing sources: Deloitte, SIA/Oxford, and McKinsey entries in the ledger.",
   },
   {
-    title: "China's STEM scale feeds a narrower toolmaking question",
+    title: "China's broad STEM pipeline stops short of the toolmaking question",
     body:
       "China's broad STEM pipeline gives domestic toolmakers a large upstream pool. The question is whether that pool converts into plasma, thin-film, optics, controls, service, and applications teams.",
     sourceNote: "Framing sources: CSET STEM PhD work and MOE disciplines.",

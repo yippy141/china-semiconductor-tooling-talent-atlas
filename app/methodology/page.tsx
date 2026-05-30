@@ -119,7 +119,7 @@ export default function MethodologyPage() {
             <span className="text-stone-500">Methodology · Beta dataset v1</span>
           </div>
           <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">
-            How the dataset is built and what it does not claim.
+            How the dataset is built and what it does not claim
           </h1>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-stone-700">
             The China Semiconductor Tooling Talent Atlas is an editorial

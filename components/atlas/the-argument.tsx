@@ -8,17 +8,17 @@ import {
 const findings = [
   {
     number: "01",
-    title: "Broad STEM totals miss the toolmaking mix.",
+    title: "Broad STEM totals miss the toolmaking mix",
     body: "The hard roles combine disciplines: plasma with RF hardware, ALD chemistry with vacuum behavior, optics with algorithms, and precision motion with calibration.",
   },
   {
     number: "02",
-    title: "Listed-firm filings are the clearest workforce window.",
+    title: "Listed-firm filings are the clearest workforce window",
     body: "AMEC, ACM Research Shanghai, NAURA, and Piotech disclose more useful detail than education statistics: R&D scale, technical staff, degree mix, after-sales categories, and product-family breadth.",
   },
   {
     number: "03",
-    title: "Customer-site support is the hardest layer to see.",
+    title: "Customer-site support is the hardest layer to see",
     body: "Product pages show ambition; filings show parts of the organization. Public sources rarely show installation practice, chamber matching, field calibration, service training, or recovery after maintenance.",
   },
 ];
@@ -47,7 +47,7 @@ export function TheArgument() {
           id="argument-heading"
           className="max-w-4xl font-serif text-3xl font-semibold leading-[1.12] tracking-tight text-ink sm:text-[2.6rem]"
         >
-          The public record shows scale before customer-site depth.
+          The public record shows scale before customer-site depth
         </h2>
         <p className="mt-7 max-w-3xl text-lg leading-8 text-ink-soft">
           Most coverage of China&apos;s chip-tooling push tracks product

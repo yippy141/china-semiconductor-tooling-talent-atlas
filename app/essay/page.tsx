@@ -4,12 +4,12 @@ const linkClass =
   "font-medium text-stone-900 underline decoration-stone-400 decoration-1 underline-offset-4 transition-colors hover:decoration-stone-900";
 
 const sections = [
-  { number: "01", title: "Product announcements leave fab support open." },
-  { number: "02", title: "What toolmaking talent means." },
-  { number: "03", title: "What listed firms disclose." },
-  { number: "04", title: "Where the public record thins out." },
-  { number: "05", title: "What to watch." },
-  { number: "06", title: "How to use the monitor." },
+  { number: "01", title: "Product announcements leave fab support open" },
+  { number: "02", title: "What toolmaking talent means" },
+  { number: "03", title: "What listed firms disclose" },
+  { number: "04", title: "Where the public record thins out" },
+  { number: "05", title: "What to watch" },
+  { number: "06", title: "How to use the monitor" },
 ];
 
 function slugFor(number: string) {
@@ -82,14 +82,14 @@ export default function EssayPage() {
               id={`${slugFor("01")}-heading`}
               className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
             >
-              Product announcements leave fab support open.
+              Product announcements leave fab support open
             </h2>
             <p>
               Most coverage of China&apos;s push into chip-making equipment
               tracks the same scoreboard: a new etch platform from
               Shanghai, a fresh deposition tool out of Shenyang, another
-              workaround for U.S. export controls. The launches are genuine
-              and describe only the first half of what a foundry needs.
+              workaround for U.S. export controls. The launches are genuine.
+              They describe only the first half of what a foundry needs.
             </p>
             <p>
               A semiconductor fab needs more than a machine. It needs a vendor
@@ -133,7 +133,7 @@ export default function EssayPage() {
               id={`${slugFor("02")}-heading`}
               className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
             >
-              What toolmaking talent means.
+              What toolmaking talent means
             </h2>
             <p>
               &ldquo;Semiconductor talent&rdquo; usually arrives as a
@@ -201,7 +201,7 @@ export default function EssayPage() {
               id={`${slugFor("03")}-heading`}
               className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
             >
-              What listed firms disclose.
+              What listed firms disclose
             </h2>
             <p>
               Four firms make the question tractable from outside.
@@ -213,7 +213,7 @@ export default function EssayPage() {
               , Shanghai&apos;s etch anchor, reports 1,548 R&amp;D
               personnel, 52.24% of all employees, and discloses that
               57.88% of that R&amp;D layer holds a master&apos;s or
-              doctoral degree. The composition is the part that one should watch.
+              doctoral degree. Watch the composition.
               Half of the company is in R&amp;D, and more than half of
               that R&amp;D layer carries an advanced degree. For a firm
               whose competition is Lam Research, that is the signature of a
@@ -263,7 +263,7 @@ export default function EssayPage() {
               structure.
             </p>
             <p>
-              The four together carry different sub-questions. AMEC
+              Each of the four carries a different question. AMEC
               answers whether a focused Chinese etch firm has built a
               science-heavy R&amp;D layer. ACM Research Shanghai answers
               whether a wet-process firm has built a visible technical-
@@ -302,7 +302,7 @@ export default function EssayPage() {
               id={`${slugFor("04")}-heading`}
               className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
             >
-              Where the public record thins out.
+              Where the public record thins out
             </h2>
             <p>
               Treat the path from lab to fab as four steps: build the
@@ -364,7 +364,7 @@ export default function EssayPage() {
               id={`${slugFor("05")}-heading`}
               className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
             >
-              What to watch.
+              What to watch
             </h2>
             <p>
               Four kinds of evidence are worth tracking through 2026 and
@@ -432,7 +432,7 @@ export default function EssayPage() {
               id={`${slugFor("06")}-heading`}
               className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
             >
-              How to use the monitor.
+              How to use the monitor
             </h2>
             <p>
               The brief on the homepage is the short version of this

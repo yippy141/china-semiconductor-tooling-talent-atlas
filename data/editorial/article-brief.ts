@@ -42,13 +42,13 @@ export const articleBrief = {
   hero: {
     title: "Can China Staff Its Chip-Tooling Push?",
     deck:
-      "Public filings and company records show Chinese toolmakers adding R&D scale and product breadth. The harder support-capacity question is whether they are building field engineers, service teams, calibration routines, and customer-support capacity.",
+      "Public filings and company records show Chinese toolmakers adding R&D scale and product breadth. The harder test is whether they are building field engineers, service teams, calibration routines, and customer-support systems that make equipment work in fabs.",
     intro:
       "China's semiconductor-equipment push is usually tracked through product announcements, export controls, and market share. Those indicators matter, but they do not show whether a firm can install a tool, tune it at a customer site, keep chambers matched, recover after maintenance, and support repeat deployment.",
   },
   heroClaim: {
     rendered:
-      "Chinese toolmakers are adding products and R&D staff. The harder support-capacity question is whether they can build field engineers, service teams, calibration routines, and customer-support systems that make equipment work in fabs.",
+      "Chinese toolmakers are adding products and R&D staff. The harder test is whether they can build field engineers, service teams, calibration routines, and customer-support systems that make equipment work in fabs.",
     beta:
       "Beta public-source monitor. Counts show source coverage, not workforce size.",
     verificationStatus: "source_checked",
@@ -69,7 +69,7 @@ export const articleBrief = {
   findings: [
     {
       eyebrow: "Finding 01",
-      title: "Broad STEM counts are too blunt for chip tooling.",
+      title: "Broad STEM counts are too blunt for chip tooling",
       body:
         "A STEM total will not tell you whether a firm has plasma engineers, ALD chemists, optical metrology staff, control engineers, and field service teams in the same organization.",
       evidenceRead:
@@ -82,7 +82,7 @@ export const articleBrief = {
     },
     {
       eyebrow: "Finding 02",
-      title: "Listed-company filings give the clearest public workforce view.",
+      title: "Listed-company filings give the clearest public workforce view",
       body:
         "AMEC, ACM Research Shanghai, and NAURA publish firm-level workforce figures that make R&D scale and technical staffing visible in a way most product pages do not.",
       evidenceRead:
@@ -103,7 +103,7 @@ export const articleBrief = {
     },
     {
       eyebrow: "Finding 03",
-      title: "Customer-site support is the hardest layer to see.",
+      title: "Customer-site support is the hardest layer to see",
       body:
         "The public record shows product families and R&D categories more readily than installation teams, chamber matching routines, calibration habits, recipe transfer, and customer-specific process support.",
       evidenceRead:
@@ -180,8 +180,8 @@ export const articleBrief = {
     },
     {
       label: "Segments",
-      href: "/segments/deposition",
-      description: "Read a segment brief for one tool family.",
+      href: "/segments",
+      description: "Compare segment briefs before choosing one tool family.",
     },
     {
       label: "Monitor",

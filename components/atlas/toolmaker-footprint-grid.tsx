@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FirmLogo } from "@/components/atlas/firm-logo";
 import {
   firmProfileBySlug,
   type FirmProfile,
@@ -143,7 +144,7 @@ export function ToolmakerFootprintGrid() {
           id="toolmaker-footprint-heading"
           className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
         >
-          Chinese toolmakers to watch.
+          Chinese toolmakers to watch
         </h3>
         <p className="max-w-3xl text-sm leading-7 text-stone-600">
           Each cell describes how the public record places a firm in a
@@ -184,7 +185,12 @@ export function ToolmakerFootprintGrid() {
                   scope="row"
                   className="px-6 py-4 text-left font-normal sm:px-8"
                 >
-                  <div className="flex flex-col gap-1">
+                  <div className="flex items-center gap-3">
+                    <FirmLogo
+                      profile={row.profile}
+                      className="hidden h-10 w-16 shrink-0 sm:flex"
+                    />
+                    <div className="flex flex-col gap-1">
                     <Link
                       href={`/firms/${row.profile.slug}`}
                       className="text-sm font-semibold tracking-tight text-stone-950 underline-offset-4 hover:underline"
@@ -194,6 +200,7 @@ export function ToolmakerFootprintGrid() {
                     <span className="text-[11px] text-stone-500">
                       {row.profile.headquarters}
                     </span>
+                    </div>
                   </div>
                 </th>
                 {row.cells.map(({ column, status }) => {

@@ -9,7 +9,7 @@ export type EditorialInsight = {
 export const insights: EditorialInsight[] = [
   {
     id: "taxonomy-scaffold-share",
-    title: "Thirty-eight percent of rows are structural scaffolding.",
+    title: "Thirty-eight percent of rows are structural scaffolding",
     summary:
       "Sixty-five of 172 rows map disciplines, roles, and segments. They make the monitor navigable, but they do not show firms hiring, training, or deploying people.",
     implication:
@@ -18,7 +18,7 @@ export const insights: EditorialInsight[] = [
   },
   {
     id: "employer-disclosures-carry-signal",
-    title: "Employer disclosures carry the strongest public signal.",
+    title: "Employer disclosures carry the strongest public signal",
     summary:
       "AMEC, ACM Research Shanghai, and NAURA publish workforce categories that expose R&D, technical, and service structure better than most education data.",
     implication:
@@ -31,7 +31,7 @@ export const insights: EditorialInsight[] = [
   },
   {
     id: "city-records-cluster",
-    title: "Shanghai and Beijing dominate the visible record.",
+    title: "Shanghai and Beijing dominate the visible record",
     summary:
       "Shanghai leads the city view, followed by Beijing. The concentration reflects firm filings, park records, and shortage notices. It does not map the full labor market.",
     implication:
@@ -44,7 +44,7 @@ export const insights: EditorialInsight[] = [
   },
   {
     id: "knowhow-hidden",
-    title: "The decisive know-how sits behind the public record.",
+    title: "The decisive know-how sits behind the public record",
     summary:
       "Chamber recovery, field calibration, tool matching, and customer-ramp support rarely appear in public records, even when firms publish product lines and R&D counts.",
     implication:

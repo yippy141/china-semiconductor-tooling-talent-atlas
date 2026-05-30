@@ -14,12 +14,12 @@ export const monitoringQuestions: MonitoringQuestion[] = [
     watchSignal:
       "Listed toolmakers disclosing growth in R&D, technical, after-sales, service, or customer-support categories in annual filings.",
     strongerSignal:
-      "Growth concentrated in customer-site categories: field application, service training, and after-sales. That is where formal engineering supply turns into organizational capacity.",
+      "Growth concentrated in customer-site categories: field application, service training, and after-sales. Those are the categories where broad engineering supply converts into deployed customer-site teams.",
     doNotInfer:
       "Whole-firm workforce categories are firm-level. They do not show segment-specific headcount.",
     link: {
-      href: "/firms/amec",
-      label: "Open AMEC dossier",
+      href: "/firms",
+      label: "Compare firm dossiers",
     },
   },
   {
@@ -44,7 +44,7 @@ export const monitoringQuestions: MonitoringQuestion[] = [
     strongerSignal:
       "The combinations are harder than the parts: plasma plus chamber hardware, ALD chemistry plus vacuum behavior, optics plus algorithms, precision motion plus calibration. STEM totals do not separate these combinations.",
     doNotInfer:
-      "Aggregate graduate output cannot tell you whether a firm has assembled the right cross-discipline teams.",
+      "Aggregate graduate output does not show whether a firm has assembled the right cross-discipline teams.",
     link: {
       href: "/segments/metrology_inspection",
       label: "See the optics-plus-algorithms case",

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FirmLogo } from "@/components/atlas/firm-logo";
 import type { FirmProfile } from "@/data/editorial/firm-profiles";
 
 type FirmIndexGridProps = {
@@ -75,7 +76,7 @@ function FirmCard({ profile }: { profile: FirmProfile }) {
       href={`/firms/${profile.slug}`}
       className="group flex min-h-80 flex-col bg-white p-6 transition-colors hover:bg-stone-50 sm:p-7"
     >
-      <div className="flex flex-wrap items-start justify-between gap-3">
+      <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500">
             {profile.headquarters}
@@ -85,9 +86,13 @@ function FirmCard({ profile }: { profile: FirmProfile }) {
           </h3>
           <p className="mt-1 text-sm text-stone-500">{profile.nameCn}</p>
         </div>
-        <span className="border border-stone-300 bg-stone-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-stone-600">
-          {profile.profileType === "full" ? "Dossier" : "Watch card"}
-        </span>
+        {profile.logo ? (
+          <FirmLogo profile={profile} className="h-14 w-24 shrink-0" />
+        ) : (
+          <span className="shrink-0 border border-stone-300 bg-stone-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-stone-600">
+            {profile.profileType === "full" ? "Dossier" : "Watch card"}
+          </span>
+        )}
       </div>
 
       <p className="mt-5 text-sm leading-7 text-stone-700">

@@ -6,6 +6,12 @@ export type FirmProfile = {
   firmId: string;
   name: string;
   nameCn: string;
+  logo?: {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+  };
   headquarters: string;
   oneLine: string;
   segments: string[];
@@ -38,9 +44,15 @@ export const firmProfiles: FirmProfile[] = [
     firmId: "ent_amec",
     name: "AMEC",
     nameCn: "中微公司",
+    logo: {
+      src: "/Advanced_Micro-Fabrication_Equipment.png",
+      alt: "AMEC logo",
+      width: 1256,
+      height: 899,
+    },
     headquarters: "Shanghai",
     oneLine:
-      "AMEC is the clearest listed-company anchor for China's etch story and also has deposition exposure.",
+      "AMEC is the clearest listed-company anchor for China's etch story, with added deposition product coverage.",
     segments: ["Etch, clean, and strip", "Deposition"],
     productFamilies: [
       {
@@ -159,6 +171,12 @@ export const firmProfiles: FirmProfile[] = [
     firmId: "ent_naura",
     name: "NAURA Technology Group",
     nameCn: "北方华创",
+    logo: {
+      src: "/002371.SZ_BIG-0f67fd11.png",
+      alt: "NAURA logo",
+      width: 1548,
+      height: 589,
+    },
     headquarters: "Beijing",
     oneLine:
       "NAURA is the scale case: a broad equipment group with public signals across deposition, etch/clean, furnaces, wet tools, implant, RTP, and epi.",
@@ -288,9 +306,15 @@ export const firmProfiles: FirmProfile[] = [
     firmId: "ent_acm_sh",
     name: "ACM Research Shanghai",
     nameCn: "盛美上海",
+    logo: {
+      src: "/ACM_Research.svg",
+      alt: "ACM Research logo",
+      width: 1518,
+      height: 944,
+    },
     headquarters: "Shanghai",
     oneLine:
-      "ACM Research Shanghai makes the wet-clean, strip, and service layer more visible than most public sources.",
+      "ACM Research Shanghai gives the clearest public view of the wet-clean, strip, and service layer among the firms in this dossier set.",
     segments: ["Etch, clean, and strip", "Deposition"],
     productFamilies: [
       {
@@ -389,9 +413,15 @@ export const firmProfiles: FirmProfile[] = [
     firmId: "ent_piotech",
     name: "Piotech",
     nameCn: "拓荆科技",
+    logo: {
+      src: "/Piotech.png",
+      alt: "Piotech logo",
+      width: 512,
+      height: 341,
+    },
     headquarters: "Shenyang",
     oneLine:
-      "Piotech gives the monitor a dedicated deposition firm, with public records pointing to multiple CVD and ALD-related product families.",
+      "Piotech is the dedicated deposition firm in this dossier set, with source records covering multiple CVD and ALD product families.",
     segments: ["Deposition"],
     productFamilies: [
       {
@@ -476,9 +506,15 @@ export const firmProfiles: FirmProfile[] = [
     firmId: "ent_jingce",
     name: "Jingce Electronics",
     nameCn: "精测电子",
+    logo: {
+      src: "/j0A6jnC4dKXSgheBbXrGNa1ROW61762945999987_200x200.png",
+      alt: "Jingce Electronics logo",
+      width: 200,
+      height: 200,
+    },
     headquarters: "Wuhan",
     oneLine:
-      "Jingce is the Wuhan-based metrology and inspection candidate for full-dossier promotion once the full annual filing has been read against the current summary source.",
+      "Jingce is the Wuhan-based metrology and inspection entry; this dossier sits at watch-card depth until the full annual filing is reviewed.",
     segments: ["Metrology and inspection"],
     productFamilies: [
       {
@@ -532,7 +568,7 @@ export const firmProfiles: FirmProfile[] = [
     ],
     workforceSignals: [],
     analystRead:
-      "Jingce is the Wuhan-based metrology and inspection anchor candidate in this dossier set. The current record rests on a single annual-report summary that names the product taxonomy at a general level. The dossier is held at watchcard depth until the full filing is read against it.",
+      "Jingce is the Wuhan-based metrology and inspection anchor in this dossier set. The current source record is a single annual-report summary that names the product taxonomy at a general level. This dossier stays at watch-card depth until the full filing is reviewed.",
     watchSignals: [
       "Front-end metrology and inspection language in the full annual filing (not just the summary)",
       "Application-engineer or calibration-support role disclosures",
@@ -566,6 +602,12 @@ export const firmProfiles: FirmProfile[] = [
     firmId: "ent_smee",
     name: "Shanghai Micro Electronics Equipment",
     nameCn: "上海微电子装备",
+    logo: {
+      src: "/6141949811eaf.jpg",
+      alt: "SMEE logo",
+      width: 626,
+      height: 275,
+    },
     headquarters: "Shanghai",
     oneLine:
       "SMEE anchors the lithography-adjacent sidebar in this brief as a domestic source of optical, alignment, stage, and calibration talent.",

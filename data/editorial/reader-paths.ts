@@ -13,7 +13,7 @@ export const readerPaths: ReaderPath[] = [
   },
   {
     question: "What does etch, deposition, or metrology require?",
-    href: "/segments/deposition",
+    href: "/segments",
     answer:
       "Open the segment briefs to see which role families and disciplines sit behind each tool family.",
   },
@@ -25,9 +25,9 @@ export const readerPaths: ReaderPath[] = [
   },
   {
     question: "What should a corporate analyst monitor?",
-    href: "/firms/amec",
+    href: "/firms",
     answer:
-      "Look for field application hiring, service training, customer validation, repeat orders, and support categories.",
+      "Compare the firm index, then open the relevant dossier for field application hiring, service training, customer validation, repeat orders, and support categories.",
   },
   {
     question: "Where is the source record strongest?",

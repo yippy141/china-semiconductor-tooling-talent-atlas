@@ -29,7 +29,7 @@ const plexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: "China Semiconductor Tooling Talent Atlas",
-  description: "An editorial evidence product built from local CSV data.",
+  description: "Public-source evidence on China's semiconductor equipment workforce.",
 };
 
 export default function RootLayout({

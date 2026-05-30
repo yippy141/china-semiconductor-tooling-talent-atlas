@@ -15,7 +15,7 @@ export function AnalystBriefRail() {
           id="analyst-brief-heading"
           className="mt-2 text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
         >
-          Read the public evidence signal before the counts.
+          Read the public evidence signal before the counts
         </h2>
       </header>
 

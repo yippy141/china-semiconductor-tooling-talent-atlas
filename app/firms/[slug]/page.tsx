@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
+import { FirmLogo } from "@/components/atlas/firm-logo";
 import sourcesData from "@/data/generated/sources.json";
 import {
   firmProfileBySlug,
@@ -104,10 +105,17 @@ export default async function FirmPage({ params }: FirmPageProps) {
 
           <div className="mt-4 grid gap-6 lg:grid-cols-[1fr_16rem] lg:items-end">
             <div>
-              <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
-                {profile.name}
-              </h1>
-              <p className="mt-2 text-lg text-stone-600">{profile.nameCn}</p>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+                <FirmLogo profile={profile} className="h-20 w-36 shrink-0" />
+                <div>
+                  <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
+                    {profile.name}
+                  </h1>
+                  <p className="mt-2 text-lg text-stone-600">
+                    {profile.nameCn}
+                  </p>
+                </div>
+              </div>
               <p className="mt-5 max-w-3xl text-xl leading-8 text-stone-800">
                 {profile.oneLine}
               </p>
@@ -233,7 +241,7 @@ export default async function FirmPage({ params }: FirmPageProps) {
           ) : (
             <p className="px-6 py-6 text-sm leading-7 text-stone-600 sm:px-8">
               No source-checked workforce figures are included in this dossier
-              yet. Use the watch signals below to guide the next source pass.
+              yet. Check the signals below for what to look for next.
             </p>
           )}
         </section>

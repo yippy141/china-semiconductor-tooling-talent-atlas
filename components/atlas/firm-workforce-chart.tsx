@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { FirmLogo } from "@/components/atlas/firm-logo";
+import { firmProfileBySlug } from "@/data/editorial/firm-profiles";
 import {
   firmWorkforceSnapshots,
   type SourceStatus,
@@ -55,7 +57,7 @@ export function FirmWorkforceChart() {
           id="firm-workforce-chart-heading"
           className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
         >
-          What listed firms disclose.
+          What listed firms disclose
         </h3>
         <p className="max-w-3xl text-sm leading-7 text-stone-600">
           Each firm shows only the categories it discloses. Read denominators
@@ -64,23 +66,33 @@ export function FirmWorkforceChart() {
       </header>
 
       <div className="grid grid-cols-1 gap-px bg-stone-200 lg:grid-cols-3">
-        {firmWorkforceSnapshots.map((snapshot) => (
-          <article
-            key={snapshot.id}
-            className="flex h-full flex-col bg-white p-6 sm:p-7"
-          >
+        {firmWorkforceSnapshots.map((snapshot) => {
+          const profile = firmProfileBySlug.get(snapshot.id);
+
+          return (
+            <article
+              key={snapshot.id}
+              className="flex h-full flex-col bg-white p-6 sm:p-7"
+            >
             <header className="border-b border-stone-200 pb-5">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500">
-                {snapshot.homeBase}
-              </p>
-              <h4 className="mt-2 text-xl font-semibold tracking-tight text-stone-950">
-                <Link
-                  href={firmHrefById[snapshot.id] ?? "/firms"}
-                  className="underline-offset-4 hover:underline"
-                >
-                  {snapshot.firm}
-                </Link>
-              </h4>
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-500">
+                    {snapshot.homeBase}
+                  </p>
+                  <h4 className="mt-2 text-xl font-semibold tracking-tight text-stone-950">
+                    <Link
+                      href={firmHrefById[snapshot.id] ?? "/firms"}
+                      className="underline-offset-4 hover:underline"
+                    >
+                      {snapshot.firm}
+                    </Link>
+                  </h4>
+                </div>
+                {profile ? (
+                  <FirmLogo profile={profile} className="h-12 w-20 shrink-0" />
+                ) : null}
+              </div>
               <ul className="mt-3 flex flex-wrap gap-2">
                 {snapshot.segmentSignals.map((segment) => (
                   <li
@@ -98,11 +110,23 @@ export function FirmWorkforceChart() {
             </p>
 
             {snapshot.numberRead ? (
-              <div className="mt-5 border border-stone-300 bg-stone-50 p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
+              <details className="group mt-5 border border-stone-300 bg-stone-50">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-4 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-stone-500 [&::-webkit-details-marker]:hidden">
                   How to read this number
-                </p>
-                <dl className="mt-3 space-y-3">
+                  <span
+                    aria-hidden
+                    className="font-mono text-[11px] text-stone-500 group-open:hidden"
+                  >
+                    +
+                  </span>
+                  <span
+                    aria-hidden
+                    className="hidden font-mono text-[11px] text-stone-500 group-open:inline"
+                  >
+                    -
+                  </span>
+                </summary>
+                <dl className="space-y-3 border-t border-stone-200 px-4 py-4">
                   <InterpretationRow
                     label="Read"
                     value={snapshot.numberRead}
@@ -120,7 +144,7 @@ export function FirmWorkforceChart() {
                     value={snapshot.doNotInfer}
                   />
                 </dl>
-              </div>
+              </details>
             ) : null}
 
             <dl className="mt-5 flex flex-col gap-4">
@@ -166,7 +190,8 @@ export function FirmWorkforceChart() {
               </Link>
             </nav>
           </article>
-        ))}
+          );
+        })}
       </div>
 
       <div className="border-t border-stone-200 px-6 py-4 sm:px-8">

@@ -42,7 +42,7 @@ export function CapabilityRoleMatrix() {
           id="capability-role-matrix-heading"
           className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl"
         >
-          Tooling talent, by segment.
+          Tooling talent, by segment
         </h3>
         <p className="max-w-3xl text-sm leading-7 text-stone-600">
           Equipment work depends on more than STEM headcount. Each tool family

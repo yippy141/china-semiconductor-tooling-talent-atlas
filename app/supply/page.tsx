@@ -121,8 +121,8 @@ export default function SupplyPage() {
             Where the workforce might come from
           </h1>
           <p className="mt-5 max-w-4xl text-lg leading-8 text-stone-700">
-            This second-click page maps official counts, feeder disciplines,
-            visible institutions, and city supply-demand joins. It treats broad
+            This page maps official counts, feeder disciplines, visible
+            institutions, and city supply-demand joins. It treats broad
             science and engineering totals as upstream context only. It does not
             claim exact tool-specific graduate output or university-to-firm
             placement.
